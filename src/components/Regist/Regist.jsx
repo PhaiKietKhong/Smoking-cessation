@@ -234,7 +234,7 @@ function Regist() {
                     display: { xs: "none", md: "block" },
                   }}
                 >
-                  Welcome Back :)
+                  Come join us :)
                 </Typography>
 
                 <Typography
@@ -260,7 +260,7 @@ function Regist() {
                   required
                   id="outlined-required"
                   label="UserName"
-                  defaultValue="ABC"
+                  defaultValue=""
                   inputRef={inputRef}
                 />
 
@@ -313,30 +313,29 @@ function Regist() {
                   }}
                 />
 
-                <div className="flex items-center space-x-2">
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   <Checkbox
                     id="terms"
                     checked={acceptTerms}
                     onChange={(e) => setAcceptTerms(e.target.checked)}
                   />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    I agree to the{" "}
-                    <Link
-                      href="/terms"
-                      className="text-primary hover:underline"
-                    >
-                      Terms and Conditions
-                    </Link>
-                  </label>
-                </div>
+                  <Typography>I agree to</Typography>
+                  &nbsp;
+                  <Link href="/terms" className="text-primary hover:underline">
+                    Terms and Conditions
+                  </Link>
+                </Box>
 
                 <Button
                   type="submit"
                   sx={{ color: "white" }}
                   variant="contained"
+                  disabled={!acceptTerms}
                 >
                   Regist
                 </Button>

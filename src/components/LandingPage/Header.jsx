@@ -1,5 +1,15 @@
+import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Box } from "@mui/material";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -9,13 +19,31 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Logo } from "../Logo/Logo";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "../Logo/Logo";
 
 function Header() {
-  const pages = ["Products", "Pricing", "Blog"];
+  const pages = ["Community", "Blog", "Preminum"];
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
+      <List>
+        {pages.map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,31 +74,24 @@ function Header() {
               justifyContent: "center",
             }}
           >
-            <IconButton
-              size="large"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElNav}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center", width: "100%" }}>
-                    {page}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {/* Remove onClick from Box and add it to IconButton */}
+            <Box sx={{ display: { xs: "block", md: "none" } }}>
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={toggleDrawer(true)} // Move onClick here
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="top" // Add anchor position
+                open={open}
+                onClose={toggleDrawer(false)}
+              >
+                {DrawerList}
+              </Drawer>
+            </Box>
           </Box>
-
           {/*navbar */}
           <Box
             sx={{
@@ -82,7 +103,6 @@ function Header() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
                 sx={{
                   color: "secondary.dark",
                   display: "block",

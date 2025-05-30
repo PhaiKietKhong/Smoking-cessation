@@ -254,15 +254,15 @@ function Login() {
                 <TextField
                   required
                   id="outlined-required"
-                  label="Email"
-                  defaultValue="Example@gmail.com"
+                  label="User Name"
+                  defaultValue=""
                   inputRef={inputRef}
                 />
                 <TextField
                   required
                   id="outlined-required"
                   label="Password"
-                  defaultValue="password"
+                  defaultValue=""
                   type={showPassword ? "text" : "password"}
                   InputProps={{
                     endAdornment: (
