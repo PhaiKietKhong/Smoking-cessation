@@ -1,11 +1,15 @@
 import { createTheme } from "@mui/material/styles";
 
+const primaryDarkColor = "#b3a891";
+const primaryMainColor = "#9c9079";
+const primaryLightColor = "#e4d8be";
+
 const theme = createTheme({
   palette: {
     primary: {
-      dark: "#b3a891",
-      main: "#9c9079",
-      light: "#e4d8be",
+      dark: primaryDarkColor,
+      main: primaryMainColor,
+      light: primaryLightColor,
     },
     secondary: {
       main: "#56616e",
@@ -30,7 +34,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#9c9079",
+            borderColor: primaryMainColor,
           },
         },
       },
@@ -39,7 +43,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-focused": {
-            color: "#9c9079",
+            color: primaryMainColor,
           },
         },
       },
@@ -57,7 +61,7 @@ const theme = createTheme({
               borderColor: "#D1D5DB",
             },
             "&.Mui-focused fieldset": {
-              borderColor: "#9c9079",
+              borderColor: primaryMainColor,
             },
           },
         },
@@ -70,15 +74,14 @@ const theme = createTheme({
           textTransform: "none",
           fontWeight: 500,
           padding: "12px 24px",
-          color: "#21211f",
         },
       },
       contained: {
         color: "#21211f", // màu chữ cho nút contained
         backgroundColor: "#21211f", // nền nếu muốn tùy chỉnh
-        "&:hover": {
-          backgroundColor: "#dacfb5",
-        },
+        // "&:hover": {
+        //   backgroundColor: "#dacfb5",
+        // },
       },
     },
   },

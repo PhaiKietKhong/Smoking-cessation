@@ -34,7 +34,7 @@ function Footer() {
               <IconButton
                 sx={{
                   color: "text.secondary",
-                  "&:hover": { color: "#67bb6b" },
+                  "&:hover": { color: "primary.main" },
                 }}
               >
                 <Twitter />
@@ -42,7 +42,7 @@ function Footer() {
               <IconButton
                 sx={{
                   color: "text.secondary",
-                  "&:hover": { color: "#67bb6b" },
+                  "&:hover": { color: "primary.main" },
                 }}
               >
                 <Facebook />
@@ -50,7 +50,7 @@ function Footer() {
               <IconButton
                 sx={{
                   color: "text.secondary",
-                  "&:hover": { color: "#67bb6b" },
+                  "&:hover": { color: "primary.main" },
                 }}
               >
                 <Instagram />
