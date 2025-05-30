@@ -1,4 +1,5 @@
 import { Box, SvgIcon, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const CustomIcon = (props) => {
   return (
     <SvgIcon {...props} viewBox="0 0 24 24" sx={{ transform: "rotate(45deg)" }}>
@@ -69,38 +70,43 @@ const CustomIcon = (props) => {
     </SvgIcon>
   );
 };
+export function Logo(props) {
+  const navigate = useNavigate();
 
-export const Logo = (props) => (
-  <Box
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      gap: 1,
-      marginY: 2,
-      flexWrap: "nowrap",
-      ...props.sx,
-    }}
-  >
-    <CustomIcon
+  return (
+    <Box
+      onClick={() => navigate("/")}
       sx={{
-        color: "primary.main",
-        width: 40,
-        height: 40,
-      }}
-    />
-    <Typography
-      variant="h5"
-      sx={{
-        fontWeight: 700,
-        letterSpacing: 1,
-        color: "text.primary",
-        fontFamily: "'Montserrat', sans-serif",
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+        marginY: 2,
+        cursor: "pointer",
+        flexWrap: "nowrap",
+        ...props.sx,
       }}
     >
-      Quit
-      <Box component="span" sx={{ color: "primary.main" }}>
-        Smart
-      </Box>
-    </Typography>
-  </Box>
-);
+      <CustomIcon
+        sx={{
+          color: "primary.main",
+          width: 40,
+          height: 40,
+        }}
+      />
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 700,
+          letterSpacing: 1,
+          color: "text.primary",
+          fontFamily: "'Montserrat', sans-serif",
+        }}
+      >
+        Quit
+        <Box component="span" sx={{ color: "primary.main" }}>
+          Smart
+        </Box>
+      </Typography>
+    </Box>
+  );
+}

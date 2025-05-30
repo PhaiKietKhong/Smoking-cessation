@@ -1,11 +1,8 @@
-import { Box, Container, Typography } from "@mui/material";
-import React from "react";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SchoolIcon from "@mui/icons-material/School";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { motion } from "motion/react";
-import LinearProgress from "@mui/material/LinearProgress";
-import { AnimatedProgress, BotToTop, FadeIn } from "../Animations/animations";
+import { Box, Container, Typography } from "@mui/material";
+import { AnimatedProgress, BotToTop } from "../Animations/animations";
 
 function Statistical() {
   function Progress({ timneline, target, duration, effect }) {
@@ -72,11 +69,11 @@ function Statistical() {
                       xs: "subtitle1",
                       md: "h4",
                     },
-                    fontSize: 800,
+                    fontWeight: 800, // Changed from fontSize to fontWeight
                     color: "primary.main",
                   }}
                 >
-                  10.567+
+                  13422 +
                 </Typography>
               </Box>
               <Typography

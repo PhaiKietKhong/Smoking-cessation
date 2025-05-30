@@ -6,7 +6,7 @@ function Hero() {
   return (
     <Box
       sx={{
-        background: "linear-gradient(to bottom, #ffffff, #f0f9f1)",
+        background: "linear-gradient(to bottom, #ffffff,rgb(228,216,190))",
         pt: 16,
         pb: 10,
       }}
@@ -16,7 +16,7 @@ function Hero() {
           container
           spacing={2}
           sx={{
-            background: "linear-gradient(to bottom, #ffffff, #f0f9f1)",
+            bgcolor: "transparent",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             minHeight: "70vh",

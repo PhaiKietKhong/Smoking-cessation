@@ -3,11 +3,13 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#67bb6b",
-      light: "#f0f9f1",
+      dark: "#b3a891",
+      main: "#9c9079",
+      light: "#e4d8be",
     },
     secondary: {
       main: "#56616e",
+      dark: "#21211f",
     },
     background: {
       default: "#F8F9FA",
@@ -28,7 +30,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#67bb6b",
+            borderColor: "#9c9079",
           },
         },
       },
@@ -37,7 +39,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-focused": {
-            color: "#67bb6b",
+            color: "#9c9079",
           },
         },
       },
@@ -55,7 +57,7 @@ const theme = createTheme({
               borderColor: "#D1D5DB",
             },
             "&.Mui-focused fieldset": {
-              borderColor: "#67bb6b",
+              borderColor: "#9c9079",
             },
           },
         },
@@ -68,6 +70,14 @@ const theme = createTheme({
           textTransform: "none",
           fontWeight: 500,
           padding: "12px 24px",
+          color: "#21211f",
+        },
+      },
+      contained: {
+        color: "#21211f", // màu chữ cho nút contained
+        backgroundColor: "#21211f", // nền nếu muốn tùy chỉnh
+        "&:hover": {
+          backgroundColor: "#dacfb5",
         },
       },
     },
