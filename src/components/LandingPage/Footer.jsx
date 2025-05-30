@@ -9,6 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Air, Twitter, Facebook, Instagram } from "@mui/icons-material";
+import { Logo } from "../Logo/Logo";
 
 function Footer() {
   return (
@@ -24,10 +25,7 @@ function Footer() {
         <Grid container spacing={4}>
           <Grid item xs={12} md={3}>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Air sx={{ color: "#67bb6b", mr: 1, fontSize: 32 }} />
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                BreatheFree
-              </Typography>
+              <Logo />
             </Box>
             <Typography color="text.secondary" sx={{ mb: 2 }}>
               Helping people quit smoking and live healthier lives since 2018.
@@ -156,7 +154,7 @@ function Footer() {
         <Divider sx={{ my: 4 }} />
         <Box textAlign="center">
           <Typography color="text.secondary" variant="body2">
-            &copy; {new Date().getFullYear()} BreatheFree. All rights reserved.
+            &copy; {new Date().getFullYear()} QuitSmart. All rights reserved.
           </Typography>
         </Box>
       </Container>

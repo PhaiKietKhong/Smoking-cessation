@@ -9,14 +9,20 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "../Logo/Logo";
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(true);
-
-  //LOGO
-
+  const inputRef = useRef(null);
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+  useEffect(() => {
+    focusInput();
+  }, []);
+  const navigate = useNavigate();
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -86,7 +92,7 @@ function Login() {
             size={{ xs: 0, md: 5 }}
             sx={{
               padding: 2,
-              backgroundColor: "rgba(128, 236, 131, 0.2)",
+              backgroundColor: "rgba(228,216,190, 0.5)",
               display: {
                 xs: "none",
                 md: "block",
@@ -250,6 +256,7 @@ function Login() {
                   id="outlined-required"
                   label="Email"
                   defaultValue="Example@gmail.com"
+                  inputRef={inputRef}
                 />
                 <TextField
                   required
@@ -293,7 +300,7 @@ function Login() {
                     }
                     label={
                       <Typography
-                        sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}
+                        sx={{ fontSize: { xs: "0.75rem", md: "1rem" } }}
                       >
                         Remember me
                       </Typography>
@@ -304,8 +311,8 @@ function Login() {
                       cursor: "pointer",
                       "&:hover": { color: "primary.main" },
                       fontSize: {
-                        xs: "0.8rem",
-                        sm: "1rem",
+                        xs: "0.75rem",
+                        md: "1rem",
                       },
                     }}
                   >
@@ -332,7 +339,11 @@ function Login() {
             >
               <Typography variant="body2">Don't have an account? </Typography>
               &nbsp;
-              <Link color="primary.main" href="#" variant="body2">
+              <Link
+                onClick={() => navigate("/regist")}
+                color="primary.main"
+                variant="body2"
+              >
                 {"Regist."}
               </Link>
             </Box>

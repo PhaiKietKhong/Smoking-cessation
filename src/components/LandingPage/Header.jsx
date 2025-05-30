@@ -10,10 +10,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Logo } from "../Logo/Logo";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const pages = ["Products", "Pricing", "Blog"];
-
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -28,10 +29,10 @@ function Header() {
     <AppBar
       position="fixed"
       sx={{
-        bgcolor: "rgba(255, 255, 255, 0.9)",
+        bgcolor: "primary.light",
         backdropFilter: "blur(8px)",
         boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-        color: "primary.main",
+        color: "secondary.dark",
       }}
     >
       <Container maxWidth="lg">
@@ -82,7 +83,11 @@ function Header() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ color: "primary.main", display: "block" }}
+                sx={{
+                  color: "secondary.dark",
+                  display: "block",
+                  fontWeight: 600,
+                }}
               >
                 {page}
               </Button>
@@ -92,6 +97,7 @@ function Header() {
           {/*Sign in */}
           <Box sx={{ flexGrow: 0 }}>
             <Button
+              onClick={() => navigate("/login")}
               variant="contained"
               sx={{
                 py: { xs: 0.5, sm: 1 },

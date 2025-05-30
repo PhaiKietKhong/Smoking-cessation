@@ -80,7 +80,7 @@ export function AnimatedProgress({ target, duration }) {
         borderRadius: 5,
         bgcolor: "rgba(0,0,0,0.1)",
         "& .MuiLinearProgress-bar": {
-          bgcolor: "#67bb6b",
+          bgcolor: "#primary.main",
         },
       }}
     />
