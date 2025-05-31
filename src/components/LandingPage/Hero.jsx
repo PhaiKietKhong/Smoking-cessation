@@ -6,9 +6,16 @@ function Hero() {
   return (
     <Box
       sx={{
-        background: "linear-gradient(to bottom, #ffffff,rgb(228,216,190))",
+        background: "linear-gradient(to bottom,#ffff, #005642)",
         pt: 16,
         pb: 10,
+        backgroundImage:
+          "url('https://www.smallsteps.org.nz/images/heros/hero-landing-desktop.webp')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        backgroundColor: "primary.dark",
       }}
     >
       <Container maxWidth="lg">
@@ -25,57 +32,100 @@ function Hero() {
         >
           {/*Left side */}
 
-          <Grid size={{ xs: 12, md: 6 }} sx={{}}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              p: 2,
+            }}
+          >
             <LeftToRight>
               <Typography
                 sx={{
-                  fontWeight: 800,
-                  typography: {
-                    xs: "h3",
-                    md: "h2",
-                  },
+                  fontWeight: 900,
+                  typography: { xs: "h3", md: "h2" },
                   textAlign: { xs: "center", md: "start" },
+                  color: "#fff700", // vàng tươi nổi bật
+                  textShadow: "3px 3px 6px rgba(0, 0, 0, 0.7)",
+                  letterSpacing: "0.03em",
                 }}
               >
                 Breathe Easier,
               </Typography>
+
               <Typography
-                variant="h2"
                 sx={{
-                  typography: {
-                    xs: "h3",
-                    md: "h2",
-                  },
-                  fontWeight: 800,
-                  color: "primary.main",
+                  fontWeight: 900,
+                  typography: { xs: "h3", md: "h2" },
                   textAlign: { xs: "center", md: "start" },
+                  color: "primary.light", // xanh lá neon nổi bật
+                  textShadow: "2px 2px 5px rgba(0, 0, 0, 0.6)",
+                  letterSpacing: "0.03em",
                 }}
               >
                 Live Longer
               </Typography>
+
               <Typography
                 variant="body1"
-                sx={{ mt: 2, color: "secondary.main" }}
+                sx={{
+                  mt: 2,
+                  color: "#ffffff", // trắng cho văn bản dài
+                  textAlign: { xs: "center", md: "start" },
+                  fontSize: { xs: "0.95rem", md: "1.1rem" },
+                  lineHeight: 1.7,
+                  maxWidth: 550,
+                  textShadow: "1px 1px 3px rgba(0, 0, 0, 0.6)",
+                }}
               >
-                Join over 10,000 people who have successfully quit smoking with
-                our scientifically-backed program. Start your journey to a
-                healthier, smoke-free life today.
+                Join over <strong style={{ color: "#ffff66" }}>10,000+</strong>{" "}
+                people who have quit smoking through our{" "}
+                <strong style={{ color: "#90ee90" }}>
+                  science-backed program
+                </strong>
+                . Begin your journey to a healthier, smoke-free life{" "}
+                <strong style={{ color: "#ffa500" }}>today</strong>.
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  mt: 4,
+                  justifyContent: { xs: "center", md: "start" },
+                }}
+              >
                 <Button
+                  variant="contained"
                   sx={{
+                    backgroundColor: "#368e38",
                     color: "white",
                     py: { xs: 0.5, sm: 1 },
-                    px: { xs: 1, sm: 2, md: 3 },
-                    color: "white",
-                    fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
+                    px: { xs: 2, sm: 3 },
+                    fontWeight: 700,
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                    "&:hover": {
+                      backgroundColor: "#2e7a31",
+                    },
                   }}
-                  variant="contained"
                 >
                   Start your journey
                 </Button>
-                <Button variant="outlined">Learn More</Button>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: "white",
+                    color: "white",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.1)",
+                      borderColor: "#ffffff",
+                    },
+                  }}
+                >
+                  Learn More
+                </Button>
               </Box>
             </LeftToRight>
           </Grid>
@@ -83,18 +133,16 @@ function Hero() {
           {/*right side */}
           <Grid size={{ xs: 12, md: 6 }} sx={{}}>
             <BotToTop>
-              <Box
+              {/* <Box
                 component="img"
-                src="https://blog.coccoc.com/wp-content/uploads/2025/04/1-dinh-nghia-absolute-cinema-1200x675.jpg"
+                src="https://www.smallsteps.org.nz/images/tools/ss-how-to-active-listening.png"
                 alt="Hero Image"
                 sx={{
                   maxWidth: "100%",
                   height: "auto",
                   objectFit: "contain",
-                  borderRadius: 2,
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                 }}
-              />
+              /> */}
             </BotToTop>
           </Grid>
         </Grid>
