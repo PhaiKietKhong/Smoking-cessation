@@ -15,10 +15,13 @@ function Footer() {
   return (
     <Box
       sx={{
-        bgcolor: "grey.50",
-        py: 6,
-        borderTop: "1px solid",
-        borderColor: "grey.200",
+        py: 10,
+        backgroundImage:
+          "url('https://www.smallsteps.org.nz/_next/image?url=%2Fimages%2Fdividers%2Fdivider-tekapo.webp&w=3840&q=75')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundColor: "primary.light",
       }}
     >
       <Container maxWidth="lg">

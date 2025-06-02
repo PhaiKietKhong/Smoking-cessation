@@ -1,103 +1,104 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { LeftToRight, BotToTop } from "../Animations/animations";
+import "@fontsource/poppins/700.css";
+import "@fontsource/poppins/400.css";
+
 function Hero() {
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMedium = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box
       sx={{
-        background: "linear-gradient(to bottom, #ffffff,rgb(228,216,190))",
-        pt: 16,
-        pb: 10,
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "primary.dark",
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        textAlign: "center",
+        overflow: "hidden",
+        px: 4,
+        mt: 7,
+        py: { xs: 10, sm: 16 },
       }}
     >
-      <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            bgcolor: "transparent",
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            minHeight: "70vh",
-            alignItems: "center",
-          }}
-        >
-          {/*Left side */}
+      {/* Background image layer */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          width: "100%",
+          height: { xs: "60vh", sm: "70vh", md: "80vh" },
+          backgroundImage: `url('https://www.smallsteps.org.nz/images/heros/hero-landing-desktop.webp')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          zIndex: 0,
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          },
+        }}
+      />
 
-          <Grid size={{ xs: 12, md: 6 }} sx={{}}>
-            <LeftToRight>
-              <Typography
-                sx={{
-                  fontWeight: 800,
-                  typography: {
-                    xs: "h3",
-                    md: "h2",
-                  },
-                  textAlign: { xs: "center", md: "start" },
-                }}
-              >
-                Breathe Easier,
-              </Typography>
-              <Typography
-                variant="h2"
-                sx={{
-                  typography: {
-                    xs: "h3",
-                    md: "h2",
-                  },
-                  fontWeight: 800,
-                  color: "primary.main",
-                  textAlign: { xs: "center", md: "start" },
-                }}
-              >
-                Live Longer
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ mt: 2, color: "secondary.main" }}
-              >
-                Join over 10,000 people who have successfully quit smoking with
-                our scientifically-backed program. Start your journey to a
-                healthier, smoke-free life today.
-              </Typography>
+      {/* Content layer */}
+      <Container maxWidth="md" sx={{ zIndex: 1 }}>
+        <BotToTop>
+          <Typography
+            variant="h3"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              fontSize: isSmall ? "1rem" : isMedium ? "1.5rem" : "2rem",
+              color: "primary.light",
+              textShadow: "2px 2px 10px rgba(0,0,0,0.7)",
+            }}
+          >
+            Join more than 10 million people
+          </Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              fontSize: isSmall ? "1rem" : isMedium ? "1.5rem" : "2rem",
+              color: "primary.light",
+              textShadow: "2px 2px 10px rgba(0,0,0,0.7)",
+            }}
+          >
+            who have already quit smoking
+          </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-                <Button
-                  sx={{
-                    color: "white",
-                    py: { xs: 0.5, sm: 1 },
-                    px: { xs: 1, sm: 2, md: 3 },
-                    color: "white",
-                    fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
-                  }}
-                  variant="contained"
-                >
-                  Start your journey
-                </Button>
-                <Button variant="outlined">Learn More</Button>
-              </Box>
-            </LeftToRight>
-          </Grid>
-
-          {/*right side */}
-          <Grid size={{ xs: 12, md: 6 }} sx={{}}>
-            <BotToTop>
-              <Box
-                component="img"
-                src="https://blog.coccoc.com/wp-content/uploads/2025/04/1-dinh-nghia-absolute-cinema-1200x675.jpg"
-                alt="Hero Image"
-                sx={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  borderRadius: 2,
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                }}
-              />
-            </BotToTop>
-          </Grid>
-        </Grid>
+          <Button
+            variant="contained"
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              fontSize: isSmall ? "1.2rem" : isMedium ? "1.5rem" : "2rem",
+              px: isSmall ? 3 : 5,
+              color: "primary.light",
+              mt: 3,
+            }}
+          >
+            Start Your Journey
+          </Button>
+        </BotToTop>
       </Container>
     </Box>
   );

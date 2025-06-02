@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "../Logo/Logo";
 
 function Header() {
-  const pages = ["Community", "Blog", "Preminum"];
+  const pages = ["Homepage", "Community", "Blog", "Preminum"];
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -45,22 +45,12 @@ function Header() {
     </Box>
   );
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   return (
     <AppBar
       position="fixed"
       sx={{
-        bgcolor: "primary.light",
-        backdropFilter: "blur(8px)",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-        color: "secondary.dark",
+        backgroundColor: "primary.light",
+        boxShadow: "none",
       }}
     >
       <Container maxWidth="lg">
@@ -74,7 +64,6 @@ function Header() {
               justifyContent: "center",
             }}
           >
-            {/* Remove onClick from Box and add it to IconButton */}
             <Box sx={{ display: { xs: "block", md: "none" } }}>
               <IconButton
                 size="large"
@@ -104,7 +93,7 @@ function Header() {
               <Button
                 key={page}
                 sx={{
-                  color: "secondary.dark",
+                  color: "primary.main",
                   display: "block",
                   fontWeight: 600,
                 }}

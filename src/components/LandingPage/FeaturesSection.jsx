@@ -8,10 +8,33 @@ function FeaturesSection() {
   return (
     <Box
       sx={{
-        bgcolor: "primary.light",
-        pt: 10,
-        pb: 10,
-        mt: 8,
+        width: "100%",
+        py: 10,
+        backgroundImage:
+          "url('https://www.smallsteps.org.nz/_next/image?url=%2Fimages%2Fss-tool-footer.png&w=1920&q=75')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover", // Changed from "100% auto" to "cover"
+        backgroundPosition: "center", // Changed from "top center"
+        backgroundColor: "primary.dark",
+        position: "relative",
+        minHeight: "100vh", // Added to ensure full height
+        display: "flex", // Added for better content positioning
+        flexDirection: "column", // Added for vertical layout
+        alignItems: "center", // Center content horizontally
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1,
+        },
+        "& > *": {
+          position: "relative",
+          zIndex: 2,
+        },
       }}
     >
       <Container maxWidth="lg">
@@ -19,7 +42,11 @@ function FeaturesSection() {
           <BotToTop>
             <Typography
               variant="h4"
-              sx={{ textAlign: "center", fontWeight: 800 }}
+              sx={{
+                textAlign: "center",
+                fontWeight: 800,
+                color: "primary.light",
+              }}
             >
               How To My Program Works
             </Typography>
@@ -28,7 +55,7 @@ function FeaturesSection() {
               variant="body1"
               sx={{
                 textAlign: "center",
-                color: "secondary.main",
+                color: "primary.light",
                 mt: 1,
                 mb: 2,
               }}
@@ -59,7 +86,7 @@ function FeaturesSection() {
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 3px 3px 0px",
                   borderRadius: 2,
                   p: 4,
-                  bgcolor: "white",
+                  bgcolor: "primary.light",
                   display: "flex",
                   flexDirection: "column",
                 }}
@@ -67,20 +94,23 @@ function FeaturesSection() {
                 <CalendarMonthIcon
                   sx={{
                     fontSize: "4rem",
-                    color: "primary.main",
-                    bgcolor: "primary.light",
+                    color: "primary.light",
+                    bgcolor: "primary.dark",
                     borderRadius: "50%",
                     p: 2,
                     mb: 2,
                     alignSelf: "flex-start",
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 2 }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                >
                   Personalized Plan
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "secondary.main", flexGrow: 1 }}
+                  sx={{ color: "primary.main", flexGrow: 1 }}
                 >
                   We create a custom quitting plan based on your smoking habits,
                   triggers, and personal goals.
@@ -100,7 +130,7 @@ function FeaturesSection() {
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 3px 3px 0px",
                   borderRadius: 2,
                   p: 4,
-                  bgcolor: "white",
+                  bgcolor: "primary.light",
                   display: "flex",
                   flexDirection: "column",
                 }}
@@ -108,20 +138,23 @@ function FeaturesSection() {
                 <GroupsOutlinedIcon
                   sx={{
                     fontSize: "4rem",
-                    color: "primary.main",
-                    bgcolor: "primary.light",
+                    color: "primary.light",
+                    bgcolor: "primary.dark",
                     borderRadius: "50%",
                     p: 2,
                     mb: 2,
                     alignSelf: "flex-start",
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 2 }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                >
                   Community Support
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "secondary.main", flexGrow: 1 }}
+                  sx={{ color: "primary.main", flexGrow: 1 }}
                 >
                   Connect with others through our supportive community and
                   expert coaches.
@@ -141,7 +174,7 @@ function FeaturesSection() {
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 3px 3px 0px",
                   borderRadius: 2,
                   p: 4,
-                  bgcolor: "white",
+                  bgcolor: "primary.light",
                   display: "flex",
                   flexDirection: "column",
                 }}
@@ -149,20 +182,23 @@ function FeaturesSection() {
                 <WorkspacePremiumOutlinedIcon
                   sx={{
                     fontSize: "4rem",
-                    color: "primary.main",
-                    bgcolor: "primary.light",
+                    color: "primary.light",
+                    bgcolor: "primary.dark",
                     borderRadius: "50%",
                     p: 2,
                     mb: 2,
                     alignSelf: "flex-start",
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 2 }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                >
                   Progress Tracking
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "secondary.main", flexGrow: 1 }}
+                  sx={{ color: "primary.main", flexGrow: 1 }}
                 >
                   Track your progress, celebrate milestones, and see the health
                   benefits in real-time.

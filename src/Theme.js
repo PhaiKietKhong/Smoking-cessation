@@ -1,8 +1,8 @@
 import { createTheme } from "@mui/material/styles";
 
-const primaryDarkColor = "#b3a891";
-const primaryMainColor = "#9c9079";
-const primaryLightColor = "#e4d8be";
+const primaryDarkColor = "#025f4c";
+const primaryMainColor = "#38b277";
+const primaryLightColor = "#e8fde8";
 
 const theme = createTheme({
   palette: {
@@ -12,7 +12,7 @@ const theme = createTheme({
       light: primaryLightColor,
     },
     secondary: {
-      main: "#56616e",
+      main: "#fff",
       dark: "#21211f",
     },
     background: {
@@ -24,9 +24,6 @@ const theme = createTheme({
     h4: {
       fontWeight: 600,
       fontSize: "1.75rem",
-    },
-    body2: {
-      color: "#6B7280",
     },
   },
   components: {
