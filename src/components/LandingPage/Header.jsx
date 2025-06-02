@@ -45,21 +45,12 @@ function Header() {
     </Box>
   );
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   return (
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "rgba(255, 255, 255, 0.6)",
+        backgroundColor: "primary.light",
         boxShadow: "none",
-        backdropFilter: "blur(10px)",
       }}
     >
       <Container maxWidth="lg">
@@ -73,7 +64,6 @@ function Header() {
               justifyContent: "center",
             }}
           >
-            {/* Remove onClick from Box and add it to IconButton */}
             <Box sx={{ display: { xs: "block", md: "none" } }}>
               <IconButton
                 size="large"
