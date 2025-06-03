@@ -14,10 +14,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import {
-  TrendingUp,
-  AttachMoney,
-  SmokeFree,
-  Favorite,
+  Article as ArticleIcon,
+  PersonAdd as PersonAddIcon,
+  People as PeopleIcon,
+  Visibility as VisibilityIcon,
+  TrendingUp as TrendingUpIcon,
+  Forum as ForumIcon,
   FilterList,
   Refresh,
 } from "@mui/icons-material";
@@ -53,13 +55,13 @@ const Dashboard = () => {
   const [timeRange, setTimeRange] = useState("month");
   const [dateRange, setDateRange] = useState("");
 
-  // Sample data for smoking progress
-  const smokingProgressData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+  // Sample data for user growth
+  const userGrowthData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
-        label: "Cigarettes per day",
-        data: [20, 15, 10, 5],
+        label: "New Users",
+        data: [65, 89, 120, 150, 180, 210],
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
         fill: true,
@@ -68,30 +70,25 @@ const Dashboard = () => {
     ],
   };
 
-  // Sample data for money saved
-  const moneySavedData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+  // Sample data for post views
+  const postViewsData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
       {
-        label: "Money Saved (VND)",
-        data: [140000, 280000, 420000, 560000],
+        label: "Post Views",
+        data: [1200, 1900, 1500, 2100, 1800, 2400, 2000],
         backgroundColor: "rgba(54, 162, 235, 0.5)",
         borderRadius: 5,
       },
     ],
   };
 
-  // Sample data for health improvement
-  const healthImprovementData = {
-    labels: [
-      "Blood Pressure",
-      "Lung Function",
-      "Energy Level",
-      "Sleep Quality",
-    ],
+  // Sample data for user engagement
+  const userEngagementData = {
+    labels: ["Posts", "Comments", "Shares", "Likes"],
     datasets: [
       {
-        data: [30, 40, 60, 50],
+        data: [45, 25, 15, 15],
         backgroundColor: [
           "rgba(255, 99, 132, 0.5)",
           "rgba(54, 162, 235, 0.5)",
@@ -103,7 +100,7 @@ const Dashboard = () => {
     ],
   };
 
-  const StatCard = ({ title, value, icon, color }) => (
+  const StatCard = ({ title, value, icon, color, change }) => (
     <Card sx={{ height: "100%" }}>
       <CardContent>
         <Box
@@ -120,6 +117,15 @@ const Dashboard = () => {
             <Typography variant="h4" component="div">
               {value}
             </Typography>
+            {change && (
+              <Typography
+                variant="body2"
+                color={change > 0 ? "success.main" : "error.main"}
+              >
+                {change > 0 ? "+" : ""}
+                {change}% from last period
+              </Typography>
+            )}
           </Box>
           <Box
             sx={{
@@ -148,7 +154,7 @@ const Dashboard = () => {
           sx={{ mb: 3 }}
         >
           <Typography variant="h4" gutterBottom>
-            Dashboard
+            System Dashboard
           </Typography>
           <Stack direction="row" spacing={2}>
             <TextField
@@ -182,51 +188,56 @@ const Dashboard = () => {
           </Stack>
         </Stack>
 
+        {/* First Line - System Stats */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
           <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <StatCard
-              title="Days Smoke-Free"
-              value="28"
-              icon={<TrendingUp sx={{ color: "#4CAF50" }} />}
+              title="Total Posts"
+              value="1,234"
+              icon={<ArticleIcon sx={{ color: "#4CAF50" }} />}
               color="#4CAF50"
+              change={12}
             />
           </Grid>
           <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <StatCard
-              title="Money Saved"
-              value="560,000₫"
-              icon={<AttachMoney sx={{ color: "#2196F3" }} />}
+              title="New Posts"
+              value="45"
+              icon={<ArticleIcon sx={{ color: "#2196F3" }} />}
               color="#2196F3"
+              change={8}
             />
           </Grid>
           <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <StatCard
-              title="Cigarettes Not Smoked"
-              value="560"
-              icon={<SmokeFree sx={{ color: "#FF9800" }} />}
+              title="Total Users"
+              value="5,678"
+              icon={<PeopleIcon sx={{ color: "#FF9800" }} />}
               color="#FF9800"
+              change={15}
             />
           </Grid>
           <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <StatCard
-              title="Health Score"
-              value="85%"
-              icon={<Favorite sx={{ color: "#F44336" }} />}
+              title="New Registrations"
+              value="123"
+              icon={<PersonAddIcon sx={{ color: "#F44336" }} />}
               color="#F44336"
+              change={20}
             />
           </Grid>
         </Grid>
 
-        {/* Second Line - Progress and Health Charts */}
+        {/* Second Line - User Growth and Engagement */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid item size={{ xs: 12, sm: 6, md: 8 }}>
+          <Grid item size={{ xs: 12, md: 8 }}>
             <Paper sx={{ p: 3, height: "100%" }}>
               <Typography variant="h6" gutterBottom>
-                Smoking Progress
+                User Growth
               </Typography>
               <Box sx={{ height: 300 }}>
                 <Line
-                  data={smokingProgressData}
+                  data={userGrowthData}
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
@@ -240,14 +251,14 @@ const Dashboard = () => {
               </Box>
             </Paper>
           </Grid>
-          <Grid item size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid item size={{ xs: 12, md: 4 }}>
             <Paper sx={{ p: 3, height: "100%" }}>
               <Typography variant="h6" gutterBottom>
-                Health Improvement
+                User Engagement
               </Typography>
               <Box sx={{ height: 300 }}>
                 <Doughnut
-                  data={healthImprovementData}
+                  data={userEngagementData}
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
@@ -263,16 +274,16 @@ const Dashboard = () => {
           </Grid>
         </Grid>
 
-        {/* Third Line - Money Saved Chart */}
+        {/* Third Line - Post Views and Additional Stats */}
         <Grid container spacing={3}>
-          <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
+          <Grid item size={{ xs: 12, md: 8 }}>
             <Paper sx={{ p: 3 }}>
               <Typography variant="h6" gutterBottom>
-                Money Saved Over Time
+                Post Views Analytics
               </Typography>
               <Box sx={{ height: 300 }}>
                 <Bar
-                  data={moneySavedData}
+                  data={postViewsData}
                   options={{
                     responsive: true,
                     maintainAspectRatio: false,
@@ -285,6 +296,28 @@ const Dashboard = () => {
                 />
               </Box>
             </Paper>
+          </Grid>
+          <Grid item size={{ xs: 12, md: 4 }}>
+            <Grid container spacing={3}>
+              <Grid item size={{ xs: 12 }}>
+                <StatCard
+                  title="Active Users"
+                  value="2,345"
+                  icon={<PeopleIcon sx={{ color: "#9C27B0" }} />}
+                  color="#9C27B0"
+                  change={5}
+                />
+              </Grid>
+              <Grid item size={{ xs: 12 }}>
+                <StatCard
+                  title="Total Views"
+                  value="45,678"
+                  icon={<VisibilityIcon sx={{ color: "#00BCD4" }} />}
+                  color="#00BCD4"
+                  change={18}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
