@@ -4,20 +4,23 @@ import "./App.css";
 import theme from "./Theme";
 import LandingPage from "./components/LandingPage/LandingPage";
 import Login from "./components/Login/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Regist from "./components/Regist/Regist";
+import Dashboard from "./components/Dashboard";
+
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/regist" element={<Regist />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </ThemeProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
