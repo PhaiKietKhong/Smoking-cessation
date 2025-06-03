@@ -6,7 +6,8 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import Login from "./components/Login/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Regist from "./components/Regist/Regist";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Layout/Dashboard";
+import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/onBoardingPage" element={<OnboadingPage />} />
         </Routes>
       </ThemeProvider>
     </Router>

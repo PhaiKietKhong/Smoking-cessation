@@ -34,7 +34,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
-import DashboardLayout from "./Layout/DashboardLayout";
+import DashboardLayout from "./DashboardLayout";
 
 // Register ChartJS components
 ChartJS.register(

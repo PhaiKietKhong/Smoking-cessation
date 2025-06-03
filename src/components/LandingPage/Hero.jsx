@@ -11,11 +11,20 @@ import { motion } from "framer-motion";
 import { LeftToRight, BotToTop } from "../Animations/animations";
 import "@fontsource/poppins/700.css";
 import "@fontsource/poppins/400.css";
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const isMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
+  const handleNavigate = (value) => {
+    switch (value) {
+      case "onBoardingPage":
+        navigate("/onBoardingPage");
+        break;
+    }
+  };
 
   return (
     <Box
@@ -95,6 +104,7 @@ function Hero() {
               color: "primary.light",
               mt: 3,
             }}
+            onClick={() => handleNavigate("onBoardingPage")}
           >
             Start Your Journey
           </Button>
