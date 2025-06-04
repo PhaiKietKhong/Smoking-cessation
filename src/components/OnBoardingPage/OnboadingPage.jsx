@@ -88,7 +88,7 @@ function OnboadingPage() {
           borderRadius: 5,
           bgcolor: "rgba(0,0,0,0.1)",
           "& .MuiLinearProgress-bar": {
-            bgcolor: "#primary.main",
+            bgcolor: "#primary.light",
           },
           transition: "ease",
         }}
@@ -106,7 +106,7 @@ function OnboadingPage() {
             </Typography>
 
             <Typography variant="body2">
-              if you haven't yet, pick when you do it
+              Select the date you plan to quit smoking
             </Typography>
             <Box
               sx={{
@@ -190,7 +190,7 @@ function OnboadingPage() {
                 value={cigaretteCount}
                 onChange={(e) => {
                   const value = Math.min(
-                    Math.max(Number(e.target.value), 1),
+                    Math.max(Number(e.target.value), 0),
                     100
                   );
                   setCigaretteCount(value);
@@ -246,7 +246,7 @@ function OnboadingPage() {
                 value={cigarettesInAPack}
                 onChange={(e) => {
                   const value = Math.min(
-                    Math.max(Number(e.target.value), 1),
+                    Math.max(Number(e.target.value), 0),
                     100
                   );
                   setCigarettesInAPack(value);
@@ -350,7 +350,7 @@ function OnboadingPage() {
                 value={priceOfThePack}
                 onChange={(e) => {
                   const value = Math.min(
-                    Math.max(Number(e.target.value), 1),
+                    Math.max(Number(e.target.value), 0),
                     10000000
                   );
                   setPriceOfThePack(value);
@@ -391,9 +391,13 @@ function OnboadingPage() {
                   </Typography>
                   <Typography
                     variant="body1"
-                    sx={{ fontWeight: 800, textAlign: "start" }}
+                    sx={{
+                      fontWeight: 800,
+                      textAlign: "start",
+                      letterSpacing: "0.1rem",
+                    }}
                   >
-                    {quitDate.format("YYYY-MM-DD HH:mm")}
+                    {quitDate.format("YYYY/MM/DD HH:mm")}
                   </Typography>
                 </Box>
               </Box>
@@ -410,13 +414,13 @@ function OnboadingPage() {
                     variant="body1"
                     sx={{ textAlign: "start", fontWeight: 600 }}
                   >
-                    Quit Date
+                    Cigarettes/day
                   </Typography>
                   <Typography
                     variant="body1"
                     sx={{ fontWeight: 800, textAlign: "start" }}
                   >
-                    {quitDate.format("YYYY-MM-DD HH:mm")}
+                    {cigaretteCount}
                   </Typography>
                 </Box>
               </Box>
@@ -461,7 +465,7 @@ function OnboadingPage() {
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Everyday
+                    Every week
                   </Typography>
                   <Typography
                     variant="body1"
@@ -483,7 +487,7 @@ function OnboadingPage() {
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Everyday
+                    Every Month
                   </Typography>
                   <Typography
                     variant="body1"
@@ -501,7 +505,7 @@ function OnboadingPage() {
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Everyday
+                    Every year
                   </Typography>
                   <Typography
                     variant="body1"
@@ -539,9 +543,8 @@ function OnboadingPage() {
         <Box
           sx={{
             width: "60%",
-            bgcolor: "primary.dark",
             color: "primary.light",
-
+            bgcolor: "primary.dark",
             borderRadius: 2,
             padding: 4,
             height: "95vh",
