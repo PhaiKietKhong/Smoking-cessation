@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Regist from "./components/Regist/Regist";
 import Dashboard from "./components/Layout/Dashboard";
 
+import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
+
 function App() {
   return (
     <Router>
@@ -18,6 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/onBoardingPage" element={<OnboadingPage />} />
         </Routes>
       </ThemeProvider>
     </Router>

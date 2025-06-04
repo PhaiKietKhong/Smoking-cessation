@@ -76,7 +76,7 @@ export function AnimatedProgress({ target, duration }) {
       variant="determinate"
       value={value}
       sx={{
-        height: 10,
+        height: 20,
         borderRadius: 5,
         bgcolor: "rgba(0,0,0,0.1)",
         "& .MuiLinearProgress-bar": {

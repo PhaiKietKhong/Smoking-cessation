@@ -72,13 +72,27 @@ const theme = createTheme({
           fontWeight: 500,
           padding: "12px 24px",
         },
-      },
-      contained: {
-        color: "#21211f", // màu chữ cho nút contained
-        backgroundColor: "#21211f", // nền nếu muốn tùy chỉnh
-        // "&:hover": {
-        //   backgroundColor: "#dacfb5",
-        // },
+        contained: {
+          color: primaryLightColor,
+          backgroundColor: primaryMainColor,
+          "&:hover": {
+            backgroundColor: primaryDarkColor,
+          },
+        },
+        outlined: {
+          borderColor: primaryMainColor,
+          color: primaryMainColor,
+          "&:hover": {
+            borderColor: primaryDarkColor,
+            backgroundColor: "rgba(56, 178, 119, 0.04)",
+          },
+        },
+        text: {
+          color: primaryMainColor,
+          "&:hover": {
+            backgroundColor: "rgba(56, 178, 119, 0.04)",
+          },
+        },
       },
     },
   },
