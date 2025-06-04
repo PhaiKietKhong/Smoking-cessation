@@ -6,7 +6,7 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import Login from "./components/Login/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Regist from "./components/Regist/Regist";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Layout/Dashboard";
 
 function App() {
   return (
