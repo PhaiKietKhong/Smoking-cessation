@@ -60,12 +60,6 @@ const chartSetting = {
     {
       label: "Cigarettes",
       width: 60,
-      labelStyle: {
-        fill: "#ffffff", // Y-axis label color
-      },
-      tickLabelStyle: {
-        fill: "#ffffff", // Y-axis tick labels color
-      },
     },
   ],
   series: [
@@ -73,7 +67,6 @@ const chartSetting = {
       dataKey: "Cigarettes",
       label: "Cigarettes",
       valueFormatter,
-      color: "white", // Bar color
       highlightScope: {
         highlighted: "series",
         faded: "global",
@@ -81,20 +74,6 @@ const chartSetting = {
     },
   ],
   height: 300,
-  sx: {
-    "& .MuiChartsAxis-line": {
-      stroke: "#ffffff", // Axis lines color
-    },
-    "& .MuiChartsAxis-tick": {
-      stroke: "#ffffff", // Tick marks color
-    },
-    "& .MuiChartsAxis-tickLabel": {
-      fill: "#ffffff", // X-axis tick labels color
-    },
-    "& .MuiChartsLegend-label": {
-      fill: "#ffffff", // Legend text color
-    },
-  },
 };
 
 export default function Chart() {

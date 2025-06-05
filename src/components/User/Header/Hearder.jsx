@@ -122,8 +122,12 @@ export default function PrimarySearchAppBar() {
             <Button
               size="large"
               aria-label="show 17 new notifications"
-              variant="text"
-              sx={{ color: "primary.light", mr: 2 }}
+              variant="outlined"
+              sx={{
+                color: "primary.light",
+                mr: 2,
+                borderColor: "primary.light",
+              }}
             >
               Update progress
             </Button>

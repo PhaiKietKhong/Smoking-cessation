@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Progress from "./Progress/Progress";
 import AchievementList from "./AchievementList/AchievementList";
+import Health from "./Health/Health";
+import Community from "./Community/Community";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -91,10 +93,10 @@ export default function TabList() {
         <AchievementList />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Healthy
+        <Health />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        Community
+        <Community />
       </CustomTabPanel>
     </Box>
   );

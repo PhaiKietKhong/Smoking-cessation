@@ -8,7 +8,6 @@ function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
       sx={{
         bgcolor: isObtain ? "primary.main" : "",
         borderRadius: 2,
-        border: isObtain ? "2px solid green" : "2px solid grey",
         p: 2,
         display: "flex",
         flexDirection: "column",
@@ -16,6 +15,7 @@ function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
         alignItems: "center",
         height: "250px",
         color: isObtain ? "primary.light" : "black",
+        boxShadow: 1,
       }}
     >
       <Box

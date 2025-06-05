@@ -9,7 +9,7 @@ function UserDashBoard() {
       {/*Header */}
       <Header />
 
-      <Box sx={{ px: 6 }}>
+      <Box sx={{ px: { xs: 2, md: 6 } }}>
         <QuickStat />
         <TabList />
       </Box>
