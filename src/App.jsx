@@ -9,6 +9,8 @@ import Regist from "./components/Regist/Regist";
 import Dashboard from "./components/Layout/Dashboard";
 
 import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
+import UserDashBoard from "./components/User/UserDashBoard";
+import FormerSmokeData from "./components/User/FormerSmokerData/FormerSmokeData";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="/regist" element={<Regist />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/onBoardingPage" element={<OnboadingPage />} />
+          <Route path="/userDashBoard" element={<UserDashBoard />} />
+          <Route path="/formersmokedata" element={<FormerSmokeData />} />
         </Routes>
       </ThemeProvider>
     </Router>
