@@ -10,7 +10,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import LogoutIcon from "@mui/icons-material/Logout";
+import UpgradeIcon from "@mui/icons-material/Upgrade";
+import { useNavigate } from "react-router-dom";
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -18,6 +21,7 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const navigate = useNavigate();
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,6 +39,9 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleFormerData = () => {
+    navigate("/formersmokedata");
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -52,7 +59,19 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleFormerData}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <CheckCircleOutlineIcon />
+          <Typography variant="body1">Former smoker data</Typography>
+        </Box>
+      </MenuItem>
+
+      <MenuItem onClick={handleMenuClose}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <LogoutIcon />
+          <Typography variant="body1">Logout</Typography>
+        </Box>
+      </MenuItem>
     </Menu>
   );
 
@@ -79,7 +98,7 @@ export default function PrimarySearchAppBar() {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <NotificationsIcon />
+          <UpgradeIcon />
         </IconButton>
         <p>update progress</p>
       </MenuItem>
@@ -100,6 +119,8 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {renderMobileMenu}
+      {renderMenu}
       <AppBar
         position="static"
         sx={{ bgcolor: "primary.main", p: 1, boxShadow: "none" }}
