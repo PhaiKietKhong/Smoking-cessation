@@ -3,10 +3,10 @@
     "composite": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "module": "ESNext", // ✅ REQUIRED
+    "moduleResolution": "Bundler", // ✅ REQUIRED for Vite
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   }
 }

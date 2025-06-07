@@ -19,7 +19,9 @@
     "checkJs": false, // set to true if you want type-checking in JS files
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["dist"]
 }
