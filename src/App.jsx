@@ -14,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/regist" element={<Regist />} />
         </Routes>
       </ThemeProvider>
