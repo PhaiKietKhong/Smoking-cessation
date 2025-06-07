@@ -23,7 +23,24 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "../Logo/Logo";
 
 function Header() {
-  const pages = ["Homepage", "Community", "Blog", "Preminum"];
+  const pages = [
+    {
+      title: "Homepage",
+      path: "/",
+    },
+    {
+      title: "Community",
+      path: "/community",
+    },
+    {
+      title: "Blog",
+      path: "/",
+    },
+    {
+      title: "Preminum",
+      path: "/",
+    },
+  ];
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -34,10 +51,10 @@ function Header() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
       <List>
-        {pages.map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {pages.map((page) => (
+          <ListItem key={page.title} disablePadding>
             <ListItemButton>
-              <ListItemText primary={text} />
+              <ListItemText primary={page.title} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -91,14 +108,15 @@ function Header() {
           >
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.title}
                 sx={{
                   color: "primary.main",
                   display: "block",
                   fontWeight: 600,
                 }}
+                onClick={() => navigate(page.path)}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
