@@ -12,17 +12,23 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "../Logo/Logo";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(true);
   const inputRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
   const focusInput = () => {
     inputRef.current.focus();
   };
   useEffect(() => {
     focusInput();
   }, []);
-  const navigate = useNavigate();
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -31,6 +37,61 @@ function Login() {
     setChecked(event.target.checked);
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(USER_API_ROUTES.LOGIN, {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", response.data.token);
+      checkSurvey(response.data.token);
+    } catch (error) {
+      if (error.response) {
+        console.error("Lỗi server:", error.response.status);
+        console.error("Chi tiết:", error.response.data);
+
+        if (error.response.status === 400) {
+          setError(true);
+        } else if (error.response.status === 401) {
+          alert("Sai tài khoản hoặc mật khẩu");
+        } else {
+          alert("Đã có lỗi xảy ra. Vui lòng thử lại.");
+        }
+      } else if (error.request) {
+      } else {
+      }
+    }
+  };
+
+  const checkSurvey = async (token) => {
+    try {
+      const response = await axios.get(USER_API_ROUTES.GET_SMOKING_STATUS, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data;
+
+      console.log("Survey response:", data);
+
+      if (data) {
+        navigate("/userDashBoard");
+      }
+    } catch (error) {
+      console.error("Failed to check smoking status:", error);
+
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        navigate("/onBoardingPage");
+      }
+    }
+  };
   return (
     <Container
       maxWidth={false}
@@ -137,7 +198,7 @@ function Login() {
                     textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                   }}
                 >
-                  💪 "Every cigarette you don't smoke is a victory!"
+                  💪 "Mỗi điếu thuốc bạn không hút là một chiến thắng!"
                 </Typography>
               </Box>
 
@@ -165,7 +226,7 @@ function Login() {
                     textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                   }}
                 >
-                  🌟 "Your future self will thank you for quitting today"
+                  🌟 "Tương lai bạn sẽ cảm ơn bạn vì đã bỏ thuốc hôm nay"
                 </Typography>
               </Box>
 
@@ -192,7 +253,7 @@ function Login() {
                     textShadow: "0 2px 4px rgba(0,0,0,0.2)",
                   }}
                 >
-                  🚭 "You're stronger than your cravings"
+                  🚭 "Bạn mạnh mẽ hơn cơn thèm thuốc"
                 </Typography>
               </Box>
             </Box>
@@ -224,12 +285,12 @@ function Login() {
                   component="h1"
                   sx={{
                     mb: 1,
-                    color: "#1F2937",
                     fontWeight: 600,
                     display: { xs: "none", md: "block" },
+                    color: "primary.main",
                   }}
                 >
-                  Welcome Back :)
+                  Chào mừng trở lại :)
                 </Typography>
 
                 <Typography
@@ -241,29 +302,37 @@ function Login() {
                     display: { xs: "none", md: "block" },
                   }}
                 >
-                  To keep connected with us please login with your personal
+                  Để duy trì kết nối với chúng tôi, vui lòng đăng nhập bằng địa
+                  chỉ
                   <br />
-                  information by email address and password
+                  email và mật khẩu cá nhân của bạn
                 </Typography>
               </Box>
               {/* Login form */}
+
               <Box
                 component="form"
+                onSubmit={handleLogin}
                 sx={{ display: "flex", flexDirection: "column", gap: 4 }}
               >
                 <TextField
                   required
                   id="outlined-required"
-                  label="User Name"
-                  defaultValue=""
+                  label="email"
                   inputRef={inputRef}
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  error={error}
                 />
                 <TextField
                   required
                   id="outlined-required"
                   label="Password"
-                  defaultValue=""
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   type={showPassword ? "text" : "password"}
+                  error={error}
+                  helperText={error && "Email hoặc mật khẩu không đúng"}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -302,7 +371,7 @@ function Login() {
                       <Typography
                         sx={{ fontSize: { xs: "0.75rem", md: "1rem" } }}
                       >
-                        Remember me
+                        Ghi nhớ đăng nhập
                       </Typography>
                     }
                   />
@@ -316,7 +385,7 @@ function Login() {
                       },
                     }}
                   >
-                    Forgot password ?
+                    Quên mật khẩu?
                   </Typography>
                 </Box>
 
@@ -325,7 +394,7 @@ function Login() {
                   sx={{ color: "white" }}
                   variant="contained"
                 >
-                  Login Now
+                  Đăng nhập ngay
                 </Button>
               </Box>
             </Box>
@@ -337,14 +406,14 @@ function Login() {
                 justifyContent: "center",
               }}
             >
-              <Typography variant="body2">Don't have an account? </Typography>
+              <Typography variant="body2">Không có tài khoản ? </Typography>
               &nbsp;
               <Link
                 onClick={() => navigate("/regist")}
                 color="primary.main"
                 variant="body2"
               >
-                {"Regist."}
+                {"Đăng Ký."}
               </Link>
             </Box>
           </Grid>

@@ -10,23 +10,63 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import TextField from "@mui/material/TextField";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 function OnboadingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [quitDate, setQuitDate] = useState(null);
   const [cigaretteCount, setCigaretteCount] = useState("");
   const [cigarettesInAPack, setCigarettesInAPack] = useState("");
   const [priceOfThePack, setPriceOfThePack] = useState("");
-
+  const navigate = useNavigate();
   function formatNumber(number) {
     number = Math.round(parseFloat(number));
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
+
+  const submitData = async () => {
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      quitDate: quitDate?.toISOString(),
+      cigarettesPerDay: Number(cigaretteCount),
+      costPerPack: Number(priceOfThePack),
+      cigarettesPerPack: Number(cigarettesInAPack),
+    };
+
+    try {
+      const response = await axios.post(
+        USER_API_ROUTES.POST_SMOKING_STATUS,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      navigate("/userDashBoard");
+      // redirect hoặc cập nhật UI nếu cần
+    } catch (error) {
+      if (error.response) {
+        console.error("Server error:", error.response.data);
+        alert("Có lỗi xảy ra khi gửi dữ liệu");
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        alert("Không thể kết nối đến máy chủ.");
+      } else {
+        console.error("Error setting up request:", error.message);
+        alert("Lỗi không xác định.");
+      }
+    }
+  };
 
   const handleNext = () => {
     if (currentStep == 5) {
@@ -102,11 +142,11 @@ function OnboadingPage() {
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              When did you Quit Smoking?
+              Bạn bỏ thuốc lá khi nào?
             </Typography>
 
             <Typography variant="body2">
-              Select the date you plan to quit smoking
+              Chọn ngày bạn dự định bỏ thuốc lá
             </Typography>
             <Box
               sx={{
@@ -167,11 +207,11 @@ function OnboadingPage() {
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              How many cigarettes did you smoke per day?
+              Bạn hút bao nhiêu điếu thuốc mỗi ngày?{" "}
             </Typography>
 
             <Typography variant="body2">
-              Enter the average number of cigarettes you smoke per day
+              Nhập số lượng thuốc lá trung bình bạn hút mỗi ngày
             </Typography>
             <Box
               sx={{
@@ -223,11 +263,11 @@ function OnboadingPage() {
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              How many cigarettes are in a pack?
+              Một gói có bao nhiêu điếu thuốc?{" "}
             </Typography>
 
             <Typography variant="body2">
-              Enter the number of cigarettes in a pack you usually buy
+              Nhập số lượng thuốc lá trong một gói mà bạn thường mua
             </Typography>
             <Box
               sx={{
@@ -279,11 +319,11 @@ function OnboadingPage() {
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              What's price of the pack?
+              Giá của gói sản phẩm này là bao nhiêu?{" "}
             </Typography>
 
             <Typography variant="body2">
-              Enter the price of a pack of medicine (VND)
+              Nhập giá một gói thuốc (VNĐ)
             </Typography>
             <Box
               sx={{
@@ -364,11 +404,11 @@ function OnboadingPage() {
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Box sx={{ textAlign: "center", my: 3 }}>
               <Typography variant="h4" sx={{ mb: 2 }}>
-                Summarize your information
+                Tóm tắt thông tin của bạn
               </Typography>
 
               <Typography variant="body2">
-                Here's how much money you'll save by quitting smoking
+                Đây là số tiền bạn sẽ tiết kiệm được khi bỏ thuốc lá
               </Typography>
             </Box>
             {/* */}
@@ -387,7 +427,7 @@ function OnboadingPage() {
                     variant="body1"
                     sx={{ textAlign: "start", fontWeight: 600 }}
                   >
-                    Quit Date
+                    Ngày bỏ thuốc
                   </Typography>
                   <Typography
                     variant="body1"
@@ -447,7 +487,7 @@ function OnboadingPage() {
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Everyday
+                    Mỗi ngày
                   </Typography>
                   <Typography
                     variant="body1"
@@ -465,7 +505,7 @@ function OnboadingPage() {
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every week
+                    Mỗi tuần
                   </Typography>
                   <Typography
                     variant="body1"
@@ -487,7 +527,7 @@ function OnboadingPage() {
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every Month
+                    Mỗi tháng
                   </Typography>
                   <Typography
                     variant="body1"
@@ -505,7 +545,7 @@ function OnboadingPage() {
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every year
+                    Mỗi năm
                   </Typography>
                   <Typography
                     variant="body1"
@@ -530,7 +570,11 @@ function OnboadingPage() {
     }
   };
   return (
-    <Box>
+    <Box
+      sx={{
+        bgcolor: "primary.light",
+      }}
+    >
       <Container
         sx={{
           display: "flex",
@@ -573,7 +617,9 @@ function OnboadingPage() {
 
           <Box>
             <hr />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
               <Button
                 startIcon={<ArrowBackIosNewIcon />}
                 variant="outlined"
@@ -586,23 +632,29 @@ function OnboadingPage() {
                 }}
                 onClick={handlePrevious}
               >
-                Back
+                Quay lại
               </Button>
-              <Button
-                sx={{
-                  "& .MuiSvgIcon-root": {
-                    fontSize: "1rem", // Adjust icon size
-                  },
-                  px: 3,
-                  py: 1,
-                }}
-                endIcon={<ArrowForwardIosIcon />}
-                variant="contained"
-                onClick={handleNext}
-                disabled={!canProcess()}
-              >
-                {currentStep < 5 ? "Next" : "Finish"}
-              </Button>
+              {currentStep === 5 ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={submitData}
+                  disabled={!canProcess()}
+                  sx={{ mt: 2 }}
+                >
+                  Gửi
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  disabled={!canProcess()}
+                  sx={{ mt: 2 }}
+                >
+                  Tiếp theo
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

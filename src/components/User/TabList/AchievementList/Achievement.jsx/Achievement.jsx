@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 import Chip from "@mui/material/Chip";
-function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
+function Achievement({ title, icon, isObtain, dateObtain }) {
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
@@ -34,7 +34,15 @@ function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
           },
         }}
       >
-        <Icon />
+        <img
+          src={`/icons/${icon}.svg`}
+          alt={title}
+          style={{
+            width: 32,
+            height: 32,
+            filter: isObtain ? "none" : "grayscale(100%)",
+          }}
+        />
       </Box>
 
       <Typography variant="body1" sx={{ my: 2, fontWeight: 600 }}>

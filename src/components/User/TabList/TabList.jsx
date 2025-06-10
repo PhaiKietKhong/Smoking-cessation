@@ -37,7 +37,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabList() {
+export default function TabList({ achievements }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -90,7 +90,7 @@ export default function TabList() {
         <Progress />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <AchievementList />
+        <AchievementList achievements={achievements} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Health />

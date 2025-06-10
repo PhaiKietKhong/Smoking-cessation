@@ -3,7 +3,20 @@ import React from "react";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MovingIcon from "@mui/icons-material/Moving";
-function QuickStat() {
+import dayjs from "dayjs";
+import { SmokeFree } from "@mui/icons-material";
+function QuickStat({ userData }) {
+  if (!userData || !userData.quitDate) {
+    return <div></div>;
+  }
+
+  const formattedDate = dayjs(userData.quitDate).format("DD/MM/YYYY");
+  const now = dayjs();
+  const diffDays = dayjs().diff(dayjs(userData.quitDate), "day");
+  const costPerDay =
+    (userData.costPerPack / userData.cigarettesPerPack) *
+    userData.cigarettesPerDay;
+
   return (
     <Box sx={{ mt: 4 }}>
       <Grid container spacing={2}>
@@ -24,14 +37,14 @@ function QuickStat() {
                 mb: 1,
               }}
             >
-              <Typography variant="body2">No smoking day</Typography>
+              <Typography variant="body2">Ngày không hút thuốc</Typography>
               <EventNoteIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              50
+              {userData.daysSmokeFree}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              Since 11/11/2025
+              từ {formattedDate}
             </Typography>
           </Box>
         </Grid>
@@ -52,14 +65,14 @@ function QuickStat() {
                 mb: 1,
               }}
             >
-              <Typography variant="body2">Money saved</Typography>
+              <Typography variant="body2">Số tiền đã tiết kiệm </Typography>
               <AttachMoneyIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              200.000 ₫
+              {userData.moneySaved}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              ~ 20.000 ₫/Day
+              ~ {Math.floor(costPerDay)} ₫ /Ngày
             </Typography>
           </Box>
         </Grid>
@@ -80,16 +93,14 @@ function QuickStat() {
                 mb: 1,
               }}
             >
-              <Typography variant="body2">
-                Number of cigrarettes avoided
-              </Typography>
+              <Typography variant="body2">Số thuốc lá đã tránh được</Typography>
               <MovingIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              940
+              {userData.cigarettesPerDay * userData.daysSmokeFree}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              ~20 cigrarettes/Day
+              ~{userData.cigarettesPerDay} điếu thuốc /Ngày
             </Typography>
           </Box>
         </Grid>

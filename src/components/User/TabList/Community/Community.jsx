@@ -1,9 +1,13 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 
 function Community() {
+  const token = localStorage.getItem("token");
+
   const SvgComponent = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -129,6 +133,20 @@ function Community() {
       />
     </svg>
   );
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await axios.get(USER_API_ROUTES.GET_POSTS, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(response.data);
+      } catch (error) {}
+    };
+    getPost();
+  }, []);
 
   return (
     <Box sx={{ my: 3 }}>
@@ -152,10 +170,10 @@ function Community() {
               variant="h4"
               sx={{ fontWeight: 600, color: "black", mb: 1 }}
             >
-              Share your achievements
+              Chia sẻ thành tích của bạn
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              Motivate the community with your story
+              Truyền cảm hứng cho cộng đồng bằng câu chuyện của bạn
             </Typography>
             <Box
               sx={{
@@ -168,7 +186,7 @@ function Community() {
               <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
                 <SvgComponent />
                 <Typography sx={{ color: "primary.main", fontStyle: "italic" }}>
-                  New achievement!
+                  Thành tích mới
                 </Typography>
               </Box>
               <Typography sx={{ color: "primary.main" }}>
@@ -180,7 +198,7 @@ function Community() {
               variant="contained"
               endIcon={<ReplyIcon sx={{ transform: "rotate(180deg)" }} />}
             >
-              Share your achievements
+              Chia sẻ thành tích của bạn
             </Button>
           </Box>
         </Grid>
@@ -204,10 +222,10 @@ function Community() {
               variant="h4"
               sx={{ fontWeight: 600, color: "black", mb: 1 }}
             >
-              Community Activities
+              Hoạt động cộng đồng
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              Recent shares from other members
+              Chia sẻ gần đây từ các thành viên khác
             </Typography>
 
             <Box
