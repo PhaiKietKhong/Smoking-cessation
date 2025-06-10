@@ -9,8 +9,8 @@ import Regist from "./components/Regist/Regist";
 import Dashboard from "./components/Layout/Dashboard";
 import CommunityPage from "./components/Community/CommunityPage";
 import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
-import UserDashBoard from "./components/User/UserDashBoard";
-import FormerSmokeData from "./components/User/FormerSmokerData/FormerSmokeData";
+import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
+import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
 
 function App() {
   return (

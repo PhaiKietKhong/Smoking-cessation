@@ -1,6 +1,6 @@
 import { Box, Grid, LinearProgress, Typography } from "@mui/material";
 import React from "react";
-import { AnimatedProgress } from "../../../Animations/animations";
+import { AnimatedProgress } from "../../../../Animations/animations";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import Chart from "./Chart";
 function Progress() {
