@@ -19,7 +19,6 @@ export default function PrimarySearchAppBar({ userData }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  console.log(userData);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const navigate = useNavigate();
@@ -75,11 +74,8 @@ export default function PrimarySearchAppBar({ userData }) {
         </Box>
       </MenuItem>
 
-      <MenuItem onClick={handleMenuClose}>
-        <Box
-          onClick={logout}
-          sx={{ display: "flex", gap: 1, alignItems: "center" }}
-        >
+      <MenuItem onClick={logout}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           <LogoutIcon />
           <Typography variant="body1">Logout</Typography>
         </Box>

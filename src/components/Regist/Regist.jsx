@@ -28,16 +28,41 @@ function Regist() {
     FullName: "",
     userName: "",
     email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   });
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
-
   const [success, setSuccess] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+
+  const [formErrors, setFormErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (formData.fullName.length < 3 || formData.fullName.length > 20) {
+      errors.fullName = "Họ tên phải từ 3 đến 20 ký tự";
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    if (!emailRegex.test(formData.email)) {
+      errors.email = "Email phải có định dạng @gmail.com";
+    }
+
+    const passwordRegex = /^\d{6}$/;
+    if (!passwordRegex.test(formData.password)) {
+      errors.password = "Mật khẩu phải gồm đúng 6 chữ số";
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,14 +79,21 @@ function Regist() {
 
   const handleRegister = async () => {
     setErrorMessage("");
+    setError(false);
+    setSuccess(false);
+
+    if (!validateForm()) {
+      setError(true);
+      return;
+    }
+
     try {
       const response = await axios.post(USER_API_ROUTES.REGISTER, {
         username: formData.userName,
         email: formData.email,
         password: formData.password,
-        confirmPassword: formData.confirmPassword,
         fullName: formData.fullName,
-        phoneNumber: formData.phone,
+        role: "User",
       });
 
       setSuccess(true);
@@ -69,15 +101,12 @@ function Regist() {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrorMessage(error.response.data.message);
-        setSuccess(false);
         setError(true);
-        console.error(error);
       } else {
         console.error(error);
       }
     }
   };
-
   return (
     <Container
       maxWidth={false}
@@ -247,9 +276,9 @@ function Regist() {
                     required
                     label="Họ và tên"
                     fullWidth
-                    error={error}
+                    error={!!formErrors.fullName}
+                    helperText={formErrors.fullName}
                     size="small"
-                    sx={{ flex: 1 }}
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
@@ -259,10 +288,10 @@ function Regist() {
                     required
                     label="Tên đăng nhập"
                     fullWidth
-                    error={error}
+                    error={!!formErrors.userName}
+                    helperText={formErrors.userName}
                     inputRef={inputRef}
                     size="small"
-                    sx={{ flex: 1 }}
                     name="userName"
                     value={formData.userName}
                     onChange={handleInputChange}
@@ -274,20 +303,12 @@ function Regist() {
                   fullWidth
                   size="small"
                   name="email"
-                  error={error}
                   value={formData.email}
                   onChange={handleInputChange}
-                />
-
-                <TextField
-                  required
-                  label="Số điện thoại"
-                  fullWidth
-                  size="small"
-                  name="phone"
-                  error={error}
-                  value={formData.phone}
-                  onChange={handleInputChange}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
+                  type="email"
+                  placeholder="example@gmail.com"
                 />
 
                 <TextField
@@ -295,7 +316,8 @@ function Regist() {
                   label="Mật khẩu"
                   type={showPassword ? "text" : "password"}
                   fullWidth
-                  error={error}
+                  error={!!formErrors.password}
+                  helperText={formErrors.password}
                   size="small"
                   name="password"
                   value={formData.password}
@@ -320,8 +342,8 @@ function Regist() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  error={error}
-                  helperText={errorMessage}
+                  error={!!formErrors.confirmPassword || !!errorMessage}
+                  helperText={formErrors.confirmPassword || errorMessage}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">

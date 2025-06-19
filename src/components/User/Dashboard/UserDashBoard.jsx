@@ -17,6 +17,7 @@ function UserDashBoard() {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
+      return;
     } else {
       setCheckingAuth(false);
     }
@@ -43,7 +44,6 @@ function UserDashBoard() {
             },
           }),
         ]);
-
         setUserData(statusResponse.data);
         setAchievements(achievementResponse.data);
       } catch (error) {

@@ -41,7 +41,7 @@ function QuickStat({ userData }) {
               <EventNoteIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              {userData.daysSmokeFree}
+              {userData.smokeFreenDays}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
               từ {formattedDate}
@@ -97,10 +97,10 @@ function QuickStat({ userData }) {
               <MovingIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              {userData.cigarettesPerDay * userData.daysSmokeFree}
+              {userData.cigarettesAvoided}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              ~{userData.cigarettesPerDay} điếu thuốc /Ngày
+              ~ {userData.cigarettesPerDay} điếu thuốc /Ngày
             </Typography>
           </Box>
         </Grid>

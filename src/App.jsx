@@ -13,7 +13,7 @@ import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
 import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
 import BookingPage from "./components/BookingPage/BookingPage";
 import ChatPage from "./ChatPage/ChatPage";
-import Diary from "./components/User/Dashboard/Diary/Diary";
+import Diary from "./components/User/Dashboard/Header/Diary/Diary";
 
 function App() {
   return (

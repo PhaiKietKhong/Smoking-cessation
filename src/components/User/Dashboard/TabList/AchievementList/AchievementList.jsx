@@ -10,7 +10,6 @@ function AchievementList({ achievements }) {
   if (!achievements) {
     return <div></div>;
   }
-  console.log(achievements);
   return (
     <Box>
       <Grid container spacing={3} sx={{ my: 3 }}>
@@ -20,7 +19,7 @@ function AchievementList({ achievements }) {
             title={item.name}
             icon={item.icon}
             isObtain={item.isUnlocked}
-            dateObtain={item.dateObtain}
+            unlockedAt={item.unlockedAt}
           />
         ))}
       </Grid>

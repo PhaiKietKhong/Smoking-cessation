@@ -80,10 +80,10 @@ export default function TabList({ achievements }) {
             },
           }}
         >
-          <Tab label="Progress" {...a11yProps(0)} />
-          <Tab label="Achievement" {...a11yProps(1)} />
-          <Tab label="Healthy" {...a11yProps(2)} />
-          <Tab label="Community" {...a11yProps(3)} />
+          <Tab label="Tiến trình" {...a11yProps(0)} />
+          <Tab label="Thành tích" {...a11yProps(1)} />
+          <Tab label="Sức khoẻ" {...a11yProps(2)} />
+          <Tab label="Cộng đồng" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

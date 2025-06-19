@@ -104,7 +104,6 @@ function FormerSmokeData() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data);
         setFormData({
           quitDate: dayjs(response.data.quitDate), // Convert to dayjs object for DateTimePicker
           cigarettesPerDay: response.data.cigarettesPerDay,

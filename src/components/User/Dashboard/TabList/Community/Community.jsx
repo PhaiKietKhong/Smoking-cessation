@@ -1,12 +1,15 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
+import { useNavigate } from "react-router-dom";
 
 function Community() {
   const token = localStorage.getItem("token");
+  const [posts, setPosts] = useState();
+  const navigate = useNavigate();
 
   const SvgComponent = (props) => (
     <svg
@@ -142,7 +145,7 @@ function Community() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data);
+        setPosts(response.data);
       } catch (error) {}
     };
     getPost();
@@ -228,56 +231,47 @@ function Community() {
               Chia sẻ gần đây từ các thành viên khác
             </Typography>
 
-            <Box
-              sx={{
-                bgcolor: "#f5f5f5",
-                borderRadius: 2,
-                p: 2,
-                mb: 2,
-              }}
-            >
-              <Box
-                sx={{ display: "flex", gap: 1, alignItems: "center", mb: 1 }}
-              >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Typography
-                  variant="body1"
-                  sx={{ color: "black", fontWeight: 400 }}
-                >
-                  PhKietK?
-                </Typography>
-              </Box>
-              <Typography variant="body2">
-                "Thank you for your support, community. Today marks 100 days
-                without drugs!"
-              </Typography>
-            </Box>
+            {posts ? (
+              posts.slice(0, 2).map((post) => (
+                <>
+                  <Box
+                    sx={{
+                      bgcolor: "#f5f5f5",
+                      borderRadius: 2,
+                      p: 2,
+                      mb: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "center",
+                        mb: 1,
+                      }}
+                    >
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "black", fontWeight: 400 }}
+                      >
+                        {post.authorName}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2">{post.content}</Typography>
+                  </Box>
+                </>
+              ))
+            ) : (
+              <></>
+            )}
 
-            <Box
-              sx={{
-                bgcolor: "#f5f5f5",
-                borderRadius: 2,
-                p: 2,
-                mb: 2,
-              }}
-            >
-              <Box
-                sx={{ display: "flex", gap: 1, alignItems: "center", mb: 1 }}
-              >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Typography
-                  variant="body1"
-                  sx={{ color: "black", fontWeight: 400 }}
-                >
-                  PhKietK?
-                </Typography>
-              </Box>
-              <Typography variant="body2">
-                "Thank you for your support, community. Today marks 100 days
-                without drugs!"
-              </Typography>
-            </Box>
-            <Button variant="outlined">See more</Button>
+            <Button onClick={() => navigate("/community")} variant="outlined">
+              See more
+            </Button>
           </Box>
         </Grid>
       </Grid>

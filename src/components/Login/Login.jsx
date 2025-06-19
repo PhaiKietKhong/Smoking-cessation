@@ -1,24 +1,29 @@
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Box, Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
+import {
+  Box,
+  Grid,
+  Typography,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+} from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "../Logo/Logo";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
+
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(true);
   const inputRef = useRef(null);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const navigate = useNavigate();
@@ -26,9 +31,11 @@ function Login() {
   const focusInput = () => {
     inputRef.current.focus();
   };
+
   useEffect(() => {
     focusInput();
   }, []);
+
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -41,11 +48,12 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(USER_API_ROUTES.LOGIN, {
-        email,
+        username, // gửi username thay vì email
         password,
       });
 
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", username); // lưu username nếu cần hiển thị sau
       checkSurvey(response.data.token);
     } catch (error) {
       if (error.response) {
@@ -55,12 +63,10 @@ function Login() {
         if (error.response.status === 400) {
           setError(true);
         } else if (error.response.status === 401) {
-          alert("Sai tài khoản hoặc mật khẩu");
+          setError(true);
         } else {
           alert("Đã có lỗi xảy ra. Vui lòng thử lại.");
         }
-      } else if (error.request) {
-      } else {
       }
     }
   };
@@ -76,8 +82,6 @@ function Login() {
 
       const data = response.data;
 
-      console.log("Survey response:", data);
-
       if (data) {
         navigate("/userDashBoard");
       }
@@ -92,6 +96,7 @@ function Login() {
       }
     }
   };
+
   return (
     <Container
       maxWidth={false}
@@ -104,7 +109,7 @@ function Login() {
         overflow: "hidden",
       }}
     >
-      {/* background */}
+      {/* Background bubbles */}
       <Box
         sx={{
           position: "absolute",
@@ -147,7 +152,7 @@ function Login() {
             height: "85vh",
           }}
         >
-          {/* LEFT */}
+          {/* LEFT SIDE */}
           <Grid
             item
             size={{ xs: 0, md: 5 }}
@@ -160,9 +165,7 @@ function Login() {
               },
             }}
           >
-            {/*Logo*/}
-            <Logo></Logo>
-
+            <Logo />
             <Box
               sx={{
                 display: "flex",
@@ -174,92 +177,58 @@ function Login() {
                 padding: 3,
               }}
             >
-              <Box
-                sx={{
-                  background:
-                    "linear-gradient(135deg, #7ED321 0%, #5BA617 100%)",
-                  borderRadius: "20px",
-                  padding: 3,
-                  marginBottom: 3,
-                  boxShadow: "0 8px 32px rgba(126, 211, 33, 0.3)",
-                  transform: "rotate(-2deg)",
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "rotate(0deg) scale(1.05)",
-                  },
-                }}
-              >
-                <Typography
-                  variant="h6"
+              {[
+                {
+                  bg: "#7ED321",
+                  text: '💪 "Mỗi điếu thuốc bạn không hút là một chiến thắng!"',
+                },
+                {
+                  bg: "#4A90E2",
+                  text: '🌟 "Tương lai bạn sẽ cảm ơn bạn vì đã bỏ thuốc hôm nay"',
+                },
+                {
+                  bg: "#FF6B6B",
+                  text: '🚭 "Bạn mạnh mẽ hơn cơn thèm thuốc"',
+                },
+              ].map(({ bg, text }, i) => (
+                <Box
+                  key={i}
                   sx={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: 700,
-                    textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                    background: `linear-gradient(135deg, ${bg} 0%, ${
+                      bg === "#7ED321"
+                        ? "#5BA617"
+                        : bg === "#4A90E2"
+                        ? "#357ABD"
+                        : "#EE5A52"
+                    } 100%)`,
+                    borderRadius: "20px",
+                    padding: 3,
+                    marginBottom: 3,
+                    boxShadow: `0 8px 32px rgba(0, 0, 0, 0.1)`,
+                    transform: `rotate(${i % 2 === 0 ? -2 : 2}deg)`,
+                    transition: "transform 0.3s ease",
+                    "&:hover": {
+                      transform: "rotate(0deg) scale(1.05)",
+                    },
                   }}
                 >
-                  💪 "Mỗi điếu thuốc bạn không hút là một chiến thắng!"
-                </Typography>
-              </Box>
-
-              <Box
-                sx={{
-                  background:
-                    "linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)",
-                  borderRadius: "20px",
-                  padding: 3,
-                  marginBottom: 3,
-                  boxShadow: "0 8px 32px rgba(74, 144, 226, 0.3)",
-                  transform: "rotate(2deg)",
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "rotate(0deg) scale(1.05)",
-                  },
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: 600,
-                    textShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  🌟 "Tương lai bạn sẽ cảm ơn bạn vì đã bỏ thuốc hôm nay"
-                </Typography>
-              </Box>
-
-              <Box
-                sx={{
-                  background:
-                    "linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%)",
-                  borderRadius: "20px",
-                  padding: 3,
-                  boxShadow: "0 8px 32px rgba(255, 107, 107, 0.3)",
-                  transform: "rotate(-1deg)",
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "rotate(0deg) scale(1.05)",
-                  },
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: "white",
-                    textAlign: "center",
-                    fontWeight: 600,
-                    textShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  🚭 "Bạn mạnh mẽ hơn cơn thèm thuốc"
-                </Typography>
-              </Box>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "white",
+                      textAlign: "center",
+                      fontWeight: 600,
+                      textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    {text}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Grid>
 
-          {/* RIGHT */}
+          {/* RIGHT SIDE */}
           <Grid
             item
             size={{ xs: 12, md: 7 }}
@@ -270,14 +239,7 @@ function Login() {
               p: 2,
             }}
           >
-            <Logo
-              sx={{
-                display: {
-                  md: "none",
-                },
-                textAlign: "center",
-              }}
-            />
+            <Logo sx={{ display: { md: "none" }, textAlign: "center" }} />
             <Box sx={{ maxWidth: 400, mx: "auto", width: "100%" }}>
               <Box>
                 <Typography
@@ -303,13 +265,12 @@ function Login() {
                   }}
                 >
                   Để duy trì kết nối với chúng tôi, vui lòng đăng nhập bằng địa
-                  chỉ
-                  <br />
-                  email và mật khẩu cá nhân của bạn
+                  chỉ <br />
+                  tên tài khoản và mật khẩu cá nhân của bạn
                 </Typography>
               </Box>
-              {/* Login form */}
 
+              {/* LOGIN FORM */}
               <Box
                 component="form"
                 onSubmit={handleLogin}
@@ -317,22 +278,22 @@ function Login() {
               >
                 <TextField
                   required
-                  id="outlined-required"
-                  label="email"
+                  id="username"
+                  label="Tên tài khoản"
                   inputRef={inputRef}
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                   error={error}
                 />
                 <TextField
                   required
-                  id="outlined-required"
-                  label="Password"
+                  id="password"
+                  label="Mật khẩu"
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                   type={showPassword ? "text" : "password"}
                   error={error}
-                  helperText={error && "Email hoặc mật khẩu không đúng"}
+                  helperText={error && "Tên tài khoản hoặc mật khẩu không đúng"}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -379,10 +340,7 @@ function Login() {
                     sx={{
                       cursor: "pointer",
                       "&:hover": { color: "primary.main" },
-                      fontSize: {
-                        xs: "0.75rem",
-                        md: "1rem",
-                      },
+                      fontSize: { xs: "0.75rem", md: "1rem" },
                     }}
                   >
                     Quên mật khẩu?
