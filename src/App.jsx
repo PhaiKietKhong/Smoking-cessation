@@ -14,6 +14,7 @@ import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/Former
 import BookingPage from "./components/BookingPage/BookingPage";
 import ChatPage from "./ChatPage/ChatPage";
 import Diary from "./components/User/Dashboard/Header/Diary/Diary";
+import DiaryList from "./components/User/Dashboard/Header/Diary/DiaryList";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/chatPage" element={<ChatPage />} />
           <Route path="/diary" element={<Diary />} />
+          <Route path="/diarylist" element={<DiaryList />} />
         </Routes>
       </ThemeProvider>
     </Router>

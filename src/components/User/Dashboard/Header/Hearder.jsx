@@ -157,7 +157,7 @@ export default function PrimarySearchAppBar({ userData }) {
                 mr: 2,
                 borderColor: "primary.light",
               }}
-              onClick={() => navigate("/diary")}
+              onClick={() => navigate("/diarylist")}
             >
               Nhật ký
             </Button>

@@ -1,4 +1,6 @@
+import { USER_API_ROUTES } from "@/api/apiRouter";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Box,
   Button,
@@ -11,47 +13,139 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import SaveIcon from "@mui/icons-material/Save";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-
 function Diary() {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [duplicateAlert, setDuplicateAlert] = useState(false);
+
   const [formData, setFormData] = useState({
-    entryDate: dayjs(),
-    smoked: "",
-    cigarettesSmoked: "",
-    nicotineCost: "",
-    cravingCount: "",
+    cigarettesAvoided: "",
+    moneySaved: "",
+    healthScore: "",
+    notes: "",
+    mood: "",
+    cravingLevel: "",
+    weight: "",
+    exerciseMinutes: "",
+    sleepHours: "",
   });
 
-  const [showAlert, setShowAlert] = useState(false);
-  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const fetchData = async () => {
+      try {
+        const res = await axios(USER_API_ROUTES.GET_SMOKING_STATUS, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(res.data);
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDateChange = (newValue) => {
-    setFormData((prev) => ({ ...prev, entryDate: newValue }));
+  const validate = () => {
+    const newErrors = {};
+    const {
+      cigarettesAvoided,
+      moneySaved,
+      healthScore,
+      mood,
+      cravingLevel,
+      weight,
+      exerciseMinutes,
+      sleepHours,
+    } = formData;
+
+    const parsed = (val) => parseFloat(val);
+
+    Object.entries(formData).forEach(([key, val]) => {
+      if (val === "" || val === null) {
+        newErrors[key] = "Không được để trống";
+      }
+    });
+
+    [
+      "cigarettesAvoided",
+      "moneySaved",
+      "weight",
+      "exerciseMinutes",
+      "sleepHours",
+    ].forEach((key) => {
+      if (parsed(formData[key]) < 0) {
+        newErrors[key] = "Giá trị không được âm";
+      }
+    });
+
+    if (userData) {
+      if (parsed(cigarettesAvoided) > userData.cigarettesPerDay) {
+        newErrors.cigarettesAvoided = `Không được vượt quá ${userData.cigarettesPerDay}`;
+      }
+      if (parsed(moneySaved) > userData.dailySavings) {
+        newErrors.moneySaved = `Không được vượt quá ${userData.dailySavings.toLocaleString()} VNĐ`;
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-    // Fake save function
-    setShowAlert(true);
-  };
+  const handleSubmit = async () => {
+    if (!validate()) return;
 
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      date: dayjs().toISOString(),
+      cigarettesAvoided: parseInt(formData.cigarettesAvoided),
+      moneySaved: parseInt(formData.moneySaved),
+      healthScore: parseInt(formData.healthScore),
+      notes: formData.notes,
+      mood: parseInt(formData.mood),
+      cravingLevel: parseInt(formData.cravingLevel),
+      weight: parseFloat(formData.weight),
+      exerciseMinutes: parseInt(formData.exerciseMinutes),
+      sleepHours: parseFloat(formData.sleepHours),
+    };
+
+    try {
+      await axios.post(USER_API_ROUTES.POST_DAILY_PROGRESS, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setShowAlert(true);
+    } catch (err) {
+      if (err?.response?.status === 500) {
+        setDuplicateAlert(true);
+      } else {
+        console.error("Unexpected error:", err);
+      }
+    }
+  };
   const handleNavigate = () => {
     navigate("/userDashboard");
   };
 
   return (
-    <Box>
+    <Box sx={{ height: "100vh", overflowY: "auto" }}>
       {/* Header */}
       <Box
         sx={{
@@ -67,99 +161,180 @@ function Diary() {
           sx={{ cursor: "pointer" }}
           onClick={handleNavigate}
         />
-        <Typography variant="h4">Nhật ký theo dõi</Typography>
+        <Typography variant="h4">Nhật ký sức khoẻ</Typography>
       </Box>
 
-      {/* Main Form */}
+      {/* Form */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          px: { xs: 10, md: 30, lg: 50 },
-          mt: 4,
+          px: { xs: 4, md: 20 },
+          py: 4,
         }}
       >
-        {/* Entry Date */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DateTimePicker"]}>
-            <DateTimePicker
-              label="Ngày ghi nhận"
-              value={formData.entryDate}
-              onChange={handleDateChange}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-
-        {/* Smoked? */}
-        <FormControl fullWidth>
-          <InputLabel>Bạn đã hút thuốc chưa?</InputLabel>
-          <Select
-            name="smoked"
-            value={formData.smoked}
-            label="Bạn đã hút thuốc chưa?"
-            onChange={handleChange}
-          >
-            <MenuItem value="yes">Có</MenuItem>
-            <MenuItem value="no">Không</MenuItem>
-          </Select>
-        </FormControl>
-
-        {/* Cigarettes smoked if "yes" */}
-        {formData.smoked === "yes" && (
-          <TextField
-            label="Số điếu thuốc đã hút"
-            name="cigarettesSmoked"
-            type="number"
-            value={formData.cigarettesSmoked}
-            onChange={handleChange}
-            inputProps={{ min: 0 }}
-          />
-        )}
-
-        {/* Nicotine therapy cost */}
         <TextField
-          label="Số tiền đã chi cho liệu pháp thay thế nicotine (VNĐ)"
-          name="nicotineCost"
+          label="Số điếu thuốc tránh được"
+          name="cigarettesAvoided"
           type="number"
-          value={formData.nicotineCost}
+          value={formData.cigarettesAvoided}
           onChange={handleChange}
-          inputProps={{ min: 0, step: 1000 }}
+          inputProps={{
+            min: 0,
+            max: userData?.cigarettesPerDay ?? undefined,
+          }}
+          error={!!errors.cigarettesAvoided}
+          helperText={errors.cigarettesAvoided}
         />
 
-        {/* Craving count */}
         <TextField
-          label="Số lần bạn cảm thấy thèm thuốc hôm nay"
-          name="cravingCount"
+          label="Số tiền tiết kiệm được (VNĐ)"
+          name="moneySaved"
           type="number"
-          value={formData.cravingCount}
+          value={formData.moneySaved}
+          onChange={handleChange}
+          inputProps={{
+            min: 0,
+            max: userData?.dailySavings ?? undefined,
+            step: 1000,
+          }}
+          error={!!errors.moneySaved}
+          helperText={errors.moneySaved}
+        />
+
+        <TextField
+          label="Ghi chú"
+          name="notes"
+          multiline
+          rows={2}
+          value={formData.notes}
+          onChange={handleChange}
+          error={!!errors.notes}
+          helperText={errors.notes}
+        />
+
+        <FormControl fullWidth error={!!errors.mood}>
+          <InputLabel>Mức độ tâm trạng</InputLabel>
+          <Select
+            name="mood"
+            value={formData.mood}
+            label="Mức độ tâm trạng"
+            onChange={handleChange}
+          >
+            <MenuItem value={1}>1 - Rất tệ</MenuItem>
+            <MenuItem value={2}>2 - Tệ</MenuItem>
+            <MenuItem value={3}>3 - Bình thường</MenuItem>
+            <MenuItem value={4}>4 - Tốt</MenuItem>
+            <MenuItem value={5}>5 - Rất tốt</MenuItem>
+          </Select>
+          <Typography variant="caption" color="error">
+            {errors.mood}
+          </Typography>
+        </FormControl>
+
+        <FormControl fullWidth error={!!errors.cravingLevel}>
+          <InputLabel>Mức độ thèm thuốc</InputLabel>
+          <Select
+            name="cravingLevel"
+            value={formData.cravingLevel}
+            label="Mức độ thèm thuốc"
+            onChange={handleChange}
+          >
+            <MenuItem value={1}>1 - Không thèm</MenuItem>
+            <MenuItem value={2}>2 - Hơi thèm</MenuItem>
+            <MenuItem value={3}>3 - Trung bình</MenuItem>
+            <MenuItem value={4}>4 - Rất thèm</MenuItem>
+            <MenuItem value={5}>5 - Cực kỳ thèm</MenuItem>
+          </Select>
+          <Typography variant="caption" color="error">
+            {errors.cravingLevel}
+          </Typography>
+        </FormControl>
+
+        <FormControl fullWidth error={!!errors.healthScore}>
+          <InputLabel>Mức độ sức khỏe</InputLabel>
+          <Select
+            name="healthScore"
+            value={formData.healthScore}
+            label="Mức độ sức khỏe"
+            onChange={handleChange}
+          >
+            {[...Array(10)].map((_, i) => (
+              <MenuItem key={i + 1} value={i + 1}>
+                {i + 1} -{" "}
+                {
+                  [
+                    "Rất yếu",
+                    "Yếu",
+                    "Trung bình",
+                    "Khá",
+                    "Tốt",
+                    "Rất tốt",
+                    "Tuyệt vời",
+                    "Cực khỏe",
+                    "Sức sống cao",
+                    "Cực kỳ khỏe mạnh",
+                  ][i]
+                }
+              </MenuItem>
+            ))}
+          </Select>
+          <Typography variant="caption" color="error">
+            {errors.healthScore}
+          </Typography>
+        </FormControl>
+
+        <TextField
+          label="Cân nặng hiện tại (kg)"
+          name="weight"
+          type="number"
+          value={formData.weight}
           onChange={handleChange}
           inputProps={{ min: 0 }}
+          error={!!errors.weight}
+          helperText={errors.weight}
+        />
+
+        <TextField
+          label="Thời gian tập thể dục (phút)"
+          name="exerciseMinutes"
+          type="number"
+          value={formData.exerciseMinutes}
+          onChange={handleChange}
+          inputProps={{ min: 0 }}
+          error={!!errors.exerciseMinutes}
+          helperText={errors.exerciseMinutes}
+        />
+
+        <TextField
+          label="Thời gian ngủ (giờ)"
+          name="sleepHours"
+          type="number"
+          value={formData.sleepHours}
+          onChange={handleChange}
+          inputProps={{ min: 0 }}
+          error={!!errors.sleepHours}
+          helperText={errors.sleepHours}
         />
 
         {/* Buttons */}
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button
-            onClick={handleNavigate}
-            variant="outlined"
-            sx={{ flexGrow: 1 }}
-          >
+          <Button onClick={handleNavigate} variant="outlined" fullWidth>
             Huỷ bỏ
           </Button>
           <Button
-            variant="contained"
-            sx={{
-              flexGrow: 1,
-            }}
-            startIcon={<SaveIcon />}
             onClick={handleSubmit}
+            variant="contained"
+            startIcon={<SaveIcon />}
+            fullWidth
           >
             Lưu lại
           </Button>
         </Box>
       </Box>
 
-      {/* Snackbar Alert */}
+      {/* Snackbar thành công*/}
       <Snackbar
         open={showAlert}
         autoHideDuration={4000}
@@ -172,6 +347,22 @@ function Diary() {
           sx={{ width: "100%" }}
         >
           Đã lưu thành công!
+        </Alert>
+      </Snackbar>
+
+      {/* Snackbar lỗi*/}
+      <Snackbar
+        open={duplicateAlert}
+        autoHideDuration={4000}
+        onClose={() => setDuplicateAlert(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setDuplicateAlert(false)}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          Hôm nay bạn đã viết nhật ký rồi!
         </Alert>
       </Snackbar>
     </Box>
