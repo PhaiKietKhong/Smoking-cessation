@@ -14,14 +14,22 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import { useNavigate } from "react-router-dom";
-export default function PrimarySearchAppBar() {
+
+export default function PrimarySearchAppBar({ userData }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -66,7 +74,7 @@ export default function PrimarySearchAppBar() {
         </Box>
       </MenuItem>
 
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={logout}>
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           <LogoutIcon />
           <Typography variant="body1">Logout</Typography>
@@ -149,8 +157,9 @@ export default function PrimarySearchAppBar() {
                 mr: 2,
                 borderColor: "primary.light",
               }}
+              onClick={() => navigate("/diarylist")}
             >
-              Update progress
+              Nhật ký
             </Button>
             <IconButton
               size="large"

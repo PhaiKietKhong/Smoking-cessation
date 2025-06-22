@@ -37,7 +37,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabList() {
+export default function TabList({ achievements }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -80,17 +80,17 @@ export default function TabList() {
             },
           }}
         >
-          <Tab label="Progress" {...a11yProps(0)} />
-          <Tab label="Achievement" {...a11yProps(1)} />
-          <Tab label="Healthy" {...a11yProps(2)} />
-          <Tab label="Community" {...a11yProps(3)} />
+          <Tab label="Tiến trình" {...a11yProps(0)} />
+          <Tab label="Thành tích" {...a11yProps(1)} />
+          <Tab label="Sức khoẻ" {...a11yProps(2)} />
+          <Tab label="Cộng đồng" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
         <Progress />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <AchievementList />
+        <AchievementList achievements={achievements} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Health />

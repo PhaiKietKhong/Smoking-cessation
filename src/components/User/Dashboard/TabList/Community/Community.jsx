@@ -1,9 +1,16 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
+import { USER_API_ROUTES } from "@/api/apiRouter";
+import { useNavigate } from "react-router-dom";
 
 function Community() {
+  const token = localStorage.getItem("token");
+  const [posts, setPosts] = useState();
+  const navigate = useNavigate();
+
   const SvgComponent = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -129,6 +136,20 @@ function Community() {
       />
     </svg>
   );
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await axios.get(USER_API_ROUTES.GET_POSTS, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPosts(response.data);
+      } catch (error) {}
+    };
+    getPost();
+  }, []);
 
   return (
     <Box sx={{ my: 3 }}>
@@ -152,10 +173,10 @@ function Community() {
               variant="h4"
               sx={{ fontWeight: 600, color: "black", mb: 1 }}
             >
-              Share your achievements
+              Chia sẻ thành tích của bạn
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              Motivate the community with your story
+              Truyền cảm hứng cho cộng đồng bằng câu chuyện của bạn
             </Typography>
             <Box
               sx={{
@@ -168,7 +189,7 @@ function Community() {
               <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
                 <SvgComponent />
                 <Typography sx={{ color: "primary.main", fontStyle: "italic" }}>
-                  New achievement!
+                  Thành tích mới
                 </Typography>
               </Box>
               <Typography sx={{ color: "primary.main" }}>
@@ -180,7 +201,7 @@ function Community() {
               variant="contained"
               endIcon={<ReplyIcon sx={{ transform: "rotate(180deg)" }} />}
             >
-              Share your achievements
+              Chia sẻ thành tích của bạn
             </Button>
           </Box>
         </Grid>
@@ -204,62 +225,53 @@ function Community() {
               variant="h4"
               sx={{ fontWeight: 600, color: "black", mb: 1 }}
             >
-              Community Activities
+              Hoạt động cộng đồng
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              Recent shares from other members
+              Chia sẻ gần đây từ các thành viên khác
             </Typography>
 
-            <Box
-              sx={{
-                bgcolor: "#f5f5f5",
-                borderRadius: 2,
-                p: 2,
-                mb: 2,
-              }}
-            >
-              <Box
-                sx={{ display: "flex", gap: 1, alignItems: "center", mb: 1 }}
-              >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Typography
-                  variant="body1"
-                  sx={{ color: "black", fontWeight: 400 }}
-                >
-                  PhKietK?
-                </Typography>
-              </Box>
-              <Typography variant="body2">
-                "Thank you for your support, community. Today marks 100 days
-                without drugs!"
-              </Typography>
-            </Box>
+            {posts ? (
+              posts.slice(0, 2).map((post) => (
+                <>
+                  <Box
+                    sx={{
+                      bgcolor: "#f5f5f5",
+                      borderRadius: 2,
+                      p: 2,
+                      mb: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "center",
+                        mb: 1,
+                      }}
+                    >
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "black", fontWeight: 400 }}
+                      >
+                        {post.authorName}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2">{post.content}</Typography>
+                  </Box>
+                </>
+              ))
+            ) : (
+              <></>
+            )}
 
-            <Box
-              sx={{
-                bgcolor: "#f5f5f5",
-                borderRadius: 2,
-                p: 2,
-                mb: 2,
-              }}
-            >
-              <Box
-                sx={{ display: "flex", gap: 1, alignItems: "center", mb: 1 }}
-              >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Typography
-                  variant="body1"
-                  sx={{ color: "black", fontWeight: 400 }}
-                >
-                  PhKietK?
-                </Typography>
-              </Box>
-              <Typography variant="body2">
-                "Thank you for your support, community. Today marks 100 days
-                without drugs!"
-              </Typography>
-            </Box>
-            <Button variant="outlined">See more</Button>
+            <Button onClick={() => navigate("/community")} variant="outlined">
+              See more
+            </Button>
           </Box>
         </Grid>
       </Grid>

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 import Chip from "@mui/material/Chip";
-function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
+function Achievement({ title, icon, isObtain, unlockedAt }) {
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
@@ -34,7 +34,15 @@ function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
           },
         }}
       >
-        <Icon />
+        <img
+          src={`${icon}`}
+          alt={title}
+          style={{
+            width: 32,
+            height: 32,
+            filter: isObtain ? "none" : "grayscale(100%)",
+          }}
+        />
       </Box>
 
       <Typography variant="body1" sx={{ my: 2, fontWeight: 600 }}>
@@ -49,9 +57,9 @@ function Achievement({ title, icon: Icon, isObtain, dateObtain }) {
         <Chip sx={{ mb: 2 }} label="Not Obtained" variant="outlined" />
       )}
 
-      {dateObtain ? (
+      {unlockedAt ? (
         <Typography variant="body2" sx={{ mb: 2 }}>
-          Date Obtained: {dateObtain}
+          Date Obtained: {unlockedAt}
         </Typography>
       ) : (
         <Typography variant="body2" sx={{ mb: 2 }}>

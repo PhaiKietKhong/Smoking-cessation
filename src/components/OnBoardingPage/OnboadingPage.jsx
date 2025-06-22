@@ -10,11 +10,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 
 function OnboadingPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -22,17 +25,58 @@ function OnboadingPage() {
   const [cigaretteCount, setCigaretteCount] = useState("");
   const [cigarettesInAPack, setCigarettesInAPack] = useState("");
   const [priceOfThePack, setPriceOfThePack] = useState("");
+  const [yearsOfSmoking, setYearsOfSmoking] = useState("");
+  const navigate = useNavigate();
 
   function formatNumber(number) {
     number = Math.round(parseFloat(number));
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
-  const handleNext = () => {
-    if (currentStep == 5) {
-      return;
+  const submitData = async () => {
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      quitDate: quitDate?.toISOString(),
+      cigarettesPerDay: Number(cigaretteCount),
+      costPerPack: Number(priceOfThePack),
+      cigarettesPerPack: Number(cigarettesInAPack),
+      yearsOfSmoking: Number(yearsOfSmoking), // ✅ thêm mới
+    };
+
+    try {
+      const response = await axios.post(
+        USER_API_ROUTES.POST_SMOKING_STATUS,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      navigate("/userDashBoard");
+    } catch (error) {
+      if (error.response) {
+        console.error("Server error:", error.response.data);
+        alert("Có lỗi xảy ra khi gửi dữ liệu");
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        alert("Không thể kết nối đến máy chủ.");
+      } else {
+        console.error("Error setting up request:", error.message);
+        alert("Lỗi không xác định.");
+      }
     }
-    setCurrentStep(currentStep + 1);
+  };
+
+  const handleNext = () => {
+    if (currentStep < 6) setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const canProcess = () => {
@@ -40,45 +84,22 @@ function OnboadingPage() {
       case 1:
         return quitDate !== null;
       case 2:
-        return cigaretteCount !== "" && Number.parseInt(cigaretteCount) > 0;
-
+        return cigaretteCount !== "" && Number(cigaretteCount) > 0;
       case 3:
-        return (
-          cigarettesInAPack !== "" && Number.parseInt(cigarettesInAPack) > 0
-        );
+        return cigarettesInAPack !== "" && Number(cigarettesInAPack) > 0;
       case 4:
-        return priceOfThePack !== "" && Number.parseInt(priceOfThePack) > 0;
+        return priceOfThePack !== "" && Number(priceOfThePack) > 0;
       case 5:
+        return yearsOfSmoking !== "" && Number(yearsOfSmoking) > 0;
+      case 6:
         return true;
+      default:
+        return false;
     }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep == 1) {
-      return;
-    }
-    setCurrentStep(currentStep - 1);
   };
 
   function Progress() {
-    let value;
-    switch (currentStep) {
-      case 1:
-        value = 20;
-        break;
-      case 2:
-        value = 40;
-        break;
-      case 3:
-        value = 60;
-        break;
-      case 4:
-        value = 80;
-        break;
-      case 5:
-        value = 100;
-        break;
-    }
+    const value = currentStep * (100 / 6);
     return (
       <LinearProgress
         variant="determinate"
@@ -102,59 +123,24 @@ function OnboadingPage() {
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              When did you Quit Smoking?
+              Bạn bỏ thuốc lá khi nào?
             </Typography>
-
             <Typography variant="body2">
-              Select the date you plan to quit smoking
+              Chọn ngày bạn dự định bỏ thuốc lá
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                mt: 2,
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DateTimePicker"]}>
                   <DateTimePicker
                     value={quitDate}
-                    onChange={(newValue) => {
-                      setQuitDate(newValue);
-                    }}
-                    label="Pick Date"
+                    onChange={(newValue) => setQuitDate(newValue)}
+                    label="Chọn ngày "
                     sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "rgba(255, 255, 255, 0.23)",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "rgba(255, 255, 255, 0.4)",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "primary.light",
-                        },
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "primary.light",
-                      },
-                      "& .MuiInputBase-input": {
-                        color: "primary.light",
-                      },
-                      "& .MuiIconButton-root": {
-                        color: "primary.light",
-                      },
-                      "& .MuiPickersDay-root": {
-                        color: "primary.main",
-                        "&.Mui-selected": {
-                          backgroundColor: "primary.main",
-                          color: "primary.light",
-                          "&:hover": {
-                            backgroundColor: "primary.dark",
-                          },
-                        },
+                      color: "primary.light",
+                      "& .MuiInputBase-input": { color: "primary.light" },
+                      "& .MuiInputLabel-root": { color: "primary.light" },
+                      "& .MuiOutlinedInput-root fieldset": {
+                        borderColor: "primary.light",
                       },
                     }}
                   />
@@ -163,212 +149,155 @@ function OnboadingPage() {
             </Box>
           </Box>
         );
+
       case 2:
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              How many cigarettes did you smoke per day?
+              Bạn hút bao nhiêu điếu thuốc mỗi ngày?
             </Typography>
-
             <Typography variant="body2">
-              Enter the average number of cigarettes you smoke per day
+              Nhập số lượng thuốc lá trung bình bạn hút mỗi ngày
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                mt: 2,
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <TextField
-                id="outlined-basic"
-                label="number of cigarettes"
-                variant="standard"
+                label="số điếu thuốc mỗi ngày"
                 type="number"
+                variant="standard"
                 value={cigaretteCount}
-                onChange={(e) => {
-                  const value = Math.min(
-                    Math.max(Number(e.target.value), 0),
-                    100
-                  );
-                  setCigaretteCount(value);
-                }}
+                onChange={(e) =>
+                  setCigaretteCount(
+                    Math.min(Math.max(Number(e.target.value), 0), 100)
+                  )
+                }
                 sx={{
-                  "& .MuiInputBase-input": {
-                    color: "primary.light", // Text color
-                  },
+                  "& .MuiInputBase-input": { color: "primary.light" },
+                  "& .MuiInputLabel-root": { color: "primary.light" },
                   "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light", // Default underline color
-                  },
-                  "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                    borderBottomColor: "primary.light", // Hover underline color
-                  },
-                  "& .MuiInput-underline:after": {
-                    borderBottomColor: "primary.light", // Focused underline color
-                  },
-                  "& .MuiInputLabel-root": {
-                    color: "primary.light", // Label color
-                    "&.Mui-focused": {
-                      color: "primary.light", // Focused label color
-                    },
+                    borderBottomColor: "primary.light",
                   },
                 }}
               />
             </Box>
           </Box>
         );
+
       case 3:
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              How many cigarettes are in a pack?
+              Một gói có bao nhiêu điếu thuốc?
             </Typography>
-
             <Typography variant="body2">
-              Enter the number of cigarettes in a pack you usually buy
+              Nhập số lượng thuốc lá trong một gói bạn thường mua
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                mt: 2,
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <TextField
-                id="outlined-basic"
-                label="cigarettes in a pack"
-                variant="standard"
+                label="số lượng thuốc lá trong một gói"
                 type="number"
+                variant="standard"
                 value={cigarettesInAPack}
-                onChange={(e) => {
-                  const value = Math.min(
-                    Math.max(Number(e.target.value), 0),
-                    100
-                  );
-                  setCigarettesInAPack(value);
-                }}
+                onChange={(e) =>
+                  setCigarettesInAPack(
+                    Math.min(Math.max(Number(e.target.value), 0), 100)
+                  )
+                }
                 sx={{
-                  "& .MuiInputBase-input": {
-                    color: "primary.light", // Text color
-                  },
+                  "& .MuiInputBase-input": { color: "primary.light" },
+                  "& .MuiInputLabel-root": { color: "primary.light" },
                   "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light", // Default underline color
-                  },
-                  "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                    borderBottomColor: "primary.light", // Hover underline color
-                  },
-                  "& .MuiInput-underline:after": {
-                    borderBottomColor: "primary.light", // Focused underline color
-                  },
-                  "& .MuiInputLabel-root": {
-                    color: "primary.light", // Label color
-                    "&.Mui-focused": {
-                      color: "primary.light", // Focused label color
-                    },
+                    borderBottomColor: "primary.light",
                   },
                 }}
               />
             </Box>
           </Box>
         );
+
       case 4:
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
-              What's price of the pack?
+              Giá một gói thuốc là bao nhiêu?
             </Typography>
-
             <Typography variant="body2">
-              Enter the price of a pack of medicine (VND)
+              Nhập giá một gói thuốc (VNĐ)
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                mt: 2,
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
               <TextField
-                label="Price of a pack"
-                id="outlined-start-adornment"
+                label="Giá tiền"
+                type="number"
+                variant="standard"
+                value={priceOfThePack}
+                onChange={(e) =>
+                  setPriceOfThePack(
+                    Math.min(Math.max(Number(e.target.value), 0), 10000000)
+                  )
+                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{ color: "primary.light" }}
+                    >
+                      VND
+                    </InputAdornment>
+                  ),
+                }}
                 sx={{
-                  width: "25ch",
-                  "& input[type=number]::-webkit-outer-spin-button": {
-                    display: "none",
-                  },
-                  "& input[type=number]::-webkit-inner-spin-button": {
-                    display: "none",
-                  },
-                  "& input[type=number]": {
-                    MozAppearance: "textfield",
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "primary.light",
-                  },
+                  "& .MuiInputBase-input": { color: "primary.light" },
+                  "& .MuiInputLabel-root": { color: "primary.light" },
                   "& .MuiInput-underline:before": {
                     borderBottomColor: "primary.light",
                   },
-                  "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                    borderBottomColor: "primary.light",
-                  },
-                  "& .MuiInput-underline:after": {
-                    borderBottomColor: "primary.light",
-                  },
-                  "& .MuiInputLabel-root": {
-                    color: "primary.light",
-                    "&.Mui-focused": {
-                      color: "primary.light",
-                    },
-                  },
-                  "& .MuiInputAdornment-root": {
-                    color: "primary.light", // Added color for the adornment
-                    "& .MuiTypography-root": {
-                      color: "primary.light", // Added color for the text inside adornment
-                    },
-                  },
-                }}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment
-                        sx={{ color: "primary.light" }}
-                        position="end"
-                      >
-                        VND
-                      </InputAdornment>
-                    ),
-                  },
-                }}
-                variant="standard"
-                type="number"
-                value={priceOfThePack}
-                onChange={(e) => {
-                  const value = Math.min(
-                    Math.max(Number(e.target.value), 0),
-                    10000000
-                  );
-                  setPriceOfThePack(value);
                 }}
               />
             </Box>
           </Box>
         );
+
       case 5:
+        return (
+          <Box sx={{ textAlign: "center", mt: 3 }}>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Bạn đã hút thuốc bao nhiêu năm?
+            </Typography>
+            <Typography variant="body2">
+              Nhập số năm bạn hút thuốc trước khi quyết định bỏ
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <TextField
+                label="Số năm hút thuốc"
+                type="number"
+                variant="standard"
+                value={yearsOfSmoking}
+                onChange={(e) =>
+                  setYearsOfSmoking(
+                    Math.min(Math.max(Number(e.target.value), 0), 100)
+                  )
+                }
+                sx={{
+                  "& .MuiInputBase-input": { color: "primary.light" },
+                  "& .MuiInputLabel-root": { color: "primary.light" },
+                  "& .MuiInput-underline:before": {
+                    borderBottomColor: "primary.light",
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+        );
+
+      case 6:
         return (
           <Box sx={{ textAlign: "center", mt: 3 }}>
             <Box sx={{ textAlign: "center", my: 3 }}>
               <Typography variant="h4" sx={{ mb: 2 }}>
-                Summarize your information
+                Tóm tắt thông tin của bạn
               </Typography>
 
               <Typography variant="body2">
-                Here's how much money you'll save by quitting smoking
+                Đây là số tiền bạn sẽ tiết kiệm được khi bỏ thuốc lá
               </Typography>
             </Box>
             {/* */}
@@ -387,7 +316,7 @@ function OnboadingPage() {
                     variant="body1"
                     sx={{ textAlign: "start", fontWeight: 600 }}
                   >
-                    Quit Date
+                    Ngày bỏ thuốc
                   </Typography>
                   <Typography
                     variant="body1"
@@ -414,7 +343,7 @@ function OnboadingPage() {
                     variant="body1"
                     sx={{ textAlign: "start", fontWeight: 600 }}
                   >
-                    Cigarettes/day
+                    Số điếu thuốc /ngày
                   </Typography>
                   <Typography
                     variant="body1"
@@ -437,17 +366,17 @@ function OnboadingPage() {
             >
               <Box sx={{ textAlign: "start" }}>
                 <Typography variant="h4" sx={{ mb: 1 }}>
-                  Money Saved
+                  Số tiền tiết kiệm
                 </Typography>
 
-                <Typography variant="body2">When You Quit Smoking</Typography>
+                <Typography variant="body2">khi bạn bỏ thuốc</Typography>
               </Box>
               {/* day week*/}
 
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Everyday
+                    Mỗi ngày
                   </Typography>
                   <Typography
                     variant="body1"
@@ -458,14 +387,15 @@ function OnboadingPage() {
                     }}
                   >
                     {formatNumber(
-                      cigaretteCount * (priceOfThePack / cigarettesInAPack)
+                      Number(cigaretteCount) *
+                        (Number(priceOfThePack) / Number(cigarettesInAPack))
                     )}
                     &nbsp;₫
                   </Typography>
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every week
+                    Mỗi tuần
                   </Typography>
                   <Typography
                     variant="body1"
@@ -487,7 +417,7 @@ function OnboadingPage() {
               <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every Month
+                    Mỗi tháng
                   </Typography>
                   <Typography
                     variant="body1"
@@ -505,7 +435,7 @@ function OnboadingPage() {
                 </Box>
                 <Box sx={{ width: "50%" }}>
                   <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Every year
+                    Mỗi năm
                   </Typography>
                   <Typography
                     variant="body1"
@@ -529,8 +459,9 @@ function OnboadingPage() {
         );
     }
   };
+
   return (
-    <Box>
+    <Box sx={{ bgcolor: "primary.light" }}>
       <Container
         sx={{
           display: "flex",
@@ -565,44 +496,43 @@ function OnboadingPage() {
               <Typography variant="h5" sx={{ fontWeight: 800 }}>
                 Survey about you
               </Typography>
-              <Typography variant="body1">{currentStep}/5</Typography>
+              <Typography variant="body1">{currentStep}/6</Typography>
             </Box>
-            <Progress target={25} duration={1000} />
+            <Progress />
             <Box>{renderStep()}</Box>
           </Box>
 
           <Box>
             <hr />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
               <Button
                 startIcon={<ArrowBackIosNewIcon />}
                 variant="outlined"
-                sx={{
-                  "& .MuiSvgIcon-root": {
-                    fontSize: "1rem", // Adjust icon size
-                  },
-                  px: 3,
-                  py: 1,
-                }}
                 onClick={handlePrevious}
               >
-                Back
+                Quay lại
               </Button>
-              <Button
-                sx={{
-                  "& .MuiSvgIcon-root": {
-                    fontSize: "1rem", // Adjust icon size
-                  },
-                  px: 3,
-                  py: 1,
-                }}
-                endIcon={<ArrowForwardIosIcon />}
-                variant="contained"
-                onClick={handleNext}
-                disabled={!canProcess()}
-              >
-                {currentStep < 5 ? "Next" : "Finish"}
-              </Button>
+              {currentStep === 6 ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={submitData}
+                  disabled={!canProcess()}
+                >
+                  Gửi
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  disabled={!canProcess()}
+                >
+                  Tiếp theo
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

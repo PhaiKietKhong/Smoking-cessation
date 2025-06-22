@@ -9,8 +9,12 @@ import Regist from "./components/Regist/Regist";
 import Dashboard from "./components/Layout/Dashboard";
 import CommunityPage from "./components/Community/CommunityPage";
 import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
-import UserDashBoard from "./components/User/UserDashBoard";
-import FormerSmokeData from "./components/User/FormerSmokerData/FormerSmokeData";
+import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
+import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
+import BookingPage from "./components/BookingPage/BookingPage";
+import ChatPage from "./ChatPage/ChatPage";
+import Diary from "./components/User/Dashboard/Header/Diary/Diary";
+import DiaryList from "./components/User/Dashboard/Header/Diary/DiaryList";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
           <Route path="/userDashBoard" element={<UserDashBoard />} />
           <Route path="/formersmokedata" element={<FormerSmokeData />} />
           <Route path="/community" element={<CommunityPage />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/chatPage" element={<ChatPage />} />
+          <Route path="/diary" element={<Diary />} />
+          <Route path="/diarylist" element={<DiaryList />} />
         </Routes>
       </ThemeProvider>
     </Router>
