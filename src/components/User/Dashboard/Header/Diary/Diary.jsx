@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Container,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -165,12 +166,11 @@ function Diary() {
       </Box>
 
       {/* Form */}
-      <Box
+      <Container
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          px: { xs: 4, md: 20 },
           py: 4,
         }}
       >
@@ -332,7 +332,7 @@ function Diary() {
             Lưu lại
           </Button>
         </Box>
-      </Box>
+      </Container>
 
       {/* Snackbar thành công*/}
       <Snackbar

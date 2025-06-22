@@ -35,7 +35,7 @@ function Achievement({ title, icon, isObtain, unlockedAt }) {
         }}
       >
         <img
-          src={`/icons/${icon}.svg`}
+          src={`${icon}`}
           alt={title}
           style={{
             width: 32,

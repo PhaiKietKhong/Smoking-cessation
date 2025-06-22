@@ -45,7 +45,7 @@ function Health() {
               Authorization: `Bearer ${token}`,
             },
           }),
-          axios.get(USER_API_ROUTES.GET_USER_PROGESS, {
+          axios.get(USER_API_ROUTES.GET_USER_PROGESS_BY_DATE_RANGE, {
             params: { startDate: startDate, endDate: endDate },
             headers: {
               "Content-Type": "application/json",
@@ -53,7 +53,6 @@ function Health() {
             },
           }),
         ]);
-        console.log(progressRes.data);
         setProgressData(progressRes.data);
         setBrinkman(brinkmanRes.data);
       } catch (error) {
@@ -244,18 +243,24 @@ function Health() {
             subheader="Dựa trên dữ liệu 30 ngày gần nhất"
           />
 
-          <CardContent>
-            <Typography variant="body1" gutterBottom>
-              💤 Giấc ngủ trung bình: <strong>{avg("sleepHours")} giờ</strong>
+          {progressData.length > 0 ? (
+            <CardContent>
+              <Typography variant="body1" gutterBottom>
+                💤 Giấc ngủ trung bình: <strong>{avg("sleepHours")} giờ</strong>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                🏃‍♂️ Thể dục trung bình:{" "}
+                <strong>{avg("exerciseMinutes")} phút</strong>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                ⚖️ Cân nặng trung bình: <strong>{avg("weight")} kg</strong>
+              </Typography>
+            </CardContent>
+          ) : (
+            <Typography variant="h5" sx={{ p: 2 }}>
+              Bạn chưa có viết nhật ký để hiển thị thông tin!
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              🏃‍♂️ Thể dục trung bình:{" "}
-              <strong>{avg("exerciseMinutes")} phút</strong>
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              ⚖️ Cân nặng trung bình: <strong>{avg("weight")} kg</strong>
-            </Typography>
-          </CardContent>
+          )}
         </Card>
       </Grid>
 
