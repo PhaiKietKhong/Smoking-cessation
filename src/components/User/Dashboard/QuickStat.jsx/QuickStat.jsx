@@ -1,14 +1,17 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MovingIcon from "@mui/icons-material/Moving";
 import dayjs from "dayjs";
 import { SmokeFree } from "@mui/icons-material";
+import axios from "axios";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 function QuickStat({ userData }) {
   if (!userData || !userData.quitDate) {
     return <div></div>;
   }
+  const [data, setData] = useState();
 
   const formattedDate = dayjs(userData.quitDate).format("DD/MM/YYYY");
   const now = dayjs();
@@ -17,6 +20,23 @@ function QuickStat({ userData }) {
     (userData.costPerPack / userData.cigarettesPerPack) *
     userData.cigarettesPerDay;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await axios.get(USER_API_ROUTES.GET_REPORT_DASHBOARD, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data);
+
+        setData(res.data);
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
   return (
     <Box sx={{ mt: 4 }}>
       <Grid container spacing={2}>
@@ -41,10 +61,10 @@ function QuickStat({ userData }) {
               <EventNoteIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              {userData.smokeFreenDays}
+              {data ? data.progress.currentStreak : "0"}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              từ {formattedDate}
+              thông tin từ nhật ký
             </Typography>
           </Box>
         </Grid>
@@ -69,7 +89,7 @@ function QuickStat({ userData }) {
               <AttachMoneyIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              {userData.moneySaved}
+              {data ? data.progress.statistics.totalMoneySaved : "0"}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
               ~ {Math.floor(costPerDay)} ₫ /Ngày
@@ -97,7 +117,7 @@ function QuickStat({ userData }) {
               <MovingIcon sx={{ fontSize: "1rem" }} />
             </Box>
             <Typography variant="h4" sx={{ textAlign: "start" }}>
-              {userData.cigarettesAvoided}
+              {data ? data.progress.statistics.totalCigarettesAvoided : "0"}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
               ~ {userData.cigarettesPerDay} điếu thuốc /Ngày

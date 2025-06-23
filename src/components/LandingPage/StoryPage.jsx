@@ -2,6 +2,10 @@ import { Box, Container, Typography } from "@mui/material";
 import React from "react";
 import { BotToTop } from "../Animations/animations";
 import Avatar from "@mui/material/Avatar";
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/700.css";
+import "@fontsource/be-vietnam-pro/800.css";
+
 function StoryPage() {
   return (
     <Box
@@ -24,9 +28,10 @@ function StoryPage() {
                 textAlign: "center",
                 fontWeight: 800,
                 color: "primary.light",
+                fontFamily: "Be Vietnam Pro",
               }}
             >
-              Success Stories
+              Câu chuyện thành công
             </Typography>
 
             <Typography
@@ -36,15 +41,16 @@ function StoryPage() {
                 color: "primary.light",
                 mt: 1,
                 mb: 4,
+                fontFamily: "Be Vietnam Pro",
               }}
             >
-              Hear from people who have successfully quit smoking with our
-              program
+              Lắng nghe chia sẻ từ những người đã bỏ thuốc thành công cùng
+              chương trình của chúng tôi
             </Typography>
           </BotToTop>
         </Box>
 
-        {/*story*/}
+        {/* Các câu chuyện */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <BotToTop>
             <Box
@@ -57,29 +63,44 @@ function StoryPage() {
             >
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt="H"
                   src="/static/images/avatar/1.jpg"
                   sx={{ width: 50, height: 50 }}
                 />
                 <Box>
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "primary.main" }}
+                    sx={{
+                      fontWeight: "bold",
+                      color: "primary.main",
+                      fontFamily: "Be Vietnam Pro",
+                    }}
                   >
-                    Sarah J.
+                    Trung Hoàng
                   </Typography>
-                  <Typography variant="body2">
-                    Smoke-free for 2 years
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: "Be Vietnam Pro" }}
+                  >
+                    Đã bỏ thuốc 2 năm
                   </Typography>
                 </Box>
               </Box>
-              <Typography variant="h6" sx={{ fontStyle: "italic", mt: 2 }}>
-                "After smoking for 15 years, I never thought I could quit. This
-                program made it possible with its personalized approach and
-                supportive community."
+              <Typography
+                variant="h6"
+                sx={{
+                  fontStyle: "italic",
+                  mt: 2,
+                  fontFamily: "Be Vietnam Pro",
+                }}
+              >
+                "Sau 15 năm hút thuốc, tôi chưa từng nghĩ mình có thể bỏ được.
+                Chương trình này đã giúp tôi làm điều đó nhờ cách tiếp cận cá
+                nhân hóa và cộng đồng hỗ trợ tuyệt vời."
               </Typography>
             </Box>
           </BotToTop>
+
           <BotToTop>
             <Box
               sx={{
@@ -91,27 +112,44 @@ function StoryPage() {
             >
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt="V"
                   src="/static/images/avatar/1.jpg"
                   sx={{ width: 50, height: 50 }}
                 />
                 <Box>
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "primary.main" }}
+                    sx={{
+                      fontWeight: "bold",
+                      color: "primary.main",
+                      fontFamily: "Be Vietnam Pro",
+                    }}
                   >
-                    Michael T.
+                    Hoàng Việt
                   </Typography>
-                  <Typography variant="body2">Smoke-free for 1 year</Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: "Be Vietnam Pro" }}
+                  >
+                    Đã bỏ thuốc 1 năm
+                  </Typography>
                 </Box>
               </Box>
-              <Typography variant="h6" sx={{ fontStyle: "italic", mt: 2 }}>
-                "The progress tracking and health insights kept me motivated. I
-                can now run 5k without getting winded - something I couldn't
-                imagine before."
+              <Typography
+                variant="h6"
+                sx={{
+                  fontStyle: "italic",
+                  mt: 2,
+                  fontFamily: "Be Vietnam Pro",
+                }}
+              >
+                "Các công cụ theo dõi tiến trình và thông tin sức khỏe đã giúp
+                tôi luôn có động lực. Giờ tôi có thể chạy 5km mà không mệt -
+                điều tôi chưa từng nghĩ là có thể."
               </Typography>
             </Box>
           </BotToTop>
+
           <BotToTop>
             <Box
               sx={{
@@ -123,26 +161,40 @@ function StoryPage() {
             >
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Avatar
-                  alt="Remy Sharp"
+                  alt="P"
                   src="/static/images/avatar/1.jpg"
                   sx={{ width: 50, height: 50 }}
                 />
                 <Box>
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", color: "primary.main" }}
+                    sx={{
+                      fontWeight: "bold",
+                      color: "primary.main",
+                      fontFamily: "Be Vietnam Pro",
+                    }}
                   >
-                    Elena R.
+                    Hoài Phương
                   </Typography>
-                  <Typography variant="body2">
-                    Smoke-free for 6 months
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: "Be Vietnam Pro" }}
+                  >
+                    Đã bỏ thuốc 6 tháng
                   </Typography>
                 </Box>
               </Box>
-              <Typography variant="h6" sx={{ fontStyle: "italic", mt: 2 }}>
-                "The cravings management techniques were a game-changer. I've
-                saved over $1,200 already and my sense of taste and smell has
-                completely returned!"
+              <Typography
+                variant="h6"
+                sx={{
+                  fontStyle: "italic",
+                  mt: 2,
+                  fontFamily: "Be Vietnam Pro",
+                }}
+              >
+                "Các kỹ thuật kiểm soát cơn thèm đã thay đổi cuộc chơi. Tôi đã
+                tiết kiệm được hơn 2,8 triệu đồng và vị giác, khứu giác đã hoàn
+                toàn hồi phục!"
               </Typography>
             </Box>
           </BotToTop>

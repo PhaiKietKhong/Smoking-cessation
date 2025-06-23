@@ -10,7 +10,9 @@ import {
 } from "@mui/material";
 import { Air, Twitter, Facebook, Instagram } from "@mui/icons-material";
 import { Logo } from "../Logo/Logo";
-
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/700.css";
+import "@fontsource/be-vietnam-pro/800.css";
 function Footer() {
   return (
     <Box
@@ -31,7 +33,7 @@ function Footer() {
               <Logo />
             </Box>
             <Typography color="text.secondary" sx={{ mb: 2 }}>
-              Helping people quit smoking and live healthier lives since 2018.
+              Giúp mọi người bỏ thuốc lá và sống khỏe mạnh hơn từ năm 2025.
             </Typography>
             <Box sx={{ display: "flex", gap: 1 }}>
               <IconButton
@@ -60,40 +62,48 @@ function Footer() {
               </IconButton>
             </Box>
           </Grid>
+
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-              Program
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 800, fontFamily: "Be Vietnam Pro", mb: 2 }}
+            >
+              Chương trình
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                How It Works
+                Cách hoạt động
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Features
+                Tính năng
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Pricing
+                Giá cả
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Success Stories
+                Câu chuyện thành công
               </MuiLink>
             </Box>
           </Grid>
+
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-              Resources
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 800, fontFamily: "Be Vietnam Pro", mb: 2 }}
+            >
+              Tài nguyên
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <MuiLink
@@ -106,58 +116,64 @@ function Footer() {
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Research
+                Nghiên cứu
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Tools
+                Công cụ
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                FAQ
+                Câu hỏi thường gặp
               </MuiLink>
             </Box>
           </Grid>
+
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-              Company
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 800, fontFamily: "Be Vietnam Pro", mb: 2 }}
+            >
+              Công ty
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                About Us
+                Về chúng tôi
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Careers
+                Tuyển dụng
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Contact
+                Liên hệ
               </MuiLink>
               <MuiLink
                 href="#"
                 sx={{ color: "text.secondary", textDecoration: "none" }}
               >
-                Privacy Policy
+                Chính sách bảo mật
               </MuiLink>
             </Box>
           </Grid>
         </Grid>
+
         <Divider sx={{ my: 4 }} />
+
         <Box textAlign="center">
           <Typography color="text.secondary" variant="body2">
-            &copy; {new Date().getFullYear()} QuitSmart. All rights reserved.
+            &copy; {new Date().getFullYear()} QuitSmart. Mọi quyền được bảo lưu.
           </Typography>
         </Box>
       </Container>

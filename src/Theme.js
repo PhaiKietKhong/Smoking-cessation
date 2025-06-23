@@ -1,4 +1,8 @@
 import { createTheme } from "@mui/material/styles";
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/500.css";
+import "@fontsource/be-vietnam-pro/600.css";
+import "@fontsource/be-vietnam-pro/700.css";
 
 const primaryDarkColor = "#025f4c";
 const primaryMainColor = "#38b277";
@@ -20,7 +24,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Be Vietnam Pro", "Roboto", "Helvetica", "Arial", sans-serif',
     h4: {
       fontWeight: 600,
       fontSize: "1.75rem",

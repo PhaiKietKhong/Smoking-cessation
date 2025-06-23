@@ -13,4 +13,5 @@ export const USER_API_ROUTES = {
   GET_SUGGEST_PLAN: `${BASE_URL}/api/Package/suggested-quit-plan`,
   POST_DAILY_PROGRESS: `${BASE_URL}/api/DailyProgress/daily`,
   PUT_DAILY_PROGRESS: `${BASE_URL}/api/Progress`,
+  GET_REPORT_DASHBOARD: `${BASE_URL}/api/Report/dashboard`,
 };
