@@ -1,14 +1,13 @@
 // DiaryList.jsx
 import { USER_API_ROUTES } from "@/api/apiRouter";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Button, Container, Typography } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
 import CardDiary from "./CardDiary/CardDiary";
-
 function DiaryList() {
   const [listDiary, setListDiary] = useState(null);
   const navigate = useNavigate();
@@ -54,19 +53,23 @@ function DiaryList() {
           justifyContent: "space-between",
         }}
       >
-        <Box>
-          <Typography variant="h4">Nhật ký sức khoẻ</Typography>
-        </Box>
-        <Box>
-          <Button variant="outline" onClick={() => navigate("/userDashBoard")}>
+        <Typography variant="h4">Tạo Cuộc Hẹn</Typography>
+        <Box display="flex" gap={1}>
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/userDashboard")}
+            sx={{ color: "white", borderColor: "white" }}
+          >
             Quay lại dashboard
           </Button>
           <Button
             onClick={() => navigate("/diary")}
-            variant="outline"
+            variant="outlined"
             startIcon={<AddIcon />}
+            sx={{ color: "white", borderColor: "white" }}
           >
-            Viết nhật ký mới
+            Viết nhật ký
           </Button>
         </Box>
       </Box>

@@ -1,23 +1,23 @@
 import { USER_API_ROUTES } from "@/api/apiRouter";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
 import {
+  Alert,
   Box,
   Button,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   TextField,
   Typography,
-  Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Container,
 } from "@mui/material";
 import axios from "axios";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 function Diary() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -153,16 +153,21 @@ function Diary() {
           display: "flex",
           alignItems: "center",
           p: 2,
-          bgcolor: "primary.main",
           color: "primary.light",
           gap: 2,
+          bgcolor: "primary.main",
+          justifyContent: "space-between",
         }}
       >
-        <ArrowBackIosNewIcon
-          sx={{ cursor: "pointer" }}
+        <Typography variant="h4">Nhật ký hằng ngày </Typography>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
           onClick={handleNavigate}
-        />
-        <Typography variant="h4">Nhật ký sức khoẻ</Typography>
+          sx={{ color: "white", borderColor: "white" }}
+        >
+          Quay lại Dashboard
+        </Button>
       </Box>
 
       {/* Form */}

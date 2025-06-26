@@ -14,4 +14,6 @@ export const USER_API_ROUTES = {
   POST_DAILY_PROGRESS: `${BASE_URL}/api/DailyProgress/daily`,
   PUT_DAILY_PROGRESS: `${BASE_URL}/api/Progress`,
   GET_REPORT_DASHBOARD: `${BASE_URL}/api/Report/dashboard`,
+  POST_APPOINTMENT: `${BASE_URL}/api/Premium/meeting/book`,
+  GET_APPOINTMENTS: `${BASE_URL}/api/Premium/meeting/my-meetings`,
 };

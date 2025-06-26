@@ -218,7 +218,7 @@ function FeaturesSection() {
                   sx={{ color: "primary.main", flexGrow: 1 }}
                 >
                   Theo dõi tiến trình của bạn, ăn mừng các cột mốc và thấy được
-                  lợi ích sức khỏe.
+                  lợi ích sức khỏe theo thời gian.
                 </Typography>
               </Box>
             </BotToTop>

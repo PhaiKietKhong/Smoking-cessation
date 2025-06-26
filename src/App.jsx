@@ -11,10 +11,12 @@ import CommunityPage from "./components/Community/CommunityPage";
 import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
 import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
 import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
-import BookingPage from "./components/BookingPage/BookingPage";
+import BookingPage from "./components/User/BookingPage/BookingPage";
 import ChatPage from "./ChatPage/ChatPage";
-import Diary from "./components/User/Dashboard/Header/Diary/Diary";
-import DiaryList from "./components/User/Dashboard/Header/Diary/DiaryList";
+import DiaryList from "./components/User/Diary/DiaryList";
+import CreateAppointment from "./components/User/CreateMeetingPage/CreateAppointment";
+import Diary from "./components/User/Diary/Diary";
+import AppointmentList from "./components/User/Appointments/Appointments";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route path="/chatPage" element={<ChatPage />} />
           <Route path="/diary" element={<Diary />} />
           <Route path="/diarylist" element={<DiaryList />} />
+          <Route path="/createAppointment" element={<CreateAppointment />} />
+          <Route path="/appointments" element={<AppointmentList />} />
         </Routes>
       </ThemeProvider>
     </Router>
