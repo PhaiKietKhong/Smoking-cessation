@@ -1,0 +1,132 @@
+import {
+  Avatar,
+  Box,
+  Button,
+  Modal,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  Divider,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { useState } from "react";
+
+export default function PostInputBox({ onSubmit }) {
+  const [open, setOpen] = useState(false);
+  const [newPost, setNewPost] = useState({
+    title: "",
+    content: "",
+    category: "",
+  });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setNewPost({ title: "", content: "", category: "" });
+  };
+
+  const handleSubmit = () => {
+    onSubmit(newPost);
+    handleClose();
+  };
+
+  return (
+    <>
+      <Paper
+        elevation={2}
+        sx={{
+          p: 2,
+          borderRadius: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          mt: 3,
+        }}
+      >
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Avatar />
+          <TextField
+            variant="outlined"
+            fullWidth
+            placeholder="Hãy chia sẻ trải nghiệm và kiến thức của bạn!"
+            onClick={handleOpen}
+            InputProps={{
+              readOnly: true,
+              sx: { borderRadius: "20px", backgroundColor: "#f0f2f5" },
+            }}
+          />
+        </Stack>
+
+        <Divider sx={{ my: 1 }} />
+      </Paper>
+
+      {/* Modal đăng bài */}
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            p: 4,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            width: "90%",
+            maxWidth: 500,
+            mx: "auto",
+            mt: 10,
+            boxShadow: 24,
+          }}
+        >
+          <Typography variant="h6" mb={2}>
+            Đăng bài mới
+          </Typography>
+          <Stack spacing={2}>
+            <TextField
+              label="Tiêu đề"
+              fullWidth
+              value={newPost.title}
+              onChange={(e) =>
+                setNewPost({ ...newPost, title: e.target.value })
+              }
+            />
+            <TextField
+              label="Nội dung"
+              fullWidth
+              multiline
+              rows={4}
+              value={newPost.content}
+              onChange={(e) =>
+                setNewPost({ ...newPost, content: e.target.value })
+              }
+            />
+            <FormControl fullWidth>
+              <InputLabel>Chủ đề</InputLabel>
+              <Select
+                value={newPost.category}
+                label="Chủ đề"
+                onChange={(e) =>
+                  setNewPost({ ...newPost, category: e.target.value })
+                }
+              >
+                <MenuItem value="Bài viết">Bài viết</MenuItem>
+                <MenuItem value="Chia sẻ kiến thức">Chia sẻ kiến thức</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={!newPost.title || !newPost.content || !newPost.category}
+            >
+              Đăng bài
+            </Button>
+          </Stack>
+        </Box>
+      </Modal>
+    </>
+  );
+}

@@ -1,163 +1,144 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   Box,
-//   Typography,
-//   Container,
-//   Paper,
-//   TextField,
-//   Button,
-// } from "@mui/material";
-// import SendIcon from "@mui/icons-material/Send";
-// import axios from "axios";
-// import { USER_API_ROUTES } from "@/api/apiRouter";
-// import dayjs from "dayjs";
+import { useState } from "react";
+import {
+  Trophy,
+  MessageSquare,
+  Calendar,
+  Heart,
+  Share2,
+  MoreHorizontal,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
-// const ChatPage = () => {
-//   const [messages, setMessages] = useState([]);
-//   const [newMessage, setNewMessage] = useState("");
-//   const currentUserId = 1; // Giả sử user đang đăng nhập có ID là 1
+export default function CommunityPage() {
+  const [_, setActiveTab] = useState("feed");
 
-//   useEffect(() => {
-//     const fetchMessages = async () => {
-//       try {
-//         const token = localStorage.getItem("token");
-//         const res = await axios.get(USER_API_ROUTES.GET_MESSAGES, {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-//         setMessages(res.data.data);
-//       } catch (error) {
-//         console.error("Lỗi khi lấy tin nhắn:", error);
-//       }
-//     };
+  const posts = [
+    {
+      postId: 3,
+      accountId: 1,
+      title: "chia sẻ bí quyết",
+      content: ".........",
+      category: "chia sẻ",
+      status: "Published",
+      viewCount: 0,
+      createdAt: "2025-06-27T04:02:48.8007885",
+      updatedAt: "2025-06-27T04:02:48.8007886",
+      authorName: "k123",
+      authorUsername: "k123",
+      likesCount: 0,
+      commentsCount: 0,
+      isLikedByCurrentUser: false,
+    },
+    {
+      postId: 2,
+      accountId: 1,
+      title: "test",
+      content: "qqqqqq",
+      category: "string",
+      status: "Published",
+      viewCount: 0,
+      createdAt: "2025-06-27T03:09:37.66547",
+      updatedAt: "2025-06-27T03:09:37.66547",
+      authorName: "k123",
+      authorUsername: "k123",
+      likesCount: 0,
+      commentsCount: 0,
+      isLikedByCurrentUser: false,
+    },
+  ];
 
-//     fetchMessages();
-//   }, []);
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="container mx-auto max-w-3xl px-4 py-12">
+        <Tabs
+          defaultValue="feed"
+          className="mb-12"
+          onValueChange={setActiveTab}
+        >
+          <TabsList className="grid w-full grid-cols-1 mb-8">
+            <TabsTrigger value="feed">Bài Đăng</TabsTrigger>
+          </TabsList>
 
-//   const handleSend = async () => {
-//     if (!newMessage.trim()) return;
-//     try {
-//       const token = localStorage.getItem("token");
-//       await axios.post(
-//         USER_API_ROUTES.SEND_MESSAGE,
-//         {
-//           content: newMessage,
-//           messageType: "string",
-//           receiverId: 1,
-//         },
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-//       setMessages((prev) => [
-//         ...prev,
-//         {
-//           messageId: Date.now(),
-//           senderId: currentUserId,
-//           senderName: "Bạn",
-//           receiverId: 1,
-//           receiverName: "Coach",
-//           content: newMessage,
-//           messageType: "string",
-//           sentAt: new Date().toISOString(),
-//         },
-//       ]);
-//       setNewMessage("");
-//     } catch (error) {
-//       console.error("Không gửi được tin nhắn:", error);
-//     }
-//   };
+          <TabsContent value="feed">
+            <div className="space-y-6">
+              {posts.map((post) => (
+                <Card key={post.postId} className="overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center">
+                        <Avatar className="h-10 w-10 mr-3">
+                          <AvatarImage src="/placeholder.svg" />
+                          <AvatarFallback>
+                            {post.authorName.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-medium">{post.authorName}</div>
+                          <div className="text-xs text-gray-500">
+                            {new Date(post.createdAt).toLocaleString("vi-VN")}
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardHeader>
 
-//   return (
-//     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-//       {/* Header */}
-//       <Box
-//         sx={{
-//           bgcolor: "primary.main",
-//           color: "white",
-//           p: 2,
-//           textAlign: "center",
-//         }}
-//       >
-//         <Typography variant="h5">Trang trò chuyện</Typography>
-//       </Box>
+                  <CardContent className="pb-3">
+                    <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
+                    <p className="mb-4">{post.content}</p>
+                    <div className="text-sm text-gray-500">
+                      Chủ đề:{" "}
+                      <span className="font-medium text-gray-700">
+                        {post.category}
+                      </span>
+                    </div>
+                    <div className="flex items-center mt-4 text-sm text-gray-500">
+                      <div className="flex items-center mr-4">
+                        <Heart className="h-4 w-4 mr-1" />
+                        <span>{post.likesCount}</span>
+                      </div>
+                      <div className="flex items-center mr-4">
+                        <MessageSquare className="h-4 w-4 mr-1" />
+                        <span>{post.commentsCount} bình luận</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Share2 className="h-4 w-4 mr-1" />
+                        <span>{post.viewCount} lượt xem</span>
+                      </div>
+                    </div>
+                  </CardContent>
 
-//       {/* Chat Messages */}
-//       <Container
-//         sx={{
-//           flexGrow: 1,
-//           overflowY: "auto",
-//           py: 2,
-//           display: "flex",
-//           flexDirection: "column",
-//           gap: 2,
-//         }}
-//       >
-//         {messages.map((msg) => {
-//           const isOwn = msg.senderId === currentUserId;
-//           const isBooking = msg.messageType === "SESSION_BOOKING";
-
-//           return (
-//             <Box
-//               key={msg.messageId}
-//               sx={{
-//                 alignSelf: isOwn ? "flex-end" : "flex-start",
-//                 maxWidth: "70%",
-//               }}
-//             >
-//               <Paper
-//                 elevation={2}
-//                 sx={{
-//                   p: 1.5,
-//                   bgcolor: isBooking ? "#e0f7fa" : isOwn ? "#c8e6c9" : "#fff",
-//                 }}
-//               >
-//                 <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-//                   {isBooking ? "[Đặt lịch]" : ""}
-//                   {msg.content}
-//                 </Typography>
-//                 <Typography
-//                   variant="caption"
-//                   sx={{ display: "block", mt: 0.5 }}
-//                 >
-//                   {dayjs(msg.sentAt).format("HH:mm DD/MM/YYYY")}
-//                 </Typography>
-//               </Paper>
-//             </Box>
-//           );
-//         })}
-//       </Container>
-
-//       {/* Input Box */}
-//       <Box
-//         sx={{
-//           display: "flex",
-//           p: 2,
-//           borderTop: "1px solid #ccc",
-//         }}
-//       >
-//         <TextField
-//           fullWidth
-//           placeholder="Nhập tin nhắn..."
-//           value={newMessage}
-//           onChange={(e) => setNewMessage(e.target.value)}
-//           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-//         />
-//         <Button
-//           variant="contained"
-//           sx={{ ml: 1 }}
-//           onClick={handleSend}
-//           endIcon={<SendIcon />}
-//         >
-//           Gửi
-//         </Button>
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default ChatPage;
+                  <CardFooter className="border-t pt-3 flex justify-between">
+                    <Button variant="ghost" size="sm" className="text-gray-500">
+                      <Heart className="h-4 w-4 mr-2" />
+                      Thích
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-gray-500">
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Bình luận
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-gray-500">
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Chia sẻ
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}

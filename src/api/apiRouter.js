@@ -19,3 +19,14 @@ export const USER_API_ROUTES = {
   GET_MESSAGES: `${BASE_URL}/api/Premium/chat/history`,
   GET_MY_COACH: `${BASE_URL}/api/Premium/coach/my-coach`,
 };
+
+export const COMMON_API = {
+  GET_POSTS: `${BASE_URL}/api/CommunityPost`,
+  GET_POPULAR_POSTS: `${BASE_URL}/api/CommunityPost/popular`,
+  CREATE_POST: `${BASE_URL}/api/CommunityPost`,
+  LIKE_POST: `${BASE_URL}/api/CommunityPost`,
+  GET_EXPERIENCE_POST: `${BASE_URL}/api/CommunityPost/category`,
+  GET_MY_POSTS: `${BASE_URL}/api/CommunityPost/my-posts`,
+  PUT_MY_POST: `${BASE_URL}/api/CommunityPost`,
+  DELETE_MY_POST: `${BASE_URL}/api/CommunityPost`,
+};
