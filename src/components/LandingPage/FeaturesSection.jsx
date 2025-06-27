@@ -4,6 +4,9 @@ import { BotToTop, FadeIn } from "../Animations/animations";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/700.css";
+import "@fontsource/be-vietnam-pro/800.css";
 function FeaturesSection() {
   return (
     <Box
@@ -13,14 +16,14 @@ function FeaturesSection() {
         backgroundImage:
           "url('https://www.smallsteps.org.nz/_next/image?url=%2Fimages%2Fss-tool-footer.png&w=1920&q=75')",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover", // Changed from "100% auto" to "cover"
-        backgroundPosition: "center", // Changed from "top center"
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         backgroundColor: "primary.dark",
         position: "relative",
-        minHeight: "100vh", // Added to ensure full height
-        display: "flex", // Added for better content positioning
-        flexDirection: "column", // Added for vertical layout
-        alignItems: "center", // Center content horizontally
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         overflow: "hidden",
         "&::before": {
           content: '""',
@@ -45,10 +48,11 @@ function FeaturesSection() {
               sx={{
                 textAlign: "center",
                 fontWeight: 800,
+                fontFamily: "Be Vietnam Pro",
                 color: "primary.light",
               }}
             >
-              How To My Program Works
+              Chương trình hoạt động như thế nào?
             </Typography>
 
             <Typography
@@ -60,8 +64,8 @@ function FeaturesSection() {
                 mb: 2,
               }}
             >
-              Our scientifically-backed approach helps you quit smoking
-              permanently through a personalized journey
+              Phương pháp dựa trên khoa học của chúng tôi giúp bạn cai thuốc
+              vĩnh viễn thông qua một hành trình cá nhân hóa
             </Typography>
           </BotToTop>
         </Box>
@@ -76,7 +80,7 @@ function FeaturesSection() {
             mt: 4,
           }}
         >
-          <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid item size={{ xs: 12, md: 4 }}>
             <BotToTop>
               <Box
                 sx={{
@@ -104,23 +108,27 @@ function FeaturesSection() {
                 />
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                  sx={{
+                    fontWeight: 800,
+                    fontFamily: "Be Vietnam Pro",
+                    color: "primary.main",
+                    mb: 2,
+                  }}
                 >
-                  Personalized Plan
+                  Kế hoạch cá nhân hóa
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "primary.main", flexGrow: 1 }}
                 >
-                  We create a custom quitting plan based on your smoking habits,
-                  triggers, and personal goals.
+                  Chúng tôi tạo một kế hoạch cai thuốc riêng dựa trên thói quen,
+                  tác nhân và mục tiêu của bạn.
                 </Typography>
               </Box>
             </BotToTop>
           </Grid>
 
-          {/* Second Card */}
-          <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid item size={{ xs: 12, md: 4 }}>
             <BotToTop delay={0.3}>
               <Box
                 sx={{
@@ -148,23 +156,27 @@ function FeaturesSection() {
                 />
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                  sx={{
+                    fontWeight: 800,
+                    fontFamily: "Be Vietnam Pro",
+                    mb: 2,
+                    color: "primary.main",
+                  }}
                 >
-                  Community Support
+                  Cộng đồng hỗ trợ
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "primary.main", flexGrow: 1 }}
                 >
-                  Connect with others through our supportive community and
-                  expert coaches.
+                  Kết nối với người khác thông qua cộng đồng và các huấn luyện
+                  viên chuyên môn của chúng tôi.
                 </Typography>
               </Box>
             </BotToTop>
           </Grid>
 
-          {/* Third Card */}
-          <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
+          <Grid item size={{ xs: 12, md: 4 }}>
             <BotToTop delay={0.6}>
               <Box
                 sx={{
@@ -192,16 +204,21 @@ function FeaturesSection() {
                 />
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: 800, mb: 2, color: "primary.main" }}
+                  sx={{
+                    fontWeight: 800,
+                    fontFamily: "Be Vietnam Pro",
+                    mb: 2,
+                    color: "primary.main",
+                  }}
                 >
-                  Progress Tracking
+                  Theo dõi tiến trình
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "primary.main", flexGrow: 1 }}
                 >
-                  Track your progress, celebrate milestones, and see the health
-                  benefits in real-time.
+                  Theo dõi tiến trình của bạn, ăn mừng các cột mốc và thấy được
+                  lợi ích sức khỏe theo thời gian.
                 </Typography>
               </Box>
             </BotToTop>

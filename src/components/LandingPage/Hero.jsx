@@ -9,8 +9,9 @@ import {
 import React from "react";
 import { motion } from "framer-motion";
 import { LeftToRight, BotToTop } from "../Animations/animations";
-import "@fontsource/poppins/700.css";
-import "@fontsource/poppins/400.css";
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/700.css";
+import "@fontsource/be-vietnam-pro/800.css";
 import { useNavigate } from "react-router-dom";
 
 function Hero() {
@@ -72,32 +73,32 @@ function Hero() {
           <Typography
             variant="h3"
             sx={{
-              fontFamily: "Poppins",
-              fontWeight: 700,
+              fontFamily: "Be Vietnam Pro",
+              fontWeight: 800,
               fontSize: isSmall ? "1rem" : isMedium ? "1.5rem" : "2rem",
               color: "primary.light",
               textShadow: "2px 2px 10px rgba(0,0,0,0.7)",
             }}
           >
-            Join more than 10 million people
+            Hơn 10 triệu người đã tham gia
           </Typography>
           <Typography
             variant="h3"
             sx={{
-              fontFamily: "Poppins",
-              fontWeight: 700,
+              fontFamily: "Be Vietnam Pro",
+              fontWeight: 800,
               fontSize: isSmall ? "1rem" : isMedium ? "1.5rem" : "2rem",
               color: "primary.light",
               textShadow: "2px 2px 10px rgba(0,0,0,0.7)",
             }}
           >
-            who have already quit smoking
+            và bỏ thuốc thành công
           </Typography>
 
           <Button
             variant="contained"
             sx={{
-              fontFamily: "Poppins",
+              fontFamily: "Be Vietnam Pro",
               fontWeight: 700,
               fontSize: isSmall ? "1.2rem" : isMedium ? "1.5rem" : "2rem",
               px: isSmall ? 3 : 5,
@@ -106,7 +107,7 @@ function Hero() {
             }}
             onClick={() => handleNavigate("onBoardingPage")}
           >
-            Start Your Journey
+            Bắt đầu hành trình
           </Button>
         </BotToTop>
       </Container>

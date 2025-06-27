@@ -13,4 +13,9 @@ export const USER_API_ROUTES = {
   GET_SUGGEST_PLAN: `${BASE_URL}/api/Package/suggested-quit-plan`,
   POST_DAILY_PROGRESS: `${BASE_URL}/api/DailyProgress/daily`,
   PUT_DAILY_PROGRESS: `${BASE_URL}/api/Progress`,
+  GET_REPORT_DASHBOARD: `${BASE_URL}/api/Report/dashboard`,
+  POST_APPOINTMENT: `${BASE_URL}/api/Premium/meeting/book`,
+  GET_APPOINTMENTS: `${BASE_URL}/api/Premium/meeting/my-meetings`,
+  GET_MESSAGES: `${BASE_URL}/api/Premium/chat/history`,
+  GET_MY_COACH: `${BASE_URL}/api/Premium/coach/my-coach`,
 };

@@ -4,6 +4,10 @@ import SchoolIcon from "@mui/icons-material/School";
 import { Box, Container, Typography } from "@mui/material";
 import { AnimatedProgress, BotToTop } from "../Animations/animations";
 import TimelineIcon from "@mui/icons-material/Timeline";
+import "@fontsource/be-vietnam-pro/400.css";
+import "@fontsource/be-vietnam-pro/700.css";
+import "@fontsource/be-vietnam-pro/800.css";
+
 function Statistical() {
   function Progress({ timneline, target, duration, effect }) {
     return (
@@ -14,6 +18,7 @@ function Statistical() {
           justifyContent: "center",
           mx: "auto",
           width: { xs: "100%", md: "70%" },
+          fontFamily: "Be Vietnam Pro",
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -32,6 +37,7 @@ function Statistical() {
               xs: "body2",
               md: "body1",
             },
+            fontFamily: "Be Vietnam Pro",
           }}
         >
           {effect}
@@ -41,11 +47,7 @@ function Statistical() {
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "primary.dark",
-      }}
-    >
+    <Box sx={{ backgroundColor: "primary.dark", fontFamily: "Be Vietnam Pro" }}>
       <Container maxWidth="lg">
         <BotToTop>
           <Box sx={{ display: "flex", justifyContent: "space-around", py: 6 }}>
@@ -57,13 +59,7 @@ function Statistical() {
                 flexDirection: "column",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <GroupsIcon
                   sx={{
                     mr: 1,
@@ -77,11 +73,12 @@ function Statistical() {
                       xs: "subtitle1",
                       md: "h4",
                     },
-                    fontWeight: 800, // Changed from fontSize to fontWeight
+                    fontWeight: 800,
                     color: "primary.light",
+                    fontFamily: "Be Vietnam Pro",
                   }}
                 >
-                  13422 +
+                  13422+
                 </Typography>
               </Box>
               <Typography
@@ -94,9 +91,10 @@ function Statistical() {
                   color: "primary.light",
                 }}
               >
-                People Quit Smoking
+                Người đã bỏ thuốc
               </Typography>
             </Box>
+
             <Box
               sx={{
                 display: "flex",
@@ -105,13 +103,7 @@ function Statistical() {
                 flexDirection: "column",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <EmojiEventsIcon
                   sx={{
                     mr: 1,
@@ -125,8 +117,9 @@ function Statistical() {
                       xs: "subtitle1",
                       md: "h4",
                     },
-                    fontSize: "bolder",
+                    fontWeight: 800,
                     color: "primary.light",
+                    fontFamily: "Be Vietnam Pro",
                   }}
                 >
                   94%
@@ -135,7 +128,6 @@ function Statistical() {
               <Typography
                 sx={{
                   textAlign: "center",
-
                   typography: {
                     xs: "body2",
                     md: "body1",
@@ -143,9 +135,10 @@ function Statistical() {
                   color: "primary.light",
                 }}
               >
-                Success Rate
+                Tỉ lệ thành công
               </Typography>
             </Box>
+
             <Box
               sx={{
                 display: "flex",
@@ -154,13 +147,7 @@ function Statistical() {
                 flexDirection: "column",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <SchoolIcon
                   sx={{
                     mr: 1,
@@ -170,17 +157,16 @@ function Statistical() {
                 />
                 <Typography
                   sx={{
-                    textAlign: "center",
-
                     typography: {
                       xs: "subtitle1",
                       md: "h4",
                     },
-                    fontSize: "bolder",
+                    fontWeight: 800,
                     color: "primary.light",
+                    fontFamily: "Be Vietnam Pro",
                   }}
                 >
-                  30 Days
+                  30 ngày
                 </Typography>
               </Box>
               <Typography
@@ -192,22 +178,26 @@ function Statistical() {
                   color: "primary.light",
                 }}
               >
-                Average Time to Quit
+                Thời gian trung bình để bỏ thuốc
               </Typography>
             </Box>
           </Box>
         </BotToTop>
 
-        {/*progress */}
+        {/* Timeline progress */}
         <Box>
-          {/*title */}
           <BotToTop>
             <Box>
               <Typography
                 variant="h4"
-                sx={{ textAlign: "center", color: "white", fontWeight: 800 }}
+                sx={{
+                  textAlign: "center",
+                  color: "white",
+                  fontWeight: 800,
+                  fontFamily: "Be Vietnam Pro",
+                }}
               >
-                Your Health Recovery Timeline
+                Lộ trình hồi phục sức khỏe
               </Typography>
             </Box>
             <Typography
@@ -217,49 +207,51 @@ function Statistical() {
                 color: "primary.light",
                 mt: 1,
                 mb: 2,
+                fontFamily: "Be Vietnam Pro",
               }}
             >
-              Watch your body heal itself after quitting smoking
+              Theo dõi cơ thể bạn hồi phục sau khi bỏ thuốc
             </Typography>
           </BotToTop>
 
-          {/*progress */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Progress
-              timneline={"20 minutes"}
-              target={10}
+              timneline={"20 phút"}
+              target={5} // bắt đầu sớm, thay vì 10%
               duration={1000}
-              effect={"Blood pressure and pulse rate return to normal"}
+              effect={"Huyết áp và nhịp tim trở lại bình thường"}
             />
             <Progress
-              timneline={"24 Hours"}
-              target={25}
+              timneline={"24 giờ"}
+              target={15} // loại bỏ CO, nhưng vẫn còn chất độc khác
               duration={1000}
-              effect={"Carbon monoxide is eliminated from the body"}
+              effect={"Khí CO được loại bỏ khỏi cơ thể"}
             />
             <Progress
-              timneline={"48 Hours"}
-              target={40}
+              timneline={"48 giờ"}
+              target={25} // khứu giác, vị giác cải thiện một phần
               duration={1000}
-              effect={"Sense of taste and smell improve"}
+              effect={"Vị giác và khứu giác được cải thiện"}
             />
             <Progress
-              timneline={"2-3 Months"}
-              target={60}
+              timneline={"2-3 tháng"}
+              target={45} // chức năng phổi, tuần hoàn cải thiện đáng kể
               duration={1000}
-              effect={"Circulation improves and lung function increases"}
+              effect={"Tuần hoàn cải thiện, chức năng phổi tăng"}
             />
             <Progress
-              timneline={"1 Year"}
-              target={80}
+              timneline={"1 năm"}
+              target={70} // tim mạch giảm rủi ro lớn
               duration={1000}
-              effect={"Risk of heart disease drops by half"}
+              effect={"Nguy cơ bệnh tim giảm một nửa"}
             />
             <Progress
-              timneline={"10 Years"}
-              target={100}
+              timneline={"10 năm"}
+              target={100} // đạt phục hồi tối đa sau nhiều năm
               duration={1000}
-              effect={"Lung cancer risk drops to half that of a smoker"}
+              effect={
+                "Nguy cơ ung thư phổi giảm một nửa so với người hút thuốc"
+              }
             />
           </Box>
         </Box>

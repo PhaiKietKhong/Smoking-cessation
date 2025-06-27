@@ -13,6 +13,8 @@ import * as React from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
+import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded";
+import PermPhoneMsgRoundedIcon from "@mui/icons-material/PermPhoneMsgRounded";
 import { useNavigate } from "react-router-dom";
 
 export default function PrimarySearchAppBar({ userData }) {
@@ -135,7 +137,7 @@ export default function PrimarySearchAppBar({ userData }) {
       >
         <Toolbar>
           <Typography
-            variant="h6"
+            variant="h4"
             noWrap
             component="div"
             sx={{
@@ -143,7 +145,7 @@ export default function PrimarySearchAppBar({ userData }) {
               color: "primary.light",
             }}
           >
-            Welcome Back My Friend :)
+            Chào mừng {localStorage.getItem("userName")}
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -157,6 +159,21 @@ export default function PrimarySearchAppBar({ userData }) {
                 mr: 2,
                 borderColor: "primary.light",
               }}
+              startIcon={<PermPhoneMsgRoundedIcon />}
+              onClick={() => navigate("/createAppointment")}
+            >
+              Tạo cuộc hẹn
+            </Button>
+            <Button
+              size="large"
+              aria-label="show 17 new notifications"
+              variant="outlined"
+              sx={{
+                color: "primary.light",
+                mr: 2,
+                borderColor: "primary.light",
+              }}
+              startIcon={<ImportContactsRoundedIcon />}
               onClick={() => navigate("/diarylist")}
             >
               Nhật ký

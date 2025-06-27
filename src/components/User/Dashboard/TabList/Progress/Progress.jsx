@@ -213,10 +213,10 @@ function Progress() {
         }}
       >
         <Typography sx={{ color: "black", mb: 1 }} variant="h4">
-          Chart progress
+          Biểu Đồ thuốc lá tránh được
         </Typography>
         <Typography sx={{ color: "secondary.dark" }} variant="body2">
-          Day of quit smoke
+          2 tuần gần nhất
         </Typography>
         <Chart />
       </Box>

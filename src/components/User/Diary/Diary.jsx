@@ -1,23 +1,24 @@
 import { USER_API_ROUTES } from "@/api/apiRouter";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
 import {
+  Alert,
   Box,
   Button,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   TextField,
   Typography,
-  Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Container,
 } from "@mui/material";
 import axios from "axios";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+
 function Diary() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -26,6 +27,7 @@ function Diary() {
   const [duplicateAlert, setDuplicateAlert] = useState(false);
 
   const [formData, setFormData] = useState({
+    date: dayjs().format("YYYY-MM-DD"),
     cigarettesAvoided: "",
     moneySaved: "",
     healthScore: "",
@@ -112,7 +114,7 @@ function Diary() {
     const token = localStorage.getItem("token");
 
     const payload = {
-      date: dayjs().toISOString(),
+      date: dayjs(formData.date).toISOString(),
       cigarettesAvoided: parseInt(formData.cigarettesAvoided),
       moneySaved: parseInt(formData.moneySaved),
       healthScore: parseInt(formData.healthScore),
@@ -141,6 +143,7 @@ function Diary() {
       }
     }
   };
+
   const handleNavigate = () => {
     navigate("/userDashboard");
   };
@@ -153,16 +156,21 @@ function Diary() {
           display: "flex",
           alignItems: "center",
           p: 2,
-          bgcolor: "primary.main",
           color: "primary.light",
           gap: 2,
+          bgcolor: "primary.main",
+          justifyContent: "space-between",
         }}
       >
-        <ArrowBackIosNewIcon
-          sx={{ cursor: "pointer" }}
+        <Typography variant="h4">Nhật ký hằng ngày </Typography>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
           onClick={handleNavigate}
-        />
-        <Typography variant="h4">Nhật ký sức khoẻ</Typography>
+          sx={{ color: "white", borderColor: "white" }}
+        >
+          Quay lại Dashboard
+        </Button>
       </Box>
 
       {/* Form */}
@@ -174,6 +182,21 @@ function Diary() {
           py: 4,
         }}
       >
+        {/* Ngày */}
+        <TextField
+          label="Ngày viết nhật ký"
+          name="date"
+          type="date"
+          value={formData.date}
+          onChange={handleChange}
+          InputLabelProps={{ shrink: true }}
+          inputProps={{
+            max: dayjs().format("YYYY-MM-DD"),
+          }}
+          error={!!errors.date}
+          helperText={errors.date}
+        />
+
         <TextField
           label="Số điếu thuốc tránh được"
           name="cigarettesAvoided"
@@ -334,7 +357,7 @@ function Diary() {
         </Box>
       </Container>
 
-      {/* Snackbar thành công*/}
+      {/* Snackbar thành công */}
       <Snackbar
         open={showAlert}
         autoHideDuration={4000}
@@ -350,7 +373,7 @@ function Diary() {
         </Alert>
       </Snackbar>
 
-      {/* Snackbar lỗi*/}
+      {/* Snackbar lỗi trùng */}
       <Snackbar
         open={duplicateAlert}
         autoHideDuration={4000}
@@ -362,7 +385,7 @@ function Diary() {
           severity="warning"
           sx={{ width: "100%" }}
         >
-          Hôm nay bạn đã viết nhật ký rồi!
+          Bạn đã viết nhật ký ngày hôm đấy rồi!
         </Alert>
       </Snackbar>
     </Box>
