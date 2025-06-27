@@ -54,6 +54,7 @@ function Diary() {
         console.error("Failed to fetch user data", error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -114,7 +115,12 @@ function Diary() {
     const token = localStorage.getItem("token");
 
     const payload = {
-      date: dayjs(formData.date).toISOString(),
+      date: dayjs(formData.date)
+        .hour(0)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .format(),
       cigarettesAvoided: parseInt(formData.cigarettesAvoided),
       moneySaved: parseInt(formData.moneySaved),
       healthScore: parseInt(formData.healthScore),

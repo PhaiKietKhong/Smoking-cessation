@@ -12,7 +12,7 @@ import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
 import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
 import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
 import BookingPage from "./components/User/BookingPage/BookingPage";
-import ChatPage from "./ChatPage/ChatPage";
+// import ChatPage from "./ChatPage/ChatPage";
 import DiaryList from "./components/User/Diary/DiaryList";
 import CreateAppointment from "./components/User/CreateMeetingPage/CreateAppointment";
 import Diary from "./components/User/Diary/Diary";
@@ -33,7 +33,7 @@ function App() {
           <Route path="/formersmokedata" element={<FormerSmokeData />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/booking" element={<BookingPage />} />
-          <Route path="/chatPage" element={<ChatPage />} />
+          {/* <Route path="/chatPage" element={<ChatPage />} /> */}
           <Route path="/diary" element={<Diary />} />
           <Route path="/diarylist" element={<DiaryList />} />
           <Route path="/createAppointment" element={<CreateAppointment />} />
