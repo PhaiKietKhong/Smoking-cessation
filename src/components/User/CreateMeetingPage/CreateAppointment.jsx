@@ -97,6 +97,7 @@ const CreateAppointment = () => {
               label="Thời gian mong muốn"
               value={preferredDate}
               onChange={(newValue) => setPreferredDate(newValue)}
+              minDateTime={new Date()}
               renderInput={(params) => <TextField {...params} />}
             />
 

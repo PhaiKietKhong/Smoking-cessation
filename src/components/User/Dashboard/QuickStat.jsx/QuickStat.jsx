@@ -30,7 +30,6 @@ function QuickStat({ userData }) {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res.data);
 
         setData(res.data);
       } catch (error) {}

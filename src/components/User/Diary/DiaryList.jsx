@@ -53,7 +53,7 @@ function DiaryList() {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4">Tạo Cuộc Hẹn</Typography>
+        <Typography variant="h4">Nhật ký của bạn</Typography>
         <Box display="flex" gap={1}>
           <Button
             variant="outlined"
