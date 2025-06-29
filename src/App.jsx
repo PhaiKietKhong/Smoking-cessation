@@ -18,7 +18,6 @@ import CreateAppointment from "./components/User/CreateMeetingPage/CreateAppoint
 import Diary from "./components/User/Diary/Diary";
 import AppointmentList from "./components/User/Appointments/Appointments";
 import PricingPage from "./components/Package/Package";
-
 function App() {
   return (
     <Router>
@@ -39,7 +38,7 @@ function App() {
           <Route path="/diarylist" element={<DiaryList />} />
           <Route path="/createAppointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<AppointmentList />} />
-          <Route path="/package" element={<PricingPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
         </Routes>
       </ThemeProvider>
     </Router>
