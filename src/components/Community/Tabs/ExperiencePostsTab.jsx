@@ -25,7 +25,7 @@ export default function ExperiencePostsTab({ reload }) {
   return posts.length > 0 ? (
     <Stack spacing={4} mt={4}>
       {posts.map((post) => (
-        <Feed key={post.postId} post={post} />
+        <Feed key={post.postId} post={post} onReload={fetchExperience} />
       ))}
     </Stack>
   ) : (

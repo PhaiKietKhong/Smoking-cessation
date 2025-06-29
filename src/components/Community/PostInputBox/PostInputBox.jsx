@@ -8,16 +8,14 @@ import {
   TextField,
   Typography,
   Divider,
-  IconButton,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useState } from "react";
+import axios from "axios";
+import { COMMON_API } from "@/api/apiRouter";
 
 export default function PostInputBox({ onSubmit }) {
   const [open, setOpen] = useState(false);
@@ -26,16 +24,33 @@ export default function PostInputBox({ onSubmit }) {
     content: "",
     category: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => {
     setOpen(false);
     setNewPost({ title: "", content: "", category: "" });
+    setLoading(false);
   };
 
-  const handleSubmit = () => {
-    onSubmit(newPost);
-    handleClose();
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      await axios.post(COMMON_API.CREATE_POST, newPost, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      onSubmit(); // Notify parent to refresh
+      handleClose();
+    } catch (error) {
+      console.error("Lỗi đăng bài:", error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,9 +135,14 @@ export default function PostInputBox({ onSubmit }) {
             <Button
               variant="contained"
               onClick={handleSubmit}
-              disabled={!newPost.title || !newPost.content || !newPost.category}
+              disabled={
+                !newPost.title ||
+                !newPost.content ||
+                !newPost.category ||
+                loading
+              }
             >
-              Đăng bài
+              {loading ? "Đang đăng..." : "Đăng bài"}
             </Button>
           </Stack>
         </Box>

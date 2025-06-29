@@ -11,12 +11,13 @@ import CommunityPage from "./components/Community/CommunityPage";
 import OnboadingPage from "./components/OnBoardingPage/OnboadingPage";
 import UserDashBoard from "./components/User/Dashboard/UserDashBoard";
 import FormerSmokeData from "./components/User/Dashboard/FormerSmokerData/FormerSmokeData";
-import BookingPage from "./components/User/BookingPage/BookingPage";
-// import ChatPage from "./ChatPage/ChatPage";
+import BookingPage from "./components/User/CoachListPage/CoachListPage";
 import DiaryList from "./components/User/Diary/DiaryList";
 import CreateAppointment from "./components/User/CreateMeetingPage/CreateAppointment";
 import Diary from "./components/User/Diary/Diary";
 import AppointmentList from "./components/User/Appointments/Appointments";
+import CoachListPage from "./components/User/CoachListPage/CoachListPage";
+import ChatPage from "./components/User/ChatPage/ChatPage";
 
 function App() {
   return (
@@ -33,11 +34,12 @@ function App() {
           <Route path="/formersmokedata" element={<FormerSmokeData />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/booking" element={<BookingPage />} />
-          {/* <Route path="/chatPage" element={<ChatPage />} /> */}
+          <Route path="/chatPage" element={<ChatPage />} />
           <Route path="/diary" element={<Diary />} />
           <Route path="/diarylist" element={<DiaryList />} />
           <Route path="/createAppointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<AppointmentList />} />
+          <Route path="/coachlistpage" element={<CoachListPage />} />
         </Routes>
       </ThemeProvider>
     </Router>

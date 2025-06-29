@@ -1,144 +1,200 @@
-import { useState } from "react";
+import { USER_API_ROUTES } from "@/api/apiRouter";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SendIcon from "@mui/icons-material/Send";
 import {
-  Trophy,
-  MessageSquare,
-  Calendar,
-  Heart,
-  Share2,
-  MoreHorizontal,
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+const ChatPage = ({ chatId, onBack }) => {
+  const [coach, setCoach] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
 
-export default function CommunityPage() {
-  const [_, setActiveTab] = useState("feed");
+  const fetchChatHistory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(USER_API_ROUTES.GET_CHAT_HISTORY, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCoach(res.data.coach);
+      setMessages(res.data.messages);
+    } catch (err) {
+      console.error("Lỗi tải lịch sử chat:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const posts = [
-    {
-      postId: 3,
-      accountId: 1,
-      title: "chia sẻ bí quyết",
-      content: ".........",
-      category: "chia sẻ",
-      status: "Published",
-      viewCount: 0,
-      createdAt: "2025-06-27T04:02:48.8007885",
-      updatedAt: "2025-06-27T04:02:48.8007886",
-      authorName: "k123",
-      authorUsername: "k123",
-      likesCount: 0,
-      commentsCount: 0,
-      isLikedByCurrentUser: false,
-    },
-    {
-      postId: 2,
-      accountId: 1,
-      title: "test",
-      content: "qqqqqq",
-      category: "string",
-      status: "Published",
-      viewCount: 0,
-      createdAt: "2025-06-27T03:09:37.66547",
-      updatedAt: "2025-06-27T03:09:37.66547",
-      authorName: "k123",
-      authorUsername: "k123",
-      likesCount: 0,
-      commentsCount: 0,
-      isLikedByCurrentUser: false,
-    },
-  ];
+  useEffect(() => {
+    fetchChatHistory();
+  }, [chatId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        USER_API_ROUTES.SEND_CHAT,
+        {
+          content: message,
+          messageType: "text",
+          attachmentUrl: null,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setMessage(""); // clear input
+      await fetchChatHistory(); // reload tin nhắn từ API
+    } catch (err) {
+      console.error("Lỗi gửi tin nhắn:", err);
+    }
+  };
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="container mx-auto max-w-3xl px-4 py-12">
-        <Tabs
-          defaultValue="feed"
-          className="mb-12"
-          onValueChange={setActiveTab}
+    <>
+      {/* Header  */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          p: 2,
+          color: "primary.light",
+          gap: 2,
+          bgcolor: "primary.main",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h4">Tạo Cuộc Hẹn</Typography>
+        <Box display="flex" gap={1}>
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/userDashboard")}
+            sx={{ color: "white", borderColor: "white" }}
+          >
+            Quay lại dashboard
+          </Button>
+        </Box>
+      </Box>
+      <Container
+        sx={{ height: "88vh", display: "flex", flexDirection: "column" }}
+      >
+        {/* Header */}
+        <Box
+          display="flex"
+          alignItems="center"
+          p={2}
+          borderBottom={1}
+          borderColor="divider"
         >
-          <TabsList className="grid w-full grid-cols-1 mb-8">
-            <TabsTrigger value="feed">Bài Đăng</TabsTrigger>
-          </TabsList>
+          <Avatar sx={{ ml: 1, mr: 2 }}>{coach.name?.charAt(0)}</Avatar>
+          <Box>
+            <Typography fontWeight={600}>{coach.name}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Hãy cứ nhắn
+            </Typography>
+          </Box>
+        </Box>
 
-          <TabsContent value="feed">
-            <div className="space-y-6">
-              {posts.map((post) => (
-                <Card key={post.postId} className="overflow-hidden">
-                  <CardHeader className="pb-3">
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center">
-                        <Avatar className="h-10 w-10 mr-3">
-                          <AvatarImage src="/placeholder.svg" />
-                          <AvatarFallback>
-                            {post.authorName.charAt(0).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium">{post.authorName}</div>
-                          <div className="text-xs text-gray-500">
-                            {new Date(post.createdAt).toLocaleString("vi-VN")}
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
+        {/* Messages */}
+        <Box flex={1} p={2} overflow="auto">
+          {messages.map((msg) => (
+            <Box
+              key={msg.messageId}
+              display="flex"
+              justifyContent={msg.isSentByMe ? "flex-end" : "flex-start"}
+              mb={1.5}
+            >
+              <Paper
+                sx={{
+                  px: 2,
+                  py: 1,
+                  maxWidth: "70%",
+                  minWidth: "150px",
+                  bgcolor: msg.isSentByMe ? "primary.main" : "grey.100",
+                  color: msg.isSentByMe ? "white" : "text.primary",
+                }}
+                elevation={2}
+              >
+                <Typography variant="body1" whiteSpace="pre-line">
+                  {msg.content}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  display="block"
+                  align="right"
+                  mt={0.5}
+                >
+                  {new Date(msg.sentAt).toLocaleTimeString("vi-VN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+          <div ref={messagesEndRef} />
+        </Box>
 
-                  <CardContent className="pb-3">
-                    <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
-                    <p className="mb-4">{post.content}</p>
-                    <div className="text-sm text-gray-500">
-                      Chủ đề:{" "}
-                      <span className="font-medium text-gray-700">
-                        {post.category}
-                      </span>
-                    </div>
-                    <div className="flex items-center mt-4 text-sm text-gray-500">
-                      <div className="flex items-center mr-4">
-                        <Heart className="h-4 w-4 mr-1" />
-                        <span>{post.likesCount}</span>
-                      </div>
-                      <div className="flex items-center mr-4">
-                        <MessageSquare className="h-4 w-4 mr-1" />
-                        <span>{post.commentsCount} bình luận</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Share2 className="h-4 w-4 mr-1" />
-                        <span>{post.viewCount} lượt xem</span>
-                      </div>
-                    </div>
-                  </CardContent>
+        <Divider />
 
-                  <CardFooter className="border-t pt-3 flex justify-between">
-                    <Button variant="ghost" size="sm" className="text-gray-500">
-                      <Heart className="h-4 w-4 mr-2" />
-                      Thích
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-gray-500">
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Bình luận
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-gray-500">
-                      <Share2 className="h-4 w-4 mr-2" />
-                      Chia sẻ
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
+        {/* Input */}
+        <Box display="flex" p={2} gap={1}>
+          <TextField
+            fullWidth
+            placeholder="Nhập tin nhắn..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+            multiline
+            minRows={1}
+            maxRows={4}
+          />
+          <Button
+            variant="contained"
+            onClick={handleSendMessage}
+            disabled={!message.trim()}
+          >
+            <SendIcon />
+          </Button>
+        </Box>
+      </Container>
+    </>
   );
-}
+};
+
+export default ChatPage;

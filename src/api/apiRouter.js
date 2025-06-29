@@ -18,6 +18,8 @@ export const USER_API_ROUTES = {
   GET_APPOINTMENTS: `${BASE_URL}/api/Premium/meeting/my-meetings`,
   GET_MESSAGES: `${BASE_URL}/api/Premium/chat/history`,
   GET_MY_COACH: `${BASE_URL}/api/Premium/coach/my-coach`,
+  GET_CHAT_HISTORY: `${BASE_URL}/api/Premium/chat/history`,
+  SEND_CHAT: `${BASE_URL}/api/Premium/chat/send`,
 };
 
 export const COMMON_API = {
@@ -29,4 +31,9 @@ export const COMMON_API = {
   GET_MY_POSTS: `${BASE_URL}/api/CommunityPost/my-posts`,
   PUT_MY_POST: `${BASE_URL}/api/CommunityPost`,
   DELETE_MY_POST: `${BASE_URL}/api/CommunityPost`,
+  GET_LEADERBOARD: `${BASE_URL}/api/SmokingStatus/leaderboard/money-saved`,
+  GET_COMMENTS: `${BASE_URL}/api/CommunityPost`,
+  POST_COMMENT: `${BASE_URL}/api/CommunityPost`,
+  GET_COACHES: `${BASE_URL}/api/Premium/coach/available-coaches`,
+  ASSIGN_COACH: `${BASE_URL}/api/Premium/coach/assign`,
 };

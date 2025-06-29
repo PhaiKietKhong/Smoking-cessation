@@ -16,7 +16,8 @@ import UpgradeIcon from "@mui/icons-material/Upgrade";
 import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded";
 import PermPhoneMsgRoundedIcon from "@mui/icons-material/PermPhoneMsgRounded";
 import { useNavigate } from "react-router-dom";
-
+import SportsIcon from "@mui/icons-material/Sports";
+import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 export default function PrimarySearchAppBar({ userData }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -145,11 +146,39 @@ export default function PrimarySearchAppBar({ userData }) {
               color: "primary.light",
             }}
           >
-            Chào mừng {localStorage.getItem("userName")}
+            Chào mừng
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Button
+              size="large"
+              aria-label="show 17 new notifications"
+              variant="outlined"
+              sx={{
+                color: "primary.light",
+                mr: 2,
+                borderColor: "primary.light",
+              }}
+              startIcon={<ChatBubbleOutlineRoundedIcon />}
+              onClick={() => navigate("/chatPage")}
+            >
+              Trò chuyện với huấn luyện viên
+            </Button>
+            <Button
+              size="large"
+              aria-label="show 17 new notifications"
+              variant="outlined"
+              sx={{
+                color: "primary.light",
+                mr: 2,
+                borderColor: "primary.light",
+              }}
+              startIcon={<SportsIcon />}
+              onClick={() => navigate("/coachlistpage")}
+            >
+              Chọn huấn luyện viên
+            </Button>
             <Button
               size="large"
               aria-label="show 17 new notifications"

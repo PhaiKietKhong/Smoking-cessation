@@ -10,8 +10,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EmojiEvents } from "@mui/icons-material";
+import axios from "axios";
+import { COMMON_API } from "@/api/apiRouter";
 import Header from "../LandingPage/Header";
 import PostInputBox from "./PostInputBox/PostInputBox";
 import AllPostsTab from "./Tabs/AllPostsTab";
@@ -21,18 +23,30 @@ import MyPostsTab from "./Tabs/MyPostsTab";
 
 export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState(0);
-  const [reloadTrigger, setReloadTrigger] = useState(0); // Trigger reload for children
+  const [reloadTrigger, setReloadTrigger] = useState(0);
+  const [leaderboard, setLeaderboard] = useState([]);
 
-  const leaderboard = [
-    { accountName: "k123", moneySaved: 159497 },
-    { accountName: "k1234", moneySaved: 9 },
-  ]
-    .sort((a, b) => b.moneySaved - a.moneySaved)
-    .slice(0, 10);
+  //  leaderboard
+  const fetchLeaderboard = async () => {
+    try {
+      const res = await axios.get(COMMON_API.GET_LEADERBOARD);
+      setLeaderboard(
+        res.data.sort((a, b) => b.moneySaved - a.moneySaved).slice(0, 10)
+      );
+    } catch (err) {
+      console.error("Lỗi tải bảng xếp hạng:", err);
+    }
+  };
 
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
+
+  //đăng bài
   const handlePostSubmit = () => {
     setReloadTrigger((prev) => prev + 1);
     setActiveTab(0);
+    fetchLeaderboard();
   };
 
   return (
@@ -84,7 +98,9 @@ export default function CommunityPage() {
               {leaderboard.map((user, index) => (
                 <ListItem key={index} divider>
                   <ListItemAvatar>
-                    <Avatar>{user.accountName.charAt(0).toUpperCase()}</Avatar>
+                    <Avatar>
+                      {user.accountName?.charAt(0)?.toUpperCase() || "?"}
+                    </Avatar>
                   </ListItemAvatar>
                   <ListItemText
                     sx={{

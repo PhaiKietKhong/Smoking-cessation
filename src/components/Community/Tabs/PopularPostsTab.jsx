@@ -23,7 +23,7 @@ export default function PopularPostsTab({ reload }) {
   return posts.length > 0 ? (
     <Stack spacing={4} mt={4}>
       {posts.map((post) => (
-        <Feed key={post.postId} post={post} />
+        <Feed key={post.postId} post={post} onReload={fetchPopular} />
       ))}
     </Stack>
   ) : (
