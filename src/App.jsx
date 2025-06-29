@@ -38,7 +38,7 @@ function App() {
           <Route path="/diarylist" element={<DiaryList />} />
           <Route path="/createAppointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<AppointmentList />} />
-          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/package" element={<PricingPage />} />
         </Routes>
       </ThemeProvider>
     </Router>
