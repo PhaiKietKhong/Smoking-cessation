@@ -130,6 +130,7 @@ function Diary() {
       weight: parseFloat(formData.weight),
       exerciseMinutes: parseInt(formData.exerciseMinutes),
       sleepHours: parseFloat(formData.sleepHours),
+      cigarettesSmoked: userData?.cigarettesPerDay - formData.cigarettesAvoided,
     };
 
     try {

@@ -85,7 +85,12 @@ function Progress() {
   const daysLeft = planData.daysInPlan - planData.daysCompleted;
 
   return (
-    <Box sx={{ color: "primary.light", my: 3 }}>
+    <Box
+      sx={{
+        color: "primary.light",
+        my: 3,
+      }}
+    >
       <Grid container spacing={2} sx={{ height: "50vh" }}>
         {/* Thông tin tổng quan kế hoạch */}
         <Grid
@@ -98,7 +103,11 @@ function Progress() {
           }}
         >
           <Card
-            sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+            sx={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
             <CardHeader
               title={
@@ -182,6 +191,24 @@ function Progress() {
               flexDirection: "column",
             }}
           >
+            <Box sx={{ px: 3, pt: 2 }}>
+              {planData.status === "Đạt yêu cầu" && (
+                <Chip
+                  label="Đạt yêu cầu"
+                  color="success"
+                  icon={<span style={{ fontWeight: "bold" }}>✔️</span>}
+                  sx={{ fontWeight: "bold", fontSize: 16 }}
+                />
+              )}
+              {planData.status === "Không đạt yêu cầu" && (
+                <Chip
+                  label="Không đạt yêu cầu"
+                  color="error"
+                  icon={<span style={{ fontWeight: "bold" }}>❌</span>}
+                  sx={{ fontWeight: "bold", fontSize: 16 }}
+                />
+              )}
+            </Box>
             <CardHeader
               title={
                 <Typography variant="h6" fontWeight="bold">

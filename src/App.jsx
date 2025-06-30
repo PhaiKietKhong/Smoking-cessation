@@ -25,6 +25,8 @@ import RootLayout from "./components/AdminDashBoard/layout";
 import AccountsPage from "./components/AdminDashBoard/Account";
 import CoachesPage from "./components/AdminDashBoard/Coaches";
 import DashboardPage from "./components/AdminDashBoard/Pagee";
+import CoachDashboard from "./components/Coach/CoachDashboard";
+import ChatPageCoach from "./components/Coach/ChatPageCoach/ChatPageCoach";
 function App() {
   return (
     <Router>
@@ -47,6 +49,9 @@ function App() {
           <Route path="/appointments" element={<AppointmentList />} />
           <Route path="/coachlistpage" element={<CoachListPage />} />
           <Route path="/package" element={<PricingPage />} />
+          <Route path="/coachDashboard" element={<CoachDashboard />} />
+          <Route path="/chatPageCoach/:clientId" element={<ChatPageCoach />} />
+
           <Route
             path="/accounts"
             element={
@@ -66,9 +71,7 @@ function App() {
           <Route
             path="/analytics"
             element={
-              <RootLayout>
-                {/* Thêm component Analytics nếu có */}
-              </RootLayout>
+              <RootLayout>{/* Thêm component Analytics nếu có */}</RootLayout>
             }
           />
           <Route
