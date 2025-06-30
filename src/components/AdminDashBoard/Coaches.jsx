@@ -143,6 +143,21 @@ export default function CoachesPage() {
 
     return (
         <Box p={3}>
+            <Box
+                sx={{
+                    background: "linear-gradient(90deg, #e0f7fa 0%, #f0fdfa 100%)",
+                    borderRadius: 2,
+                    p: 3,
+                    mb: 2,
+                }}
+            >
+                <Typography variant="h4" sx={{ color: "#1d4ed8", fontWeight: "bold" }}>
+                    Support Coaches
+                </Typography>
+                <Typography variant="h6" sx={{ color: "#2563eb", mt: 1 }}>
+                    Manage coaches helping users quit smoking
+                </Typography>
+            </Box>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                 <Typography variant="h6">Coach Management</Typography>
                 <Button
@@ -151,14 +166,14 @@ export default function CoachesPage() {
                     onClick={handleOpenAdd}
                     sx={{
                         bgcolor: "#22c55e",
-                        "&:hover": { bgcolor: "#16a34a" },
+                        "&:hover": { bgcolor: "#16a34a" }
                     }}
                 >
                     Add Coach
                 </Button>
             </Box>
             <Card>
-                <CardHeader title="Coaches" subheader="Manage coach profiles and their information" />
+                <CardHeader title="Details" subheader="Manage coach profiles and their information" />
                 <CardContent>
                     <TableContainer component={Paper}>
                         <Table>
