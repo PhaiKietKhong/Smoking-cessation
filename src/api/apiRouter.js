@@ -20,6 +20,8 @@ export const USER_API_ROUTES = {
   GET_MY_COACH: `${BASE_URL}/api/Premium/coach/my-coach`,
   GET_CHAT_HISTORY: `${BASE_URL}/api/Premium/chat/history`,
   SEND_CHAT: `${BASE_URL}/api/Premium/chat/send`,
+  POST_QUIT_PLAN: `${BASE_URL}/api/QuitPlan`,
+  GET_MY_PLAN: `${BASE_URL}/api/QuitPlan/my-plans`,
 };
 
 export const COMMON_API = {

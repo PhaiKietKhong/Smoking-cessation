@@ -6,30 +6,64 @@ import {
   Chip,
   Grid,
   LinearProgress,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import Chart from "./Chart";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
-
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import EditPlanModal from "./EditPlanModal/EditPlanModal";
 function Progress() {
   const [planData, setPlanData] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [milestones, setMilestones] = useState([]);
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fecthPlanData = async () => {
-      try {
-        const res = await axios.get(USER_API_ROUTES.GET_SUGGEST_PLAN, {
+  const fetchMyPlanOrSuggest = async () => {
+    try {
+      const res = await axios.get(USER_API_ROUTES.GET_MY_PLAN, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.data && res.data.length > 0) {
+        const data = res.data[0];
+        data.strategies =
+          typeof data.strategies === "string"
+            ? data.strategies.split(",").map((s) => s.trim())
+            : data.strategies;
+        setPlanData(data);
+      } else {
+        const suggestRes = await axios.get(USER_API_ROUTES.GET_SUGGEST_PLAN, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        setPlanData(res.data);
-      } catch (error) {}
-    };
-    fecthPlanData();
+        setPlanData(suggestRes.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy kế hoạch:", error);
+      try {
+        const suggestRes = await axios.get(USER_API_ROUTES.GET_SUGGEST_PLAN, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPlanData(suggestRes.data);
+      } catch (e) {
+        console.error("Lỗi khi lấy kế hoạch gợi ý:", e);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchMyPlanOrSuggest();
   }, []);
 
   if (!planData) {
@@ -41,6 +75,11 @@ function Progress() {
       </Box>
     );
   }
+
+  const handleEdit = () => {
+    setMilestones(planData.milestones || []);
+    setEditOpen(true);
+  };
 
   const progressText = `${planData.daysCompleted}/${planData.daysInPlan} ngày (${planData.completionPercentage}%)`;
   const daysLeft = planData.daysInPlan - planData.daysCompleted;
@@ -150,6 +189,13 @@ function Progress() {
                 </Typography>
               }
               subheader="Chi tiết từng tuần"
+              action={
+                <Tooltip title="chỉnh sửa">
+                  <IconButton aria-label="edit" onClick={handleEdit}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              }
             />
             <CardContent
               sx={{
@@ -220,6 +266,16 @@ function Progress() {
         </Typography>
         <Chart />
       </Box>
+      <EditPlanModal
+        open={editOpen}
+        onClose={(shouldReload) => {
+          setEditOpen(false);
+          if (shouldReload) {
+            fetchMyPlanOrSuggest();
+          }
+        }}
+        initialData={milestones}
+      />
     </Box>
   );
 }
