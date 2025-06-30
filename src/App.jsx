@@ -18,6 +18,11 @@ import CreateAppointment from "./components/User/CreateMeetingPage/CreateAppoint
 import Diary from "./components/User/Diary/Diary";
 import AppointmentList from "./components/User/Appointments/Appointments";
 import PricingPage from "./components/Package/Package";
+import { AppSidebar } from "./components/AdminDashBoard/SideBar";
+import RootLayout from "./components/AdminDashBoard/layout";
+import AccountsPage from "./components/AdminDashBoard/Account";
+import CoachesPage from "./components/AdminDashBoard/Coaches";
+import DashboardPage from "./components/AdminDashBoard/Pagee";
 function App() {
   return (
     <Router>
@@ -39,6 +44,39 @@ function App() {
           <Route path="/createAppointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<AppointmentList />} />
           <Route path="/package" element={<PricingPage />} />
+          <Route
+            path="/accounts"
+            element={
+              <RootLayout>
+                <AccountsPage />
+              </RootLayout>
+            }
+          />
+          <Route
+            path="/coaches"
+            element={
+              <RootLayout>
+                <CoachesPage />
+              </RootLayout>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <RootLayout>
+                {/* Thêm component Analytics nếu có */}
+              </RootLayout>
+            }
+          />
+          <Route
+            path="/AdminDashBoard"
+            element={
+              <RootLayout>
+                <DashboardPage />
+              </RootLayout>
+            }
+          />
+          {/* Thêm các route admin khác nếu cần */}
         </Routes>
       </ThemeProvider>
     </Router>
