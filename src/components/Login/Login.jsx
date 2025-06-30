@@ -18,6 +18,7 @@ import { Logo } from "../Logo/Logo";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,12 +29,8 @@ function Login() {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  const focusInput = () => {
-    inputRef.current.focus();
-  };
-
   useEffect(() => {
-    focusInput();
+    inputRef.current?.focus();
   }, []);
 
   const handleTogglePassword = () => {
@@ -48,18 +45,30 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(USER_API_ROUTES.LOGIN, {
-        username, // gửi username thay vì email
+        username,
         password,
       });
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", username); // lưu username nếu cần hiển thị sau
-      checkSurvey(response.data.token);
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      const role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      if (role === "Coach") {
+        navigate("/coachDashboard");
+      } else if (role === "Admin") {
+        navigate("/adminDashboard");
+      } else {
+        checkSurvey(token);
+      }
     } catch (error) {
       if (error.response) {
         console.error("Lỗi server:", error.response.status);
         console.error("Chi tiết:", error.response.data);
-
         if (error.response.status === 400) {
           setError(true);
         } else if (error.response.status === 401) {
@@ -70,7 +79,6 @@ function Login() {
       }
     }
   };
-
   const checkSurvey = async (token) => {
     try {
       const response = await axios.get(USER_API_ROUTES.GET_SMOKING_STATUS, {
@@ -81,14 +89,13 @@ function Login() {
       });
 
       const data = response.data;
-
       if (data) {
         navigate("/userDashBoard");
       }
     } catch (error) {
       console.error("Failed to check smoking status:", error);
 
-      if (error.response && error.response.status === 401) {
+      if (error.response?.status === 401) {
         localStorage.removeItem("token");
         navigate("/login");
       } else {
@@ -144,11 +151,7 @@ function Login() {
             justifyContent: "center",
             boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
             backgroundColor: "rgba(255, 255, 255, 0.2)",
-            width: {
-              xs: "90%",
-              sm: "70%",
-              md: "90%",
-            },
+            width: { xs: "90%", sm: "70%", md: "90%" },
             height: "85vh",
           }}
         >
@@ -159,10 +162,7 @@ function Login() {
             sx={{
               padding: 2,
               backgroundColor: "rgba(228,216,190, 0.5)",
-              display: {
-                xs: "none",
-                md: "block",
-              },
+              display: { xs: "none", md: "block" },
             }}
           >
             <Logo />
@@ -241,34 +241,31 @@ function Login() {
           >
             <Logo sx={{ display: { md: "none" }, textAlign: "center" }} />
             <Box sx={{ maxWidth: 400, mx: "auto", width: "100%" }}>
-              <Box>
-                <Typography
-                  variant="h4"
-                  component="h1"
-                  sx={{
-                    mb: 1,
-                    fontWeight: 600,
-                    display: { xs: "none", md: "block" },
-                    color: "primary.main",
-                  }}
-                >
-                  Chào mừng trở lại :)
-                </Typography>
+              <Typography
+                variant="h4"
+                component="h1"
+                sx={{
+                  mb: 1,
+                  fontWeight: 600,
+                  display: { xs: "none", md: "block" },
+                  color: "primary.main",
+                }}
+              >
+                Chào mừng trở lại :)
+              </Typography>
 
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 4,
-                    color: "#6B7280",
-                    lineHeight: 1.6,
-                    display: { xs: "none", md: "block" },
-                  }}
-                >
-                  Để duy trì kết nối với chúng tôi, vui lòng đăng nhập bằng địa
-                  chỉ <br />
-                  tên tài khoản và mật khẩu cá nhân của bạn
-                </Typography>
-              </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 4,
+                  color: "#6B7280",
+                  lineHeight: 1.6,
+                  display: { xs: "none", md: "block" },
+                }}
+              >
+                Để duy trì kết nối với chúng tôi, vui lòng đăng nhập bằng tên
+                tài khoản và mật khẩu cá nhân của bạn
+              </Typography>
 
               {/* LOGIN FORM */}
               <Box
@@ -355,24 +352,25 @@ function Login() {
                   Đăng nhập ngay
                 </Button>
               </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                mt: 2,
-                justifyContent: "center",
-              }}
-            >
-              <Typography variant="body2">Không có tài khoản ? </Typography>
-              &nbsp;
-              <Link
-                onClick={() => navigate("/regist")}
-                color="primary.main"
-                variant="body2"
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mt: 2,
+                  justifyContent: "center",
+                }}
               >
-                {"Đăng Ký."}
-              </Link>
+                <Typography variant="body2">Không có tài khoản ? </Typography>
+                &nbsp;
+                <Link
+                  onClick={() => navigate("/regist")}
+                  color="primary.main"
+                  variant="body2"
+                >
+                  Đăng Ký.
+                </Link>
+              </Box>
             </Box>
           </Grid>
         </Grid>
