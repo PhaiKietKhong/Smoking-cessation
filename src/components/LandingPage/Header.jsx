@@ -32,7 +32,7 @@ function Header() {
     { title: "Trang chủ", path: "/" },
     { title: "Cộng đồng", path: "/community" },
     { title: "Blog", path: "/" },
-    { title: "Gói nâng cao", path: "/" },
+    { title: "Gói nâng cao", path: "/Package" },
   ];
 
   const navigate = useNavigate();
@@ -182,3 +182,4 @@ function Header() {
 }
 
 export default Header;
+

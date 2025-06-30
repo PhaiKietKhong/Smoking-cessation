@@ -19,6 +19,7 @@ import AppointmentList from "./components/User/Appointments/Appointments";
 import CoachListPage from "./components/User/CoachListPage/CoachListPage";
 import ChatPage from "./components/User/ChatPage/ChatPage";
 
+import PricingPage from "./components/Package/Package";
 function App() {
   return (
     <Router>
@@ -40,6 +41,7 @@ function App() {
           <Route path="/createAppointment" element={<CreateAppointment />} />
           <Route path="/appointments" element={<AppointmentList />} />
           <Route path="/coachlistpage" element={<CoachListPage />} />
+          <Route path="/package" element={<PricingPage />} />
         </Routes>
       </ThemeProvider>
     </Router>
