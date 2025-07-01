@@ -139,7 +139,7 @@ export default function CoachListPage() {
         </Typography>
         <Grid container spacing={4}>
           {coaches.map((coach, index) => (
-            <Grid item xs={12} md={4} key={coach.coachId}>
+            <Grid item size={{ xs: 12, md: 4 }} key={coach.coachId}>
               <Card
                 sx={{
                   display: "flex",
@@ -188,12 +188,7 @@ export default function CoachListPage() {
                       <strong>Bằng cấp:</strong> {coach.qualifications || "N/A"}
                     </Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" mb={1.2} gap={1}>
-                    <WorkIcon sx={{ fontSize: 18 }} />
-                    <Typography variant="body2">
-                      <strong>Kinh nghiệm:</strong> {coach.experience}
-                    </Typography>
-                  </Box>
+
                   <Box display="flex" alignItems="start" mb={1.2} gap={1}>
                     <InfoIcon sx={{ fontSize: 18, mt: "2px" }} />
                     <Typography

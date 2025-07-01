@@ -47,3 +47,14 @@ export const COACH_API_ROUTES = {
   GET_CHAT_MEMBER: `${BASE_URL}/api/Coach/chats`,
   SEND_PLAN: `${BASE_URL}/api/Coach/chats`,
 };
+export const ADMIN_API_ROUTES = {
+  GET_STATISTICS: `${BASE_URL}/api/Admin/statistics`,
+  GET_STATISTICS_USERS: `${BASE_URL}/api/Admin/statistics/users`,
+  GET_ACCOUNTS: `${BASE_URL}/api/Admin/accounts`,
+  BAN_ACCOUNT: `${BASE_URL}/api/Admin/users`,
+  UNBAN_ACCOUNT: `${BASE_URL}/api/Admin/statistics/users`,
+  CHANGE_ROLE_ACCOUNT: `${BASE_URL}/api/Admin/change-role`,
+  GET_COACHES: `${BASE_URL}/api/Admin/coaches`,
+  CREATE_COACH: `${BASE_URL}/api/Admin/coaches`,
+  UPDATE_COACH: `${BASE_URL}/api/Admin/coaches`,
+};

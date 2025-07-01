@@ -1,6 +1,4 @@
-// React + MUI Version of the Account Management Page
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -12,133 +10,249 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  InputLabel,
-  FormControl,
   TextField,
   Chip,
   Paper,
-  Toolbar
+  Toolbar,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  FormControl,
 } from "@mui/material";
-import { Edit, Delete, Close } from "@mui/icons-material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-
-const initialAccounts = [
-  { id: "1", name: "John Doe", email: "john@example.com", role: "User", status: "Active", joinDate: "2024-01-15" },
-  { id: "2", name: "Sarah Wilson", email: "sarah@example.com", role: "Coach", status: "Active", joinDate: "2024-02-20" },
-  { id: "3", name: "Mike Johnson", email: "mike@example.com", role: "Admin", status: "Active", joinDate: "2024-01-10" },
-  { id: "4", name: "Emily Brown", email: "emily@example.com", role: "User", status: "Active", joinDate: "2024-03-05" },
-  { id: "5", name: "David Lee", email: "david@example.com", role: "Coach", status: "Banned", joinDate: "2024-02-28" },
-];
+import { Edit, Block, Restore } from "@mui/icons-material";
+import axios from "axios";
+import { ADMIN_API_ROUTES } from "@/api/apiRouter";
 
 export default function AccountsPage() {
-  const [accounts, setAccounts] = useState(initialAccounts);
-  const [editingId, setEditingId] = useState(null);
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [editingRoleId, setEditingRoleId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
-  const [deleteReason, setDeleteReason] = useState("");
+  const [banReason, setBanReason] = useState("");
   const [banDays, setBanDays] = useState("");
 
-  const handleRoleChange = (id, newRole) => {
-    setAccounts(accounts.map(acc => acc.id === id ? { ...acc, role: newRole } : acc));
-    setEditingId(null);
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
+
+  const fetchAccounts = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(ADMIN_API_ROUTES.GET_ACCOUNTS, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAccounts(res.data);
+    } catch (err) {
+      console.error("Lỗi lấy tài khoản:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteAccount = () => {
-    if (selectedAccount && deleteReason && banDays) {
-      setAccounts(accounts.map(acc => acc.id === selectedAccount.id ? { ...acc, status: "Banned" } : acc));
+  const handleRoleChange = async (accountId, newRole) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.put(
+        `${ADMIN_API_ROUTES.CHANGE_ROLE_ACCOUNT}/${accountId}`,
+        {
+          newRole: newRole,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setAccounts((prev) =>
+        prev.map((acc) =>
+          acc.accountId === accountId ? { ...acc, role: newRole } : acc
+        )
+      );
+      setEditingRoleId(null);
+    } catch (err) {
+      console.error("Lỗi đổi vai trò:", err);
+    }
+  };
+
+  const handleOpenDialog = (acc) => {
+    setSelectedAccount(acc);
+    setBanReason("");
+    setBanDays("");
+    setDialogOpen(true);
+  };
+
+  const handleBan = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${ADMIN_API_ROUTES.BAN_ACCOUNT}/${selectedAccount.accountId}/block`,
+        { reason: banReason, blockDays: parseInt(banDays, 10) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setAccounts((prev) =>
+        prev.map((acc) =>
+          acc.accountId === selectedAccount.accountId
+            ? { ...acc, status: "Banned" }
+            : acc
+        )
+      );
       setDialogOpen(false);
-      setSelectedAccount(null);
-      setDeleteReason("");
-      setBanDays("");
+    } catch (err) {
+      console.error("Lỗi ban:", err);
+    }
+  };
+
+  const handleUnban = async (accountId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${ADMIN_API_ROUTES.UNBAN_ACCOUNT}/${accountId}/unblock`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setAccounts((prev) =>
+        prev.map((acc) =>
+          acc.accountId === accountId ? { ...acc, status: "Active" } : acc
+        )
+      );
+    } catch (err) {
+      console.error("Lỗi unban:", err);
     }
   };
 
   const getRoleColor = (role) => {
-    switch (role) {
-      case "Admin": return "error";
-      case "Coach": return "primary";
-      case "User": return "default";
-      default: return "default";
-    }
+    if (role === "Admin") return "error";
+    if (role === "Coach") return "primary";
+    return "default";
   };
+
+  if (loading) {
+    return (
+      <Box p={3} textAlign="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box p={3}>
-
-      <Box
-        sx={{
-          background: "linear-gradient(90deg, #e0f7fa 0%, #f0fdfa 100%)", // xanh nhạt gradient
-          borderRadius: 2,
-          p: 3,
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4" sx={{ color: "#1d4ed8", fontWeight: "bold" }}>
-          User Accounts
-        </Typography>
-        <Typography variant="h6" sx={{ color: "#2563eb", mt: 1 }}>
-          Manage user accounts, roles, and quit smoking progress
-        </Typography>
-      </Box>
-      <Paper>
+      <Paper sx={{ mb: 2 }}>
         <Toolbar>
-          <Typography variant="h6">Details</Typography>
+          <Typography variant="h6">Quản lý tài khoản</Typography>
         </Toolbar>
+      </Paper>
+
+      {/* ✅ Không bọc Table bằng Box hoặc div */}
+      <Paper>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Họ tên</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Join Date</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>Vai trò</TableCell>
+              <TableCell>Trạng thái</TableCell>
+              <TableCell>Tham gia</TableCell>
+              <TableCell>Hành động</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {accounts.map(account => (
-              <TableRow key={account.id}>
-                <TableCell>{account.name}</TableCell>
-                <TableCell>{account.email}</TableCell>
+            {accounts.map((acc) => (
+              <TableRow key={acc.accountId}>
+                <TableCell>{acc.fullName}</TableCell>
+                <TableCell>{acc.email}</TableCell>
                 <TableCell>
-                  {editingId === account.id ? (
+                  {editingRoleId === acc.accountId ? (
                     <FormControl size="small">
                       <Select
-                        value={account.role}
-                        onChange={(e) => handleRoleChange(account.id, e.target.value)}
+                        value={acc.role}
+                        onChange={(e) =>
+                          handleRoleChange(acc.accountId, e.target.value)
+                        }
                       >
-                        <MenuItem value="User">User</MenuItem>
-                        <MenuItem value="Coach">Coach</MenuItem>
-                        <MenuItem value="Admin">Admin</MenuItem>
+                        <MenuItem value="User">Người dùng</MenuItem>
+                        <MenuItem value="Admin">Quản trị viên</MenuItem>
                       </Select>
                     </FormControl>
                   ) : (
                     <Box display="flex" alignItems="center" gap={1}>
-                      <Chip label={account.role} color={getRoleColor(account.role)} size="small" />
-                      <IconButton size="small" onClick={() => setEditingId(account.id)}>
+                      <Chip
+                        label={
+                          acc.role === "User"
+                            ? "Nguời dùng"
+                            : acc.role === "Coach"
+                            ? "Huấn luyện viên"
+                            : "Quản trị viên"
+                        }
+                        color={getRoleColor(acc.role)}
+                        size="small"
+                      />
+                      <IconButton
+                        onClick={() => setEditingRoleId(acc.accountId)}
+                      >
                         <Edit fontSize="small" />
                       </IconButton>
                     </Box>
                   )}
                 </TableCell>
                 <TableCell>
-                  <Chip label={account.status} color={account.status === "Active" ? "primary" : "error"} size="small" />
+                  <Chip
+                    label={acc.status || "Active"}
+                    color={acc.status === "Banned" ? "error" : "primary"}
+                    size="small"
+                  />
                 </TableCell>
-                <TableCell>{account.joinDate}</TableCell>
                 <TableCell>
-                  <IconButton
-                    color="error"
-                    onClick={() => {
-                      setDialogOpen(true);
-                      setSelectedAccount(account);
-                    }}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
+                  {new Date(acc.createdAt).toLocaleDateString("vi-VN")}
+                </TableCell>
+                <TableCell>
+                  {acc.status === "Banned" ? (
+                    <Button
+                      color="success"
+                      variant="outlined"
+                      onClick={() => handleUnban(acc)}
+                      startIcon={<Restore fontSize="small" />}
+                      sx={{
+                        borderColor: "#43a047",
+                        color: "#43a047",
+                        "&:hover": {
+                          borderColor: "#1b5e20",
+                          backgroundColor: "rgba(67,160,71,0.08)",
+                          color: "#1b5e20",
+                        },
+                        fontWeight: 600,
+                      }}
+                    >
+                      mở tài khoản
+                    </Button>
+                  ) : (
+                    <Button
+                      color="error"
+                      variant="outlined"
+                      onClick={() => handleOpenDialog(acc)}
+                      startIcon={<Block fontSize="small" />}
+                      sx={{
+                        borderColor: "#e53935",
+                        color: "#e53935",
+                        "&:hover": {
+                          borderColor: "#b71c1c",
+                          backgroundColor: "rgba(229,57,53,0.08)",
+                          color: "#b71c1c",
+                        },
+                        fontWeight: 600,
+                      }}
+                    >
+                      Khoá tài khoản
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -146,24 +260,22 @@ export default function AccountsPage() {
         </Table>
       </Paper>
 
+      {/* Dialog block */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Delete Account</DialogTitle>
+        <DialogTitle>Block tài khoản</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" gutterBottom>
-            Please provide a reason and ban duration:
-          </Typography>
           <TextField
+            label="Lý do"
             fullWidth
-            label="Reason"
             multiline
-            rows={3}
+            rows={2}
             margin="dense"
-            value={deleteReason}
-            onChange={(e) => setDeleteReason(e.target.value)}
+            value={banReason}
+            onChange={(e) => setBanReason(e.target.value)}
           />
           <TextField
+            label="Số ngày block"
             fullWidth
-            label="Ban duration (days)"
             type="number"
             margin="dense"
             value={banDays}
@@ -171,9 +283,13 @@ export default function AccountsPage() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} startIcon={<Close />}>Cancel</Button>
-          <Button onClick={handleDeleteAccount} color="error" disabled={!deleteReason || !banDays}>
-            Delete Account
+          <Button onClick={() => setDialogOpen(false)}>Hủy</Button>
+          <Button
+            color="error"
+            disabled={!banReason || !banDays}
+            onClick={handleBan}
+          >
+            Block
           </Button>
         </DialogActions>
       </Dialog>

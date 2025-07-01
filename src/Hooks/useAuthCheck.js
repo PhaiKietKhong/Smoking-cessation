@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useAuthCheck = ({ requiredRole = "User" } = {}) => {
   const [isValid, setIsValid] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +17,6 @@ export const useAuthCheck = ({ requiredRole = "User" } = {}) => {
 
     try {
       const decoded = jwtDecode(token);
-
       const currentTime = Math.floor(Date.now() / 1000);
 
       const role =
@@ -28,15 +28,17 @@ export const useAuthCheck = ({ requiredRole = "User" } = {}) => {
         navigate("/login");
       } else if (role !== requiredRole) {
         console.warn("Không đúng vai trò:", role);
-        navigate("/unauthorized");
+        navigate("/"); // <-- nên dẫn tới trang riêng
       } else {
-        setIsValid(true); // ✅ Token hợp lệ và đúng vai trò
+        setIsValid(true);
       }
     } catch (error) {
       console.error("Token không hợp lệ:", error);
       navigate("/login");
+    } finally {
+      setIsChecking(false);
     }
   }, [navigate, requiredRole]);
 
-  return isValid;
+  return { isValid, isChecking };
 };
