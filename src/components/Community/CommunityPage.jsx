@@ -25,6 +25,7 @@ export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [reloadTrigger, setReloadTrigger] = useState(0);
   const [leaderboard, setLeaderboard] = useState([]);
+  const token = localStorage.getItem("token");
 
   //  leaderboard
   const fetchLeaderboard = async () => {
@@ -74,7 +75,7 @@ export default function CommunityPage() {
             <Tab label="Bài Đăng" />
             <Tab label="Phổ Biến" />
             <Tab label="Kiến Thức" />
-            <Tab label="Bài viết của tôi" />
+            {token && <Tab label="Bài viết của tôi" />}
           </Tabs>
 
           {activeTab === 0 && <AllPostsTab reload={reloadTrigger} />}

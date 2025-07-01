@@ -18,10 +18,12 @@ import PermPhoneMsgRoundedIcon from "@mui/icons-material/PermPhoneMsgRounded";
 import { useNavigate } from "react-router-dom";
 import SportsIcon from "@mui/icons-material/Sports";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import usePremiumAccess from "@/Hooks/usePremiumAccess";
+import SwitchAccessShortcutAddOutlinedIcon from "@mui/icons-material/SwitchAccessShortcutAddOutlined";
 export default function PrimarySearchAppBar({ userData }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const { hasPremiumAccess, loading } = usePremiumAccess();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const navigate = useNavigate();
@@ -29,7 +31,9 @@ export default function PrimarySearchAppBar({ userData }) {
   const logout = () => {
     localStorage.removeItem("token");
 
-    localStorage.removeItem("user");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userID");
     navigate("/login");
   };
 
@@ -151,48 +155,66 @@ export default function PrimarySearchAppBar({ userData }) {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Button
-              size="large"
-              aria-label="show 17 new notifications"
-              variant="outlined"
-              sx={{
-                color: "primary.light",
-                mr: 2,
-                borderColor: "primary.light",
-              }}
-              startIcon={<ChatBubbleOutlineRoundedIcon />}
-              onClick={() => navigate("/chatPage")}
-            >
-              Trò chuyện với huấn luyện viên
-            </Button>
-            <Button
-              size="large"
-              aria-label="show 17 new notifications"
-              variant="outlined"
-              sx={{
-                color: "primary.light",
-                mr: 2,
-                borderColor: "primary.light",
-              }}
-              startIcon={<SportsIcon />}
-              onClick={() => navigate("/coachlistpage")}
-            >
-              Chọn huấn luyện viên
-            </Button>
-            <Button
-              size="large"
-              aria-label="show 17 new notifications"
-              variant="outlined"
-              sx={{
-                color: "primary.light",
-                mr: 2,
-                borderColor: "primary.light",
-              }}
-              startIcon={<PermPhoneMsgRoundedIcon />}
-              onClick={() => navigate("/createAppointment")}
-            >
-              Tạo cuộc hẹn
-            </Button>
+            {!loading && hasPremiumAccess ? (
+              <>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  sx={{
+                    color: "primary.light",
+                    mr: 2,
+                    borderColor: "primary.light",
+                  }}
+                  startIcon={<ChatBubbleOutlineRoundedIcon />}
+                  onClick={() => navigate("/chatPage")}
+                >
+                  Trò chuyện với huấn luyện viên
+                </Button>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  sx={{
+                    color: "primary.light",
+                    mr: 2,
+                    borderColor: "primary.light",
+                  }}
+                  startIcon={<SportsIcon />}
+                  onClick={() => navigate("/coachlistpage")}
+                >
+                  Chọn huấn luyện viên
+                </Button>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  sx={{
+                    color: "primary.light",
+                    mr: 2,
+                    borderColor: "primary.light",
+                  }}
+                  startIcon={<PermPhoneMsgRoundedIcon />}
+                  onClick={() => navigate("/createAppointment")}
+                >
+                  Tạo cuộc hẹn
+                </Button>
+              </>
+            ) : (
+              !loading && (
+                <Button
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  variant="outlined"
+                  sx={{
+                    color: "primary.light",
+                    mr: 2,
+                    borderColor: "primary.light",
+                  }}
+                  startIcon={<SwitchAccessShortcutAddOutlinedIcon />}
+                  onClick={() => navigate("/Package")}
+                >
+                  Nâng cấp gói Premium
+                </Button>
+              )
+            )}
             <Button
               size="large"
               aria-label="show 17 new notifications"

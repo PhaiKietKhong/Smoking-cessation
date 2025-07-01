@@ -25,7 +25,7 @@ function Regist() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [formData, setFormData] = useState({
-    FullName: "",
+    fullName: "",
     userName: "",
     email: "",
     password: "",
@@ -98,6 +98,9 @@ function Regist() {
 
       setSuccess(true);
       setError(false);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrorMessage(error.response.data.message);

@@ -18,6 +18,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthCheck } from "@/Hooks/useAuthCheck";
 
 function Diary() {
   const navigate = useNavigate();
@@ -25,7 +26,8 @@ function Diary() {
   const [showAlert, setShowAlert] = useState(false);
   const [errors, setErrors] = useState({});
   const [duplicateAlert, setDuplicateAlert] = useState(false);
-
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const isValid = useAuthCheck({ requiredRole: "User" });
   const [formData, setFormData] = useState({
     date: dayjs().format("YYYY-MM-DD"),
     cigarettesAvoided: "",
@@ -142,6 +144,9 @@ function Diary() {
       });
 
       setShowAlert(true);
+      setTimeout(() => {
+        navigate("/diarylist");
+      }, 2000);
     } catch (err) {
       if (err?.response?.status === 500) {
         setDuplicateAlert(true);
@@ -154,6 +159,8 @@ function Diary() {
   const handleNavigate = () => {
     navigate("/userDashboard");
   };
+
+  if (!isValid) return null;
 
   return (
     <Box sx={{ height: "100vh", overflowY: "auto" }}>

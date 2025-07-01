@@ -6,11 +6,10 @@ import { COMMON_API } from "@/api/apiRouter";
 
 export default function MyPostsTab({ reload }) {
   const [posts, setPosts] = useState([]);
+  const token = localStorage.getItem("token");
 
   const fetchMyPosts = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       const res = await axios.get(COMMON_API.GET_MY_POSTS, {
         headers: {
           Authorization: `Bearer ${token}`,

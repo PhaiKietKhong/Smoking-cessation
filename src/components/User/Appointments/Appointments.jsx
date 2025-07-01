@@ -12,16 +12,26 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
+import usePremiumAccess from "@/hooks/usePremiumAccess";
 
 const AppointmentList = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthCheck({ requiredRole: "User" });
+  const {
+    hasPremiumAccess,
+    loading: premiumLoading,
+    error: premiumError,
+  } = usePremiumAccess();
+
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -40,8 +50,38 @@ const AppointmentList = () => {
       }
     };
 
-    fetchAppointments();
-  }, []);
+    if (isAuthenticated && hasPremiumAccess) {
+      fetchAppointments();
+    }
+  }, [isAuthenticated, hasPremiumAccess]);
+
+  if (!isAuthenticated) return null;
+
+  if (premiumLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={8}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!hasPremiumAccess) {
+    return (
+      <Container sx={{ mt: 6 }}>
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          Bạn cần nâng cấp lên gói <strong>Premium</strong> để xem danh sách
+          cuộc hẹn.
+        </Alert>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/Package")}
+        >
+          Nâng cấp gói Premium
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <>

@@ -87,7 +87,7 @@ function Feed({ post, onReload }) {
       <CardHeader
         avatar={<Avatar>{post.authorName.charAt(0).toUpperCase()}</Avatar>}
         action={
-          username === post.authorName && (
+          username === post.authorUsername && (
             <>
               <Tooltip title="Tuỳ chọn">
                 <IconButton onClick={handleMenuOpen}>

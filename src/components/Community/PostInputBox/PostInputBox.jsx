@@ -19,6 +19,7 @@ import { COMMON_API } from "@/api/apiRouter";
 
 export default function PostInputBox({ onSubmit }) {
   const [open, setOpen] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
@@ -26,7 +27,14 @@ export default function PostInputBox({ onSubmit }) {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    setOpen(true);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -55,6 +63,7 @@ export default function PostInputBox({ onSubmit }) {
 
   return (
     <>
+      {/* Ô nhập bài viết */}
       <Paper
         elevation={2}
         sx={{
@@ -79,7 +88,6 @@ export default function PostInputBox({ onSubmit }) {
             }}
           />
         </Stack>
-
         <Divider sx={{ my: 1 }} />
       </Paper>
 
@@ -143,6 +151,44 @@ export default function PostInputBox({ onSubmit }) {
               }
             >
               {loading ? "Đang đăng..." : "Đăng bài"}
+            </Button>
+          </Stack>
+        </Box>
+      </Modal>
+
+      {/* Modal xác nhận đăng nhập */}
+      <Modal open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
+        <Box
+          sx={{
+            p: 4,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            width: "90%",
+            maxWidth: 450,
+            mx: "auto",
+            mt: 12,
+            boxShadow: 24,
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="h6" mb={2}>
+            Bạn cần đăng nhập để đăng bài viết
+          </Typography>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button
+              variant="contained"
+              onClick={() => {
+                setShowLoginPrompt(false);
+                window.location.href = "/login";
+              }}
+            >
+              Đăng nhập
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setShowLoginPrompt(false)}
+            >
+              Tiếp tục xem
             </Button>
           </Stack>
         </Box>

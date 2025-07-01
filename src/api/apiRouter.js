@@ -22,6 +22,7 @@ export const USER_API_ROUTES = {
   SEND_CHAT: `${BASE_URL}/api/Premium/chat/send`,
   POST_QUIT_PLAN: `${BASE_URL}/api/QuitPlan`,
   GET_MY_PLAN: `${BASE_URL}/api/QuitPlan/my-plans`,
+  CHECK_PREMIUM_ACCESS: `${BASE_URL}/api/Package/premium-access`,
 };
 
 export const COMMON_API = {

@@ -128,6 +128,10 @@ function ClientManagement() {
   const handleLogout = () => {
     handleCloseMenu();
     localStorage.removeItem("username");
+    localStorage.removeItem("token");
+
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userID");
     navigate("/login");
   };
   return (

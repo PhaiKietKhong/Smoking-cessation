@@ -19,12 +19,15 @@ import {
   Grid,
   Rating,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import MuiAlert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
+import usePremiumAccess from "@/hooks/usePremiumAccess";
+
 const fallbackImages = [
   "https://phongkhamdakhoaphuduc.com/wp-content/uploads/2020/03/2-1024x1024-1.png",
   "https://phongkhamdakhoaphuduc.com/wp-content/uploads/2020/04/1-1024x1024-1.png",
@@ -33,15 +36,18 @@ const fallbackImages = [
   "https://phongkhamdakhoaphuduc.com/wp-content/uploads/2020/04/40e797b7bf15444b1d04-768x705.jpg",
 ];
 
-export default function CoachListPage({ onAssign }) {
+export default function CoachListPage() {
+  const isAuthenticated = useAuthCheck({ requiredRole: "User" });
+  const { hasPremiumAccess, loading: premiumLoading } = usePremiumAccess();
   const [coaches, setCoaches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success", // 'error' | 'success' | 'info' | 'warning'
+    severity: "success",
   });
+  const navigate = useNavigate();
+
   const handleAssignCoach = async (coach) => {
     try {
       const token = localStorage.getItem("token");
@@ -53,18 +59,19 @@ export default function CoachListPage({ onAssign }) {
 
       setSnackbar({
         open: true,
-        message: `✅ Đã gán huấn luyện viên ${coach.name} thành công!`,
+        message: `Đã chọn huấn luyện viên ${coach.name} thành công!`,
         severity: "success",
       });
     } catch (error) {
-      console.error("❌ Gán huấn luyện viên thất bại:", error);
+      console.error("Gán huấn luyện viên thất bại:", error);
       setSnackbar({
         open: true,
-        message: "❌ Gán huấn luyện viên thất bại.",
+        message: "Gán huấn luyện viên thất bại.",
         severity: "error",
       });
     }
   };
+
   const fetchCoaches = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -80,14 +87,26 @@ export default function CoachListPage({ onAssign }) {
   };
 
   useEffect(() => {
-    fetchCoaches();
-  }, []);
+    if (isAuthenticated && hasPremiumAccess) {
+      fetchCoaches();
+    }
+  }, [isAuthenticated, hasPremiumAccess]);
 
-  if (loading) {
+  if (!hasPremiumAccess) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <CircularProgress />
-      </Box>
+      <Container sx={{ mt: 6 }}>
+        <Alert severity="info" sx={{ mb: 3 }}>
+          Bạn cần nâng cấp lên gói <strong>Premium</strong> để chọn huấn luyện
+          viên.
+        </Alert>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/premium")}
+        >
+          Nâng cấp gói Premium
+        </Button>
+      </Container>
     );
   }
 
@@ -104,7 +123,7 @@ export default function CoachListPage({ onAssign }) {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4">Danh sách cuộc hẹn</Typography>
+        <Typography variant="h4">Danh sách huấn luyện viên</Typography>
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
@@ -120,7 +139,7 @@ export default function CoachListPage({ onAssign }) {
         </Typography>
         <Grid container spacing={4}>
           {coaches.map((coach, index) => (
-            <Grid item size={{ md: 4, xs: 6 }} key={coach.coachId}>
+            <Grid item xs={12} md={4} key={coach.coachId}>
               <Card
                 sx={{
                   display: "flex",
@@ -129,7 +148,7 @@ export default function CoachListPage({ onAssign }) {
                   height: "100%",
                   borderRadius: 4,
                   boxShadow: 3,
-                  overflow: "hidden", // Đảm bảo dòng này có
+                  overflow: "hidden",
                   transition: "transform 0.3s, box-shadow 0.3s",
                   "&:hover": {
                     transform: "scale(1.025)",
@@ -147,45 +166,34 @@ export default function CoachListPage({ onAssign }) {
                     objectFit: "contain",
                     mx: "auto",
                     mt: 2,
-                    transition: "transform 0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                    },
                   }}
                 />
-
                 <CardContent sx={{ px: 3, py: 2, flexGrow: 1 }}>
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     fontWeight={700}
                     gutterBottom
-                    sx={{
-                      color: "primary.main",
-                      textAlign: "center",
-                    }}
+                    textAlign="center"
+                    color="primary.main"
                   >
                     {coach.name}
                   </Typography>
-
                   <Box display="flex" alignItems="center" mb={1.2} gap={1}>
                     <EmailIcon sx={{ fontSize: 18 }} />
                     <Typography variant="body2">{coach.email}</Typography>
                   </Box>
-
                   <Box display="flex" alignItems="center" mb={1.2} gap={1}>
                     <SchoolIcon sx={{ fontSize: 18 }} />
                     <Typography variant="body2">
                       <strong>Bằng cấp:</strong> {coach.qualifications || "N/A"}
                     </Typography>
                   </Box>
-
                   <Box display="flex" alignItems="center" mb={1.2} gap={1}>
                     <WorkIcon sx={{ fontSize: 18 }} />
                     <Typography variant="body2">
                       <strong>Kinh nghiệm:</strong> {coach.experience}
                     </Typography>
                   </Box>
-
                   <Box display="flex" alignItems="start" mb={1.2} gap={1}>
                     <InfoIcon sx={{ fontSize: 18, mt: "2px" }} />
                     <Typography
@@ -200,14 +208,12 @@ export default function CoachListPage({ onAssign }) {
                       <strong>Tiểu sử:</strong> {coach.bio}
                     </Typography>
                   </Box>
-
                   <Box display="flex" alignItems="center" mb={1.2} gap={1}>
                     <GroupsIcon sx={{ fontSize: 18 }} />
                     <Typography variant="body2">
                       <strong>Khách hàng:</strong> {coach.totalClients}
                     </Typography>
                   </Box>
-
                   <Box display="flex" alignItems="center" mb={1.2} gap={1}>
                     <EventAvailableIcon sx={{ fontSize: 18 }} />
                     <Typography variant="body2">
@@ -215,7 +221,6 @@ export default function CoachListPage({ onAssign }) {
                       {coach.sessionsCompleted}
                     </Typography>
                   </Box>
-
                   <Box display="flex" alignItems="center" mt={1} gap={1}>
                     <StarIcon sx={{ fontSize: 18, color: "#facc15" }} />
                     <Rating
@@ -227,7 +232,6 @@ export default function CoachListPage({ onAssign }) {
                     />
                   </Box>
                 </CardContent>
-
                 <CardActions sx={{ px: 3, pb: 3 }}>
                   <Button
                     fullWidth
@@ -262,7 +266,7 @@ export default function CoachListPage({ onAssign }) {
           onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <MuiAlert
+          <Alert
             elevation={6}
             variant="filled"
             severity={snackbar.severity}
@@ -270,7 +274,7 @@ export default function CoachListPage({ onAssign }) {
             sx={{ width: "100%" }}
           >
             {snackbar.message}
-          </MuiAlert>
+          </Alert>
         </Snackbar>
       </Container>
     </Box>

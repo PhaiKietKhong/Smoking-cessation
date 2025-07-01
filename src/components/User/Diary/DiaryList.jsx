@@ -8,8 +8,11 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardDiary from "./CardDiary/CardDiary";
+import { useAuthCheck } from "@/Hooks/useAuthCheck";
 function DiaryList() {
   const [listDiary, setListDiary] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const isValid = useAuthCheck({ requiredRole: "User" });
   const navigate = useNavigate();
 
   const fetchListDiary = async () => {
@@ -37,7 +40,14 @@ function DiaryList() {
     fetchListDiary();
   }, []);
 
-  if (!listDiary) return null;
+  if (!isValid) return null;
+
+  if (!listDiary)
+    return (
+      <Typography variant="h4" sx={{ textAlign: "center" }}>
+        Hiện tại bạn chưa viết nhật ký
+      </Typography>
+    );
 
   return (
     <div>
@@ -78,9 +88,15 @@ function DiaryList() {
         maxWidth
         sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
       >
-        {listDiary.map((diary, i) => (
-          <CardDiary key={i} diaryData={diary} onUpdated={fetchListDiary} />
-        ))}
+        {listDiary.length > 0 ? (
+          listDiary.map((diary, i) => (
+            <CardDiary key={i} diaryData={diary} onUpdated={fetchListDiary} />
+          ))
+        ) : (
+          <Typography variant="h4" sx={{ textAlign: "center" }}>
+            Hiện tại bạn chưa viết nhật ký
+          </Typography>
+        )}
       </Container>
     </div>
   );

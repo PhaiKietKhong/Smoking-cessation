@@ -6,9 +6,12 @@ import TabList from "./TabList/TabList";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API_ROUTES } from "@/api/apiRouter";
+import { useAuthCheck } from "@/Hooks/useAuthCheck";
 
 function UserDashBoard() {
   const navigate = useNavigate();
+  const isValid = useAuthCheck({ requiredRole: "User" });
+
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [userData, setUserData] = useState();
   const [achievements, setAchievements] = useState([]);
@@ -53,6 +56,8 @@ function UserDashBoard() {
 
     fetchData();
   }, [checkingAuth]);
+
+  if (!isValid) return null;
 
   return (
     <Box>
