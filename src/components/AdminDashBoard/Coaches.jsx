@@ -167,7 +167,7 @@ export default function CoachesPage() {
         alignItems="center"
         mb={2}
       >
-        <Typography variant="h6">Coach Management</Typography>
+        <Typography variant="h6">Quản lý huấn luyện viên</Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
@@ -183,8 +183,8 @@ export default function CoachesPage() {
 
       <Card>
         <CardHeader
-          title="Details"
-          subheader="Manage coach profiles and their information"
+          title="Mô tả"
+          subheader="Quản lý hồ sơ huấn luyện viên và thông tin của họ"
         />
         <CardContent>
           <TableContainer component={Paper}>

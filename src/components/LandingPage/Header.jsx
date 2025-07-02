@@ -26,6 +26,7 @@ import { Logo } from "../Logo/Logo";
 import "@fontsource/be-vietnam-pro/400.css";
 import "@fontsource/be-vietnam-pro/700.css";
 import "@fontsource/be-vietnam-pro/800.css";
+import { jwtDecode } from "jwt-decode";
 
 function Header() {
   const pages = [
@@ -69,9 +70,32 @@ function Header() {
 
   const handleProfile = () => {
     handleCloseMenu();
-    navigate("/userDashBoard");
-  };
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      const role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      if (role === "Admin") {
+        navigate("/AdminDashboard");
+      } else if (role === "User") {
+        navigate("/userDashboard");
+      } else if (role === "Coach") {
+        navigate("/coachDashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Lỗi giải mã token:", error);
+      navigate("/login");
+    }
+  };
   const handleLogout = () => {
     handleCloseMenu();
     localStorage.removeItem("token");
@@ -182,4 +206,3 @@ function Header() {
 }
 
 export default Header;
-

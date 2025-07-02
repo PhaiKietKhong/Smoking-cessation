@@ -45,7 +45,8 @@ export const COACH_API_ROUTES = {
   GET_MY_CLIENTS: `${BASE_URL}/api/Coach/my-clients`,
   GET_CHAT_STATUS: `${BASE_URL}/api/Coach/chats`,
   GET_CHAT_MEMBER: `${BASE_URL}/api/Coach/chats`,
-  SEND_PLAN: `${BASE_URL}/api/Coach/chats`,
+  SEND_PLAN: `${BASE_URL}/api/Coach/create-plan-for-client`,
+  SEND_CHAT: `${BASE_URL}/api/Coach/chats`,
 };
 export const ADMIN_API_ROUTES = {
   GET_STATISTICS: `${BASE_URL}/api/Admin/statistics`,

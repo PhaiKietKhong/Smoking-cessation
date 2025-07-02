@@ -35,19 +35,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../Logo/Logo";
+import SendPlan from "./SendPlan/SendPlan";
 
 function ClientManagement() {
   const [clients, setClients] = useState([]);
-  const [chatStatus, setChatStatus] = useState({}); // key: memberId -> { unreadCount, lastMessage }
+  const [chatStatus, setChatStatus] = useState({});
+  const [planOpen, setPlanOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   const token = localStorage.getItem("token");
 
   const fetchClients = async () => {
     try {
       const res = await axios.get(COACH_API_ROUTES.GET_MY_CLIENTS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setClients(res.data);
     } catch (error) {
@@ -58,9 +59,7 @@ function ClientManagement() {
   const fetchChats = async () => {
     try {
       const res = await axios.get(COACH_API_ROUTES.GET_CHAT_STATUS, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const statusMap = {};
@@ -70,7 +69,6 @@ function ClientManagement() {
           lastMessage: item.lastMessage,
         };
       });
-
       setChatStatus(statusMap);
     } catch (error) {
       console.error("Lỗi khi lấy thông tin chat:", error);
@@ -81,6 +79,24 @@ function ClientManagement() {
     fetchClients();
     fetchChats();
   }, []);
+
+  const handleOpenPlan = (client) => {
+    console.log(client.coachId);
+    setSelectedClient({
+      clientId: client.clientId,
+      name: "",
+      strategies: "0",
+      description: "",
+      startDate: "",
+      endDate: "",
+      packageId: 2,
+      coachId: 1,
+      quitReason: "",
+      strategies: "",
+      milestones: [],
+    });
+    setPlanOpen(true);
+  };
 
   const pages = [
     { title: "Trang chủ", path: "/" },
@@ -129,11 +145,11 @@ function ClientManagement() {
     handleCloseMenu();
     localStorage.removeItem("username");
     localStorage.removeItem("token");
-
     localStorage.removeItem("userName");
     localStorage.removeItem("userID");
     navigate("/login");
   };
+
   return (
     <>
       <AppBar
@@ -205,14 +221,8 @@ function ClientManagement() {
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={handleCloseMenu}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
                   >
                     <MenuItem onClick={handleProfile}>Trang cá nhân</MenuItem>
                     <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
@@ -254,7 +264,7 @@ function ClientManagement() {
                   <b>Email</b>
                 </TableCell>
                 <TableCell>
-                  <b> Trò chuyện</b>
+                  <b>Trò chuyện</b>
                 </TableCell>
                 <TableCell>
                   <b>Tạo kế hoạch cai thuốc</b>
@@ -291,10 +301,7 @@ function ClientManagement() {
                       <Button
                         variant="outlined"
                         startIcon={<EditCalendarOutlinedIcon />}
-                        onClick={() => {
-                          // Mở modal chat hoặc điều hướng sang chat page
-                          console.log("Open chat with", client.clientId);
-                        }}
+                        onClick={() => handleOpenPlan(client)}
                       >
                         Tạo kế hoạch
                       </Button>
@@ -305,7 +312,7 @@ function ClientManagement() {
 
               {clients.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={3}>
+                  <TableCell colSpan={4}>
                     <Typography align="center" color="text.secondary">
                       Không có khách hàng nào.
                     </Typography>
@@ -316,6 +323,17 @@ function ClientManagement() {
           </Table>
         </TableContainer>
       </Container>
+
+      {/* Modal tạo kế hoạch */}
+      <SendPlan
+        open={planOpen}
+        onClose={() => setPlanOpen(false)}
+        data={selectedClient}
+        onSave={() => {
+          setPlanOpen(false);
+          fetchClients();
+        }}
+      />
     </>
   );
 }

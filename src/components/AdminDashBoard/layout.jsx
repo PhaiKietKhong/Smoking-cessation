@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Box,
   CssBaseline,
@@ -10,8 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  ThemeProvider,
-  createTheme,
   CircularProgress,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
@@ -19,24 +17,12 @@ import PeopleIcon from "@mui/icons-material/People";
 import PersonIcon from "@mui/icons-material/Person";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
+import Header from "../LandingPage/Header";
 
 const drawerWidth = 240;
-
-const theme = createTheme({
-  palette: {
-    background: {
-      default: "#f9fafb",
-    },
-    primary: {
-      main: "#22c55e",
-    },
-  },
-  typography: {
-    fontFamily: "Be Vietnam Pro, sans-serif",
-  },
-});
+const headerHeight = 64; // mặc định của MUI AppBar
 
 export default function RootLayout({ children }) {
   const { isValid, isChecking } = useAuthCheck({ requiredRole: "Admin" });
@@ -55,11 +41,26 @@ export default function RootLayout({ children }) {
   }
 
   if (!isValid) return null;
-  if (isValid === false) return null;
+
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
-      <Box sx={{ display: "flex" }}>
+
+      {/* Header nằm trên cùng, chiếm full width */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          zIndex: 1201, // cao hơn Drawer
+        }}
+      >
+        <Header />
+      </Box>
+
+      {/* Main layout phía dưới Header */}
+      <Box sx={{ display: "flex", pt: `${headerHeight}px` }}>
         {/* Sidebar */}
         <Drawer
           variant="permanent"
@@ -72,12 +73,13 @@ export default function RootLayout({ children }) {
               bgcolor: "#064e3b",
               color: "#fff",
               borderRight: 0,
+              top: `${headerHeight}px`,
+              height: `calc(100vh - ${headerHeight}px)`,
+              position: "fixed",
             },
           }}
         >
-          <Toolbar />
           <List sx={{ px: 2 }}>
-            {/* Tiêu đề */}
             <ListItem disablePadding>
               <ListItemText
                 primary="Bảng điều khiển"
@@ -93,7 +95,6 @@ export default function RootLayout({ children }) {
               />
             </ListItem>
 
-            {/* Nhóm menu */}
             <ListItem disablePadding sx={{ mt: 2 }}>
               <ListItemText
                 primary="Điều hướng"
@@ -105,7 +106,6 @@ export default function RootLayout({ children }) {
               />
             </ListItem>
 
-            {/* Danh sách menu */}
             {[
               { icon: <HomeIcon />, text: "Tổng quan", to: "/AdminDashBoard" },
               { icon: <PeopleIcon />, text: "Tài khoản", to: "/accounts" },
@@ -137,12 +137,19 @@ export default function RootLayout({ children }) {
           </List>
         </Drawer>
 
-        {/* Nội dung chính */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Toolbar />
+        {/* Main content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+
+            width: `calc(100% - ${drawerWidth}px)`,
+            p: 3,
+          }}
+        >
           {children}
         </Box>
       </Box>
-    </ThemeProvider>
+    </>
   );
 }

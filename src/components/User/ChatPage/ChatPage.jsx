@@ -25,6 +25,8 @@ const ChatPage = ({ chatId }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [hasCoach, setHasCoach] = useState(true);
+  const [coachLoading, setCoachLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
@@ -37,12 +39,16 @@ const ChatPage = ({ chatId }) => {
       const res = await axios.get(USER_API_ROUTES.GET_CHAT_HISTORY, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setCoach(res.data.coach);
       setMessages(res.data.messages);
+      setHasCoach(res.data.coach !== null);
     } catch (err) {
       console.error("Lỗi tải lịch sử chat:", err);
+      setHasCoach(false);
     } finally {
       setLoading(false);
+      setCoachLoading(false);
     }
   };
 
@@ -80,6 +86,14 @@ const ChatPage = ({ chatId }) => {
     }
   };
 
+  if (!isAuthenticated || premiumLoading || coachLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (!hasPremiumAccess) {
     return (
       <Container sx={{ mt: 6 }}>
@@ -95,6 +109,49 @@ const ChatPage = ({ chatId }) => {
           Nâng cấp gói Premium
         </Button>
       </Container>
+    );
+  }
+
+  if (!hasCoach) {
+    return (
+      <>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            p: 2,
+            color: "primary.light",
+            gap: 2,
+            bgcolor: "primary.main",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h4">Trò chuyện</Typography>
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/userDashboard")}
+            sx={{ color: "white", borderColor: "white" }}
+          >
+            Quay lại dashboard
+          </Button>
+        </Box>
+
+        {/* Thông báo chưa có coach */}
+        <Container sx={{ mt: 6 }}>
+          <Alert severity="warning" sx={{ mb: 3 }}>
+            Bạn chưa có huấn luyện viên. Vui lòng chọn huấn luyện viên trước khi
+            bắt đầu trò chuyện.
+          </Alert>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/coachlistpage")}
+          >
+            Chọn Huấn Luyện Viên
+          </Button>
+        </Container>
+      </>
     );
   }
 

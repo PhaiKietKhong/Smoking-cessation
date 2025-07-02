@@ -37,7 +37,7 @@ const CreateAppointment = () => {
   const [hasCoach, setHasCoach] = useState(true);
   const [coachLoading, setCoachLoading] = useState(true);
 
-  // Fetch coach thông tin khi component mount
+  // Fetch coach
   useEffect(() => {
     const fetchCoach = async () => {
       const token = localStorage.getItem("token");
