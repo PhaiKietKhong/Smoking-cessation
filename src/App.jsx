@@ -26,6 +26,7 @@ import CoachesPage from "./components/AdminDashBoard/Coaches";
 import DashboardPage from "./components/AdminDashBoard/Pagee";
 import CoachDashboard from "./components/Coach/CoachDashboard";
 import ChatPageCoach from "./components/Coach/ChatPageCoach/ChatPageCoach";
+import Appointments from "./components/Coach/Appointments/Appointments";
 function App() {
   return (
     <Router>
@@ -50,7 +51,7 @@ function App() {
           <Route path="/package" element={<PricingPage />} />
           <Route path="/coachDashboard" element={<CoachDashboard />} />
           <Route path="/chatPageCoach/:clientId" element={<ChatPageCoach />} />
-
+          <Route path="/coach/appointments" element={<Appointments />} />
           <Route
             path="/accounts"
             element={

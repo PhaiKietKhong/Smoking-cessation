@@ -14,8 +14,8 @@ export const USER_API_ROUTES = {
   POST_DAILY_PROGRESS: `${BASE_URL}/api/DailyProgress/daily`,
   PUT_DAILY_PROGRESS: `${BASE_URL}/api/Progress`,
   GET_REPORT_DASHBOARD: `${BASE_URL}/api/Report/dashboard`,
-  POST_APPOINTMENT: `${BASE_URL}/api/Premium/meeting/book`,
-  GET_APPOINTMENTS: `${BASE_URL}/api/Premium/meeting/my-meetings`,
+  POST_APPOINTMENT: `${BASE_URL}/api/Appointment`,
+  GET_APPOINTMENTS: `${BASE_URL}/api/Appointment/my`,
   GET_MESSAGES: `${BASE_URL}/api/Premium/chat/history`,
   GET_MY_COACH: `${BASE_URL}/api/Premium/coach/my-coach`,
   GET_CHAT_HISTORY: `${BASE_URL}/api/Premium/chat/history`,
@@ -47,6 +47,7 @@ export const COACH_API_ROUTES = {
   GET_CHAT_MEMBER: `${BASE_URL}/api/Coach/chats`,
   SEND_PLAN: `${BASE_URL}/api/Coach/create-plan-for-client`,
   SEND_CHAT: `${BASE_URL}/api/Coach/chats`,
+  GET_APPOINTMENTS: `${BASE_URL}/api/Appointment/coach`,
 };
 export const ADMIN_API_ROUTES = {
   GET_STATISTICS: `${BASE_URL}/api/Admin/statistics`,

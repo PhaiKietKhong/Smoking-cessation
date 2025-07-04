@@ -36,7 +36,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../Logo/Logo";
 import SendPlan from "./SendPlan/SendPlan";
-
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 function ClientManagement() {
   const [clients, setClients] = useState([]);
   const [chatStatus, setChatStatus] = useState({});
@@ -85,7 +85,6 @@ function ClientManagement() {
     setSelectedClient({
       clientId: client.clientId,
       name: "",
-      strategies: "0",
       description: "",
       startDate: "",
       endDate: "",
@@ -249,10 +248,25 @@ function ClientManagement() {
       </AppBar>
 
       <Container sx={{ mt: 10 }}>
-        <Typography variant="h5" fontWeight="bold" mb={2}>
-          Khách hàng của tôi
-        </Typography>
-
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold">
+            Khách hàng của tôi
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/coach/appointments")}
+            startIcon={<CalendarMonthOutlinedIcon />}
+          >
+            Xem lịch hẹn
+          </Button>
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

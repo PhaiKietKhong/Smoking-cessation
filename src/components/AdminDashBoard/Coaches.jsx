@@ -40,22 +40,23 @@ export default function CoachesPage() {
   const [selectedCoach, setSelectedCoach] = useState(null);
 
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
+    fullName: "",
     email: "",
     specialization: "",
     experience: "",
     bio: "",
-    status: "ACTIVE",
+    password: "",
   });
 
   const resetForm = () => {
     setFormData({
-      name: "",
+      username: "",
       email: "",
       specialization: "",
       experience: "",
       bio: "",
-      status: "ACTIVE",
+      password: "",
     });
     setSelectedCoach(null);
   };
@@ -115,10 +116,10 @@ export default function CoachesPage() {
         await axios.post(
           ADMIN_API_ROUTES.CREATE_COACH,
           {
-            username: formData.name,
+            username: formData.username,
             email: formData.email,
-            password: "12345678", // mặc định hoặc thêm input
-            fullName: formData.name,
+            password: formData.password, // mặc định hoặc thêm input
+            fullName: formData.fullName,
             phone: "0123456789", // mặc định hoặc thêm input
             specialization: formData.specialization,
             bio: formData.bio,
@@ -260,13 +261,13 @@ export default function CoachesPage() {
           <Grid container spacing={2}>
             <Grid size={{ xs: 6 }}>
               <TextField
-                label="Họ và tên"
+                label="Tên tài khoản"
                 fullWidth
                 disabled={editMode}
                 size="small"
-                value={formData.name}
+                value={formData.username}
                 onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
+                  setFormData({ ...formData, username: e.target.value })
                 }
               />
             </Grid>
@@ -281,6 +282,30 @@ export default function CoachesPage() {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 disabled={editMode}
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                label="Họ và tên"
+                fullWidth
+                disabled={editMode}
+                size="small"
+                value={formData.fullName}
+                onChange={(e) =>
+                  setFormData({ ...formData, fullName: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                label="Mật khẩu"
+                type="password"
+                fullWidth
+                size="small"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
               />
             </Grid>
             <Grid size={{ xs: 12 }}>
