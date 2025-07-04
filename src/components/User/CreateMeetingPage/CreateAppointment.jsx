@@ -5,7 +5,6 @@ import {
   Button,
   Container,
   TextField,
-  MenuItem,
   Snackbar,
   Alert,
   CircularProgress,
@@ -26,9 +25,11 @@ const CreateAppointment = () => {
   const isAuthenticated = useAuthCheck({ requiredRole: "User" });
   const { hasPremiumAccess, loading: premiumLoading } = usePremiumAccess();
 
-  const [preferredDate, setPreferredDate] = useState(new Date());
-  const [meetingType, setMeetingType] = useState("");
-  const [notes, setNotes] = useState("");
+  const [appointmentTime, setAppointmentTime] = useState(new Date());
+  const [durationMinutes, setDurationMinutes] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorSnackbar, setErrorSnackbar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,7 +38,6 @@ const CreateAppointment = () => {
   const [hasCoach, setHasCoach] = useState(true);
   const [coachLoading, setCoachLoading] = useState(true);
 
-  // Fetch coach thông tin khi component mount
   useEffect(() => {
     const fetchCoach = async () => {
       const token = localStorage.getItem("token");
@@ -59,11 +59,15 @@ const CreateAppointment = () => {
 
   const handleSubmit = async () => {
     const payload = {
-      preferredDate: preferredDate.toISOString(),
-      meetingType,
-      notes,
+      coachId: coachInfo.coachId,
+      appointmentTime: appointmentTime.toISOString(),
+      durationMinutes: parseInt(durationMinutes),
+      subject,
+      description,
     };
+
     const token = localStorage.getItem("token");
+
     try {
       await axios.post(USER_API_ROUTES.POST_APPOINTMENT, payload, {
         headers: {
@@ -82,7 +86,6 @@ const CreateAppointment = () => {
     }
   };
 
-  // Nếu chưa auth hoặc đang loading premium
   if (!isAuthenticated || premiumLoading || coachLoading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -91,7 +94,6 @@ const CreateAppointment = () => {
     );
   }
 
-  // Nếu chưa có premium
   if (!hasPremiumAccess) {
     return (
       <Container sx={{ mt: 6 }}>
@@ -111,7 +113,6 @@ const CreateAppointment = () => {
 
   return (
     <>
-      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -144,7 +145,6 @@ const CreateAppointment = () => {
         </Box>
       </Box>
 
-      {/* Nếu chưa có coach */}
       {!hasCoach && (
         <Container maxWidth="sm" sx={{ mt: 4 }}>
           <Alert severity="warning" sx={{ mb: 3 }}>
@@ -160,10 +160,8 @@ const CreateAppointment = () => {
         </Container>
       )}
 
-      {/* Nếu có coach, hiển thị thông tin + form đặt lịch */}
       {hasCoach && (
         <>
-          {/* Hiển thị thông tin coach */}
           {coachInfo && (
             <Container maxWidth="sm" sx={{ mt: 4 }}>
               <Box p={2} border="1px solid #ccc" borderRadius={2} mb={2}>
@@ -196,35 +194,37 @@ const CreateAppointment = () => {
             </Container>
           )}
 
-          {/* Form đặt lịch */}
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Container maxWidth="sm" sx={{ mt: 4 }}>
               <Box display="flex" flexDirection="column" gap={2}>
                 <DateTimePicker
-                  label="Thời gian mong muốn"
-                  value={preferredDate}
-                  onChange={(newValue) => setPreferredDate(newValue)}
+                  label="Thời gian cuộc hẹn"
+                  value={appointmentTime}
+                  onChange={(newValue) => setAppointmentTime(newValue)}
                   minDateTime={new Date()}
                   renderInput={(params) => <TextField {...params} />}
                 />
 
                 <TextField
-                  select
-                  label="Loại cuộc hẹn"
-                  value={meetingType}
-                  onChange={(e) => setMeetingType(e.target.value)}
-                >
-                  <MenuItem value="online">Online</MenuItem>
-                  <MenuItem value="offline">Offline</MenuItem>
-                  <MenuItem value="call">Gọi điện</MenuItem>
-                </TextField>
+                  label="Thời lượng (phút)"
+                  type="number"
+                  value={durationMinutes}
+                  onChange={(e) => setDurationMinutes(e.target.value)}
+                  inputProps={{ min: 1 }}
+                />
 
                 <TextField
-                  label="Ghi chú"
+                  label="Chủ đề"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                />
+
+                <TextField
+                  label="Mô tả"
                   multiline
                   rows={3}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
 
                 <Button variant="contained" onClick={handleSubmit}>
@@ -241,6 +241,7 @@ const CreateAppointment = () => {
                   Cuộc hẹn đã được gửi!
                 </Alert>
               </Snackbar>
+
               <Snackbar
                 open={errorSnackbar}
                 autoHideDuration={3000}

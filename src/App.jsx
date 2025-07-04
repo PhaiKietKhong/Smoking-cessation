@@ -18,7 +18,6 @@ import Diary from "./components/User/Diary/Diary";
 import AppointmentList from "./components/User/Appointments/Appointments";
 import CoachListPage from "./components/User/CoachListPage/CoachListPage";
 import ChatPage from "./components/User/ChatPage/ChatPage";
-
 import PricingPage from "./components/Package/Package";
 import { AppSidebar } from "./components/AdminDashBoard/SideBar";
 import RootLayout from "./components/AdminDashBoard/layout";
@@ -27,6 +26,7 @@ import CoachesPage from "./components/AdminDashBoard/Coaches";
 import DashboardPage from "./components/AdminDashBoard/Pagee";
 import CoachDashboard from "./components/Coach/CoachDashboard";
 import ChatPageCoach from "./components/Coach/ChatPageCoach/ChatPageCoach";
+import Appointments from "./components/Coach/Appointments/Appointments";
 function App() {
   return (
     <Router>
@@ -51,7 +51,7 @@ function App() {
           <Route path="/package" element={<PricingPage />} />
           <Route path="/coachDashboard" element={<CoachDashboard />} />
           <Route path="/chatPageCoach/:clientId" element={<ChatPageCoach />} />
-
+          <Route path="/coach/appointments" element={<Appointments />} />
           <Route
             path="/accounts"
             element={

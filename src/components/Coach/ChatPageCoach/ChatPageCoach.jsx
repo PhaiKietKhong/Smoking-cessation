@@ -1,7 +1,4 @@
 import { COACH_API_ROUTES } from "@/api/apiRouter";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import SendIcon from "@mui/icons-material/Send";
 import {
   Avatar,
   Box,
@@ -9,22 +6,47 @@ import {
   CircularProgress,
   Container,
   Divider,
-  IconButton,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-const ChatPageCoach = ({ chatId, onBack }) => {
-  const [coach, setCoach] = useState(null);
+import { useAuthCheck } from "@/hooks/useAuthCheck";
+
+const ChatPageCoach = () => {
   const { clientId } = useParams();
+  const [clientName, setClientName] = useState("Coach");
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
+
+  // ✅ Role-based authentication
+  const { isValid, isChecking } = useAuthCheck({ requiredRole: "Coach" });
+
+  const fetchClientName = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(COACH_API_ROUTES.GET_MY_CLIENTS, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const matchedClient = res.data.find(
+        (client) => client.clientId === parseInt(clientId)
+      );
+
+      if (matchedClient) {
+        setClientName(matchedClient.clientName);
+      }
+    } catch (err) {
+      console.error("Lỗi khi lấy danh sách client:", err);
+    }
+  };
 
   const fetchChatHistory = async () => {
     try {
@@ -35,8 +57,7 @@ const ChatPageCoach = ({ chatId, onBack }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setClient(res.data.client);
-      setMessages(res.data.messages);
+      setMessages(res.data || []);
     } catch (err) {
       console.error("Lỗi tải lịch sử chat:", err);
     } finally {
@@ -45,8 +66,9 @@ const ChatPageCoach = ({ chatId, onBack }) => {
   };
 
   useEffect(() => {
+    fetchClientName();
     fetchChatHistory();
-  }, [chatId]);
+  }, [clientId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,10 +80,10 @@ const ChatPageCoach = ({ chatId, onBack }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        USER_API_ROUTES.SEND_CHAT,
+        `${COACH_API_ROUTES.SEND_CHAT}/${clientId}/reply`,
         {
           content: message,
-          messageType: "text",
+          messageType: "string",
           attachmentUrl: null,
         },
         {
@@ -69,13 +91,14 @@ const ChatPageCoach = ({ chatId, onBack }) => {
         }
       );
 
-      setMessage(""); // clear input
-      await fetchChatHistory(); // reload tin nhắn từ API
+      setMessage("");
+      await fetchChatHistory();
     } catch (err) {
       console.error("Lỗi gửi tin nhắn:", err);
     }
   };
-  if (loading) {
+
+  if (isChecking || loading || !isValid) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
         <CircularProgress />
@@ -85,7 +108,7 @@ const ChatPageCoach = ({ chatId, onBack }) => {
 
   return (
     <>
-      {/* Header  */}
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -97,22 +120,21 @@ const ChatPageCoach = ({ chatId, onBack }) => {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4">Tạo Cuộc Hẹn</Typography>
-        <Box display="flex" gap={1}>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate("/userDashboard")}
-            sx={{ color: "white", borderColor: "white" }}
-          >
-            Quay lại dashboard
-          </Button>
-        </Box>
+        <Typography variant="h4">Trò chuyện với khách hàng</Typography>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/coachDashboard")}
+          sx={{ color: "white", borderColor: "white" }}
+        >
+          Quay lại dashboard
+        </Button>
       </Box>
+
       <Container
         sx={{ height: "88vh", display: "flex", flexDirection: "column" }}
       >
-        {/* Header */}
+        {/* Client Info */}
         <Box
           display="flex"
           alignItems="center"
@@ -120,52 +142,59 @@ const ChatPageCoach = ({ chatId, onBack }) => {
           borderBottom={1}
           borderColor="divider"
         >
-          <Avatar sx={{ ml: 1, mr: 2 }}>{coach.name?.charAt(0)}</Avatar>
+          <Avatar sx={{ ml: 1, mr: 2 }}>{clientName.charAt(0)}</Avatar>
           <Box>
-            <Typography fontWeight={600}>{coach.name}</Typography>
+            <Typography fontWeight={600}>{clientName || "Coach"}</Typography>
             <Typography variant="body2" color="text.secondary">
-              Hãy cứ nhắn
+              Đang trò chuyện
             </Typography>
           </Box>
         </Box>
 
         {/* Messages */}
         <Box flex={1} p={2} overflow="auto">
-          {messages.map((msg) => (
-            <Box
-              key={msg.messageId}
-              display="flex"
-              justifyContent={msg.isSentByMe ? "flex-end" : "flex-start"}
-              mb={1.5}
-            >
-              <Paper
-                sx={{
-                  px: 2,
-                  py: 1,
-                  maxWidth: "70%",
-                  minWidth: "150px",
-                  bgcolor: msg.isSentByMe ? "primary.main" : "grey.100",
-                  color: msg.isSentByMe ? "white" : "text.primary",
-                }}
-                elevation={2}
+          {messages.map((msg) => {
+            const isSentByCoach = msg.isSentByCoach;
+            const isBooking = msg.messageType === "SESSION_BOOKING";
+
+            return (
+              <Box
+                key={msg.messageId}
+                display="flex"
+                justifyContent={isSentByCoach ? "flex-end" : "flex-start"}
+                mb={1.5}
               >
-                <Typography variant="body1" whiteSpace="pre-line">
-                  {msg.content}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  display="block"
-                  align="right"
-                  mt={0.5}
+                <Paper
+                  sx={{
+                    px: 2,
+                    py: 1,
+                    maxWidth: "70%",
+                    minWidth: "150px",
+                    bgcolor: isSentByCoach ? "primary.main" : "grey.100",
+                    color: isSentByCoach ? "white" : "text.primary",
+                    borderLeft: isBooking ? "4px solid #f50057" : undefined,
+                  }}
+                  elevation={2}
                 >
-                  {new Date(msg.sentAt).toLocaleTimeString("vi-VN", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </Typography>
-              </Paper>
-            </Box>
-          ))}
+                  <Typography variant="body1" whiteSpace="pre-line">
+                    {isBooking ? <strong>Lịch hẹn:</strong> : null}{" "}
+                    {msg.content}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    align="right"
+                    mt={0.5}
+                  >
+                    {new Date(msg.sentAt).toLocaleTimeString("vi-VN", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Typography>
+                </Paper>
+              </Box>
+            );
+          })}
           <div ref={messagesEndRef} />
         </Box>
 

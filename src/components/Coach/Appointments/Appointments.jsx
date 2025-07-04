@@ -12,27 +12,19 @@ import {
   TableRow,
   Paper,
   CircularProgress,
-  Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { USER_API_ROUTES } from "@/api/apiRouter";
+import { COACH_API_ROUTES } from "@/api/apiRouter";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
-import usePremiumAccess from "@/hooks/usePremiumAccess";
 
-const AppointmentList = () => {
+const Appointments = () => {
   const navigate = useNavigate();
 
-  // ✅ Tách rõ isValid và isChecking
   const { isValid: isAuthenticated, isChecking: authChecking } = useAuthCheck({
-    requiredRole: "User",
+    requiredRole: "Coach",
   });
-  const {
-    hasPremiumAccess,
-    loading: premiumLoading,
-    error: premiumError,
-  } = usePremiumAccess();
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +33,7 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get(USER_API_ROUTES.GET_APPOINTMENTS, {
+        const res = await axios.get(COACH_API_ROUTES.GET_APPOINTMENTS, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -54,44 +46,12 @@ const AppointmentList = () => {
       }
     };
 
-    // ✅ Đảm bảo chỉ gọi 1 lần sau khi auth và premium check xong
-    if (
-      !authChecking &&
-      !premiumLoading &&
-      isAuthenticated &&
-      hasPremiumAccess
-    ) {
+    if (!authChecking && isAuthenticated) {
       fetchAppointments();
     }
-  }, [authChecking, premiumLoading, isAuthenticated, hasPremiumAccess]);
+  }, [authChecking, isAuthenticated]);
 
   if (!isAuthenticated || authChecking) return null;
-
-  if (premiumLoading) {
-    return (
-      <Box display="flex" justifyContent="center" mt={8}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (!hasPremiumAccess) {
-    return (
-      <Container sx={{ mt: 6 }}>
-        <Alert severity="warning" sx={{ mb: 3 }}>
-          Bạn cần nâng cấp lên gói <strong>Premium</strong> để xem danh sách
-          cuộc hẹn.
-        </Alert>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/Package")}
-        >
-          Nâng cấp gói Premium
-        </Button>
-      </Container>
-    );
-  }
 
   return (
     <>
@@ -111,7 +71,7 @@ const AppointmentList = () => {
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/userDashboard")}
+          onClick={() => navigate("/coachDashboard")}
           sx={{ color: "white", borderColor: "white" }}
         >
           Quay lại Dashboard
@@ -130,7 +90,7 @@ const AppointmentList = () => {
             <Table>
               <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                 <TableRow>
-                  <TableCell>Huấn luyện viên</TableCell>
+                  <TableCell>Khách hàng</TableCell>
                   <TableCell>Chủ đề</TableCell>
                   <TableCell>Mô tả</TableCell>
                   <TableCell>Thời gian</TableCell>
@@ -139,7 +99,7 @@ const AppointmentList = () => {
               <TableBody>
                 {appointments.map((appt) => (
                   <TableRow key={appt.appointmentId}>
-                    <TableCell>{appt.coachName || "-"}</TableCell>
+                    <TableCell>{appt.clientName || "-"}</TableCell>
                     <TableCell>{appt.subject || "-"}</TableCell>
                     <TableCell>{appt.description || "-"}</TableCell>
                     <TableCell>
@@ -156,4 +116,4 @@ const AppointmentList = () => {
   );
 };
 
-export default AppointmentList;
+export default Appointments;
