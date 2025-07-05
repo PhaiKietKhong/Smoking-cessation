@@ -270,7 +270,7 @@ function Community() {
             )}
 
             <Button onClick={() => navigate("/community")} variant="outlined">
-              See more
+              Xem thêm
             </Button>
           </Box>
         </Grid>

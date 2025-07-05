@@ -23,6 +23,7 @@ export const USER_API_ROUTES = {
   POST_QUIT_PLAN: `${BASE_URL}/api/QuitPlan`,
   GET_MY_PLAN: `${BASE_URL}/api/QuitPlan/my-plans`,
   CHECK_PREMIUM_ACCESS: `${BASE_URL}/api/Package/premium-access`,
+  UPGRADE_PACKAGE: `${BASE_URL}/api/Package/force-upgrade-premium`,
 };
 
 export const COMMON_API = {

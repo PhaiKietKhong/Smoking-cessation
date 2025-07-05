@@ -342,6 +342,7 @@ export default function CoachesPage() {
                 fullWidth
                 size="small"
                 displayEmpty
+                defaultValue={"ACTIVE"}
               >
                 <MenuItem value="ACTIVE">Đang hoạt động</MenuItem>
                 <MenuItem value="INACTIVE">Ngừng hoạt động</MenuItem>

@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
 import Header from "../LandingPage/Header";
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 const headerHeight = 64; // mặc định của MUI AppBar
 
 export default function RootLayout({ children }) {

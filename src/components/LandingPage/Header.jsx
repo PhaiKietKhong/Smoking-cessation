@@ -32,7 +32,6 @@ function Header() {
   const pages = [
     { title: "Trang chủ", path: "/" },
     { title: "Cộng đồng", path: "/community" },
-    { title: "Blog", path: "/" },
     { title: "Gói nâng cao", path: "/Package" },
   ];
 

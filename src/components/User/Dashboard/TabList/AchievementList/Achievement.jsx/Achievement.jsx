@@ -1,12 +1,14 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Chip, Grid, Typography } from "@mui/material";
 import React from "react";
-import Chip from "@mui/material/Chip";
-function Achievement({ title, icon, isObtain, unlockedAt }) {
+
+function Achievement({ title, icon, isObtain, unlockedAt, badgeColor }) {
+  const isEmoji = typeof icon === "string" && icon.length <= 4;
+
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
       sx={{
-        bgcolor: isObtain ? "primary.main" : "",
+        bgcolor: isObtain ? badgeColor : "",
         borderRadius: 2,
         p: 2,
         display: "flex",
@@ -28,42 +30,45 @@ function Achievement({ title, icon, isObtain, unlockedAt }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          "& > svg": {
-            fontSize: 32,
-            color: isObtain ? "primary.light" : "grey",
-          },
+          fontSize: 32,
+          filter: isObtain ? "none" : "grayscale(100%)",
         }}
       >
-        <img
-          src={`${icon}`}
-          alt={title}
-          style={{
-            width: 32,
-            height: 32,
-            filter: isObtain ? "none" : "grayscale(100%)",
-          }}
-        />
+        {isEmoji ? (
+          <Typography fontSize={32}>{icon}</Typography>
+        ) : (
+          <img
+            src={icon}
+            alt={title}
+            style={{
+              width: 32,
+              height: 32,
+              filter: isObtain ? "none" : "grayscale(100%)",
+            }}
+          />
+        )}
       </Box>
 
       <Typography variant="body1" sx={{ my: 2, fontWeight: 600 }}>
         {title}
       </Typography>
+
       {isObtain ? (
         <Chip
           label="Obtained"
           sx={{ bgcolor: "primary.light", mb: 2, color: "primary.main" }}
         />
       ) : (
-        <Chip sx={{ mb: 2 }} label="Not Obtained" variant="outlined" />
+        <Chip sx={{ mb: 2 }} label="Chưa Đạt Được" variant="outlined" />
       )}
 
-      {unlockedAt ? (
+      {isObtain ? (
         <Typography variant="body2" sx={{ mb: 2 }}>
-          Date Obtained: {unlockedAt}
+          Ngày đạt được: {unlockedAt}
         </Typography>
       ) : (
         <Typography variant="body2" sx={{ mb: 2 }}>
-          Try your best!!!
+          Cố Gắng lên!!
         </Typography>
       )}
     </Grid>

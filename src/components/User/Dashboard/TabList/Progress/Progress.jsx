@@ -16,6 +16,8 @@ import { USER_API_ROUTES } from "@/api/apiRouter";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import EditPlanModal from "./EditPlanModal/EditPlanModal";
+import React from "react";
+import { Flag, AccessTime, DirectionsRun } from "@mui/icons-material";
 function Progress() {
   const [planData, setPlanData] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -246,19 +248,51 @@ function Progress() {
                   >
                     {milestone.title}
                   </Typography>
+
                   <Typography variant="body2" color="text.secondary">
                     {milestone.description}
                   </Typography>
-                  <Typography variant="body2" mt={1}>
-                    🎯 Mục tiêu: {milestone.targetCigarettes} điếu/ngày
+
+                  <Typography
+                    variant="body2"
+                    mt={1}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Flag
+                      fontSize="small"
+                      sx={{ mr: 0.5, color: "warning.main" }}
+                    />
+                    Mục tiêu: {milestone.targetCigarettes} điếu/ngày
                   </Typography>
-                  <Typography variant="body2">
-                    📅 Thời hạn:{" "}
+
+                  <Typography
+                    variant="body2"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <AccessTime
+                      fontSize="small"
+                      sx={{ mr: 0.5, color: "info.main" }}
+                    />
+                    Thời hạn:{" "}
                     {new Date(milestone.targetDate).toLocaleDateString("vi-VN")}
                   </Typography>
-                  <Typography variant="body2" fontWeight="bold" mt={1}>
-                    ✅ Hành động:
+
+                  <Typography
+                    variant="body2"
+                    fontWeight="bold"
+                    mt={1}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <DirectionsRun
+                      fontSize="small"
+                      sx={{ mr: 0.5, color: "success.main" }}
+                    />
+                    Hành động:
                   </Typography>
+
                   <ul style={{ paddingLeft: 16 }}>
                     {milestone.actions?.map((action, i) => (
                       <li key={i}>

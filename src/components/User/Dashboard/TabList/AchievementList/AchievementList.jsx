@@ -10,6 +10,7 @@ function AchievementList({ achievements }) {
   if (!achievements) {
     return <div></div>;
   }
+  console.log(achievements);
   return (
     <Box>
       <Grid container spacing={3} sx={{ my: 3 }}>
@@ -20,6 +21,7 @@ function AchievementList({ achievements }) {
             icon={item.icon}
             isObtain={item.isUnlocked}
             unlockedAt={item.unlockedAt}
+            badgeColor={item.badgeColor}
           />
         ))}
       </Grid>
