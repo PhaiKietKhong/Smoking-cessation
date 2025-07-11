@@ -24,6 +24,7 @@ export const USER_API_ROUTES = {
   GET_MY_PLAN: `${BASE_URL}/api/QuitPlan/my-plans`,
   CHECK_PREMIUM_ACCESS: `${BASE_URL}/api/Package/premium-access`,
   UPGRADE_PACKAGE: `${BASE_URL}/api/Package/force-upgrade-premium`,
+  GET_UNLOCKED_ACHIEVEMENTS: `${BASE_URL}/api/Achievement/unlocked`,
 };
 
 export const COMMON_API = {
@@ -49,6 +50,8 @@ export const COACH_API_ROUTES = {
   SEND_PLAN: `${BASE_URL}/api/Coach/create-plan-for-client`,
   SEND_CHAT: `${BASE_URL}/api/Coach/chats`,
   GET_APPOINTMENTS: `${BASE_URL}/api/Appointment/coach`,
+  GET_DIARY_USER: `${BASE_URL}/api/Coach/clients`,
+  SENDNOTES_DIARY_USER: `${BASE_URL}/api/Coach/clients`,
 };
 export const ADMIN_API_ROUTES = {
   GET_STATISTICS: `${BASE_URL}/api/Admin/statistics`,

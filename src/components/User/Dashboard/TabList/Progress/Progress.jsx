@@ -193,7 +193,7 @@ function Progress() {
               flexDirection: "column",
             }}
           >
-            <Box sx={{ px: 3, pt: 2 }}>
+            {/* <Box sx={{ px: 3, pt: 2 }}>
               {planData.status === "Đạt yêu cầu" && (
                 <Chip
                   label="Đạt yêu cầu"
@@ -210,7 +210,7 @@ function Progress() {
                   sx={{ fontWeight: "bold", fontSize: 16 }}
                 />
               )}
-            </Box>
+            </Box> */}
             <CardHeader
               title={
                 <Typography variant="h6" fontWeight="bold">

@@ -70,8 +70,10 @@ const EditProgramModal = ({ open, onClose, data, onSave }) => {
           title: "",
           description: "",
           targetDate: "",
+          planId: 0,
           targetCigarettes: 0,
           actions: [""],
+          status: "",
         },
       ],
     }));
@@ -223,6 +225,11 @@ const EditProgramModal = ({ open, onClose, data, onSave }) => {
       onSave?.(response.data);
       onClose(true);
     } catch (error) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        console.log("❌ Validation Errors:", error.response.data.errors);
+      } else {
+        console.log("⚠️ Lỗi không xác định:", error.message);
+      }
       console.error("Lỗi API:", error);
       alert("Không thể gửi chương trình. Vui lòng thử lại.");
     }
