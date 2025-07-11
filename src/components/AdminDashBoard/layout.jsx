@@ -110,8 +110,8 @@ export default function RootLayout({ children }) {
               { icon: <HomeIcon />, text: "Tổng quan", to: "/AdminDashBoard" },
               { icon: <PeopleIcon />, text: "Tài khoản", to: "/accounts" },
               { icon: <PersonIcon />, text: "Huấn luyện viên", to: "/coaches" },
-              { icon: <BarChartIcon />, text: "Thống kê", to: "/analytics" },
-              { icon: <SettingsIcon />, text: "Cài đặt", to: "/settings" },
+              // { icon: <BarChartIcon />, text: "Thống kê", to: "/analytics" },
+              // { icon: <SettingsIcon />, text: "Cài đặt", to: "/settings" },
             ].map((item) => (
               <ListItem
                 button

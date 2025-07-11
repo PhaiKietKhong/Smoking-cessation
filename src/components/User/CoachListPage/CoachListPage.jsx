@@ -135,7 +135,7 @@ export default function CoachListPage() {
       </Box>
       <Container sx={{ py: 4 }}>
         <Typography variant="h4" mb={4} fontWeight={700} color="primary">
-          🌟 Danh sách Huấn luyện viên
+          Danh sách Huấn luyện viên
         </Typography>
         <Grid container spacing={4}>
           {coaches.map((coach, index) => (

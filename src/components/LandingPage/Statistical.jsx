@@ -8,7 +8,7 @@ import "@fontsource/be-vietnam-pro/400.css";
 import "@fontsource/be-vietnam-pro/700.css";
 import "@fontsource/be-vietnam-pro/800.css";
 
-function Statistical() {
+function Statistical({ sectionRef }) {
   function Progress({ timneline, target, duration, effect }) {
     return (
       <Box
@@ -18,7 +18,6 @@ function Statistical() {
           justifyContent: "center",
           mx: "auto",
           width: { xs: "100%", md: "70%" },
-          fontFamily: "Be Vietnam Pro",
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -47,7 +46,10 @@ function Statistical() {
   }
 
   return (
-    <Box sx={{ backgroundColor: "primary.dark", fontFamily: "Be Vietnam Pro" }}>
+    <Box
+      ref={sectionRef}
+      sx={{ backgroundColor: "primary.dark", fontFamily: "Be Vietnam Pro" }}
+    >
       <Container maxWidth="lg">
         <BotToTop>
           <Box sx={{ display: "flex", justifyContent: "space-around", py: 6 }}>
@@ -217,37 +219,37 @@ function Statistical() {
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Progress
               timneline={"20 phút"}
-              target={5} // bắt đầu sớm, thay vì 10%
+              target={5}
               duration={1000}
               effect={"Huyết áp và nhịp tim trở lại bình thường"}
             />
             <Progress
               timneline={"24 giờ"}
-              target={15} // loại bỏ CO, nhưng vẫn còn chất độc khác
+              target={15}
               duration={1000}
               effect={"Khí CO được loại bỏ khỏi cơ thể"}
             />
             <Progress
               timneline={"48 giờ"}
-              target={25} // khứu giác, vị giác cải thiện một phần
+              target={25}
               duration={1000}
               effect={"Vị giác và khứu giác được cải thiện"}
             />
             <Progress
               timneline={"2-3 tháng"}
-              target={45} // chức năng phổi, tuần hoàn cải thiện đáng kể
+              target={45}
               duration={1000}
               effect={"Tuần hoàn cải thiện, chức năng phổi tăng"}
             />
             <Progress
               timneline={"1 năm"}
-              target={70} // tim mạch giảm rủi ro lớn
+              target={70}
               duration={1000}
               effect={"Nguy cơ bệnh tim giảm một nửa"}
             />
             <Progress
               timneline={"10 năm"}
-              target={100} // đạt phục hồi tối đa sau nhiều năm
+              target={100}
               duration={1000}
               effect={
                 "Nguy cơ ung thư phổi giảm một nửa so với người hút thuốc"

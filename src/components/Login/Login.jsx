@@ -180,15 +180,15 @@ function Login() {
               {[
                 {
                   bg: "#7ED321",
-                  text: '💪 "Mỗi điếu thuốc bạn không hút là một chiến thắng!"',
+                  text: '"Mỗi điếu thuốc bạn không hút là một chiến thắng!"',
                 },
                 {
                   bg: "#4A90E2",
-                  text: '🌟 "Tương lai bạn sẽ cảm ơn bạn vì đã bỏ thuốc hôm nay"',
+                  text: '"Tương lai bạn sẽ cảm ơn bạn vì đã bỏ thuốc hôm nay"',
                 },
                 {
                   bg: "#FF6B6B",
-                  text: '🚭 "Bạn mạnh mẽ hơn cơn thèm thuốc"',
+                  text: '"Bạn mạnh mẽ hơn cơn thèm thuốc"',
                 },
               ].map(({ bg, text }, i) => (
                 <Box
