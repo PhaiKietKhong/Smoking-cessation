@@ -86,7 +86,7 @@ export default function Dashboard() {
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" fontWeight={700} mb={3}>
-        📊 Bảng Thống Kê Quản Trị
+        Bảng Thống Kê Quản Trị
       </Typography>
 
       <Paper elevation={4} sx={{ p: 3, mb: 4, borderRadius: 4 }}>

@@ -27,6 +27,8 @@ import DashboardPage from "./components/AdminDashBoard/Pagee";
 import CoachDashboard from "./components/Coach/CoachDashboard";
 import ChatPageCoach from "./components/Coach/ChatPageCoach/ChatPageCoach";
 import Appointments from "./components/Coach/Appointments/Appointments";
+import ClientDiary from "./components/Coach/ClientDiary/ClientDiary";
+import UserPackagePage from "@/components/User/UserPackage/UserPackage";
 function App() {
   return (
     <Router>
@@ -52,6 +54,8 @@ function App() {
           <Route path="/coachDashboard" element={<CoachDashboard />} />
           <Route path="/chatPageCoach/:clientId" element={<ChatPageCoach />} />
           <Route path="/coach/appointments" element={<Appointments />} />
+          <Route path="/clientDiary/:clientId" element={<ClientDiary />} />
+          <Route path="/userPackage" element={<UserPackagePage />} />
           <Route
             path="/accounts"
             element={

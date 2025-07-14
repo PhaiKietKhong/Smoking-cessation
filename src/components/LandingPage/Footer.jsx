@@ -171,8 +171,8 @@ function Footer() {
 
         <Divider sx={{ my: 4 }} />
 
-        <Box textAlign="center">
-          <Typography color="text.secondary" variant="body2">
+        <Box sx={{ color: "primary.light" }} textAlign="center">
+          <Typography variant="body2">
             &copy; {new Date().getFullYear()} QuitSmart. Mọi quyền được bảo lưu.
           </Typography>
         </Box>

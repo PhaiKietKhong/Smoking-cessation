@@ -1,9 +1,11 @@
 import { Box, Chip, Grid, Typography } from "@mui/material";
 import React from "react";
-
+import dayjs from "dayjs";
 function Achievement({ title, icon, isObtain, unlockedAt, badgeColor }) {
   const isEmoji = typeof icon === "string" && icon.length <= 4;
-
+  const formattedDate = unlockedAt
+    ? dayjs(unlockedAt).format("DD/MM/YYYY")
+    : "";
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
@@ -64,7 +66,7 @@ function Achievement({ title, icon, isObtain, unlockedAt, badgeColor }) {
 
       {isObtain ? (
         <Typography variant="body2" sx={{ mb: 2 }}>
-          Ngày đạt được: {unlockedAt}
+          Ngày đạt được: {formattedDate}
         </Typography>
       ) : (
         <Typography variant="body2" sx={{ mb: 2 }}>

@@ -76,6 +76,7 @@ const SendPlan = ({ open, onClose, data, onSave }) => {
           targetDate: "",
           targetCigarettes: 0,
           actions: [""],
+          status: "",
         },
       ],
     }));

@@ -14,7 +14,7 @@ import "@fontsource/be-vietnam-pro/700.css";
 import "@fontsource/be-vietnam-pro/800.css";
 import { useNavigate } from "react-router-dom";
 
-function Hero() {
+function Hero({ handleScroll }) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const isMedium = useMediaQuery(theme.breakpoints.down("md"));
@@ -105,7 +105,7 @@ function Hero() {
               color: "primary.light",
               mt: 3,
             }}
-            onClick={() => handleNavigate("onBoardingPage")}
+            onClick={() => handleScroll()}
           >
             Bắt đầu hành trình
           </Button>

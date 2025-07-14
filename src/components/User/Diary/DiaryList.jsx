@@ -2,7 +2,7 @@
 import { USER_API_ROUTES } from "@/api/apiRouter";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -88,15 +88,17 @@ function DiaryList() {
         maxWidth
         sx={{ display: "flex", flexDirection: "column", gap: 2, my: 2 }}
       >
-        {listDiary.length > 0 ? (
-          listDiary.map((diary, i) => (
-            <CardDiary key={i} diaryData={diary} onUpdated={fetchListDiary} />
-          ))
-        ) : (
-          <Typography variant="h4" sx={{ textAlign: "center" }}>
-            Hiện tại bạn chưa viết nhật ký
-          </Typography>
-        )}
+        <Grid container spacing={3}>
+          {listDiary.length > 0 ? (
+            listDiary.map((diary, i) => (
+              <CardDiary key={i} diaryData={diary} onUpdated={fetchListDiary} />
+            ))
+          ) : (
+            <Typography variant="h4" sx={{ textAlign: "center" }}>
+              Hiện tại bạn chưa viết nhật ký
+            </Typography>
+          )}
+        </Grid>
       </Container>
     </div>
   );

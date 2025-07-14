@@ -172,7 +172,6 @@ function Health() {
                     formatter={formatTooltip}
                     labelFormatter={(label) => `Ngày ${label}`}
                   />
-
                   <ReferenceArea
                     y1={0}
                     y2={0.3}
@@ -191,7 +190,6 @@ function Health() {
                     fill="#28a745"
                     fillOpacity={0.1}
                   />
-
                   <Legend
                     payload={[
                       {
@@ -218,6 +216,7 @@ function Health() {
                     dot={false}
                     isAnimationActive={false}
                     name="Tỷ lệ hồi phục"
+                    strokeDasharray="5 5"
                   />
                 </LineChart>
               </ResponsiveContainer>

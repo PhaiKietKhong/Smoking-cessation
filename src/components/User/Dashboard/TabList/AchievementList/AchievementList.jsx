@@ -1,29 +1,54 @@
 import { Box, Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Achievement from "./Achievement.jsx/Achievement";
-import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
-import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
-import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
-import SmokeFreeOutlinedIcon from "@mui/icons-material/SmokeFreeOutlined";
+import axios from "axios";
+import { USER_API_ROUTES } from "@/api/apiRouter";
 
 function AchievementList({ achievements }) {
-  if (!achievements) {
-    return <div></div>;
-  }
-  console.log(achievements);
+  const [unlockedAchievements, setUnlockedAchievements] = useState([]);
+
+  useEffect(() => {
+    const fetchUnlockedAchievements = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          USER_API_ROUTES.GET_UNLOCKED_ACHIEVEMENTS,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUnlockedAchievements(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách thành tựu đã mở khóa", error);
+      }
+    };
+
+    fetchUnlockedAchievements();
+  }, []);
+
+  // Tạo Map để dễ tra cứu achievementId
+  const unlockedMap = new Map(
+    unlockedAchievements.map((item) => [item.achievementId, item])
+  );
+
   return (
     <Box>
       <Grid container spacing={3} sx={{ my: 3 }}>
-        {achievements.map((item, index) => (
-          <Achievement
-            key={index}
-            title={item.name}
-            icon={item.icon}
-            isObtain={item.isUnlocked}
-            unlockedAt={item.unlockedAt}
-            badgeColor={item.badgeColor}
-          />
-        ))}
+        {achievements.map((item, index) => {
+          const unlockedItem = unlockedMap.get(item.achievementId);
+          return (
+            <Achievement
+              key={item.achievementId}
+              title={item.name}
+              icon={item.icon}
+              isObtain={!!unlockedItem?.isUnlocked}
+              unlockedAt={unlockedItem?.unlockedAt}
+              badgeColor={unlockedItem?.badgeColor || "#ccc"}
+            />
+          );
+        })}
       </Grid>
     </Box>
   );

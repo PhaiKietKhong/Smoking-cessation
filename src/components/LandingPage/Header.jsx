@@ -44,6 +44,18 @@ function Header() {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+  let isTokenValid = false;
+
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      isTokenValid = decoded.exp && decoded.exp > currentTime;
+    } catch (err) {
+      console.error("Token không hợp lệ:", err);
+      token = null;
+    }
+  }
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={() => setOpen(false)}>
@@ -69,7 +81,6 @@ function Header() {
 
   const handleProfile = () => {
     handleCloseMenu();
-    const token = localStorage.getItem("token");
 
     if (!token) {
       navigate("/login");
@@ -158,7 +169,7 @@ function Header() {
 
           {/* Avatar hoặc Đăng nhập */}
           <Box sx={{ flexGrow: 0 }}>
-            {token ? (
+            {isTokenValid ? (
               <>
                 <Tooltip title={username || "Tài khoản"}>
                   <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>

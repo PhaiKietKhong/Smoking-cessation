@@ -18,6 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import EditPlanModal from "./EditPlanModal/EditPlanModal";
 import React from "react";
 import { Flag, AccessTime, DirectionsRun } from "@mui/icons-material";
+import TimelineChart from "./TimelineChart";
 function Progress() {
   const [planData, setPlanData] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -93,11 +94,11 @@ function Progress() {
         my: 3,
       }}
     >
-      <Grid container spacing={2} sx={{ height: "50vh" }}>
+      <Grid container spacing={3} sx={{ height: "90vh" }}>
         {/* Thông tin tổng quan kế hoạch */}
         <Grid
           item
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 4 }}
           sx={{
             height: "100%",
             display: "flex",
@@ -179,7 +180,7 @@ function Progress() {
         {/* Mốc tuần (milestones) */}
         <Grid
           item
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 8 }}
           sx={{
             height: "100%",
             display: "flex",
@@ -193,7 +194,7 @@ function Progress() {
               flexDirection: "column",
             }}
           >
-            <Box sx={{ px: 3, pt: 2 }}>
+            {/* <Box sx={{ px: 3, pt: 2 }}>
               {planData.status === "Đạt yêu cầu" && (
                 <Chip
                   label="Đạt yêu cầu"
@@ -210,14 +211,13 @@ function Progress() {
                   sx={{ fontWeight: "bold", fontSize: 16 }}
                 />
               )}
-            </Box>
+            </Box> */}
             <CardHeader
               title={
                 <Typography variant="h6" fontWeight="bold">
                   Các mốc trong kế hoạch
                 </Typography>
               }
-              subheader="Chi tiết từng tuần"
               action={
                 <Tooltip title="chỉnh sửa">
                   <IconButton aria-label="edit" onClick={handleEdit}>
@@ -228,6 +228,8 @@ function Progress() {
             />
             <CardContent
               sx={{
+                display: "flex",
+                justifyContent: "center",
                 flexGrow: 1,
                 overflowY: "auto",
                 "&::-webkit-scrollbar": {
@@ -237,73 +239,10 @@ function Progress() {
                   backgroundColor: "#ccc",
                   borderRadius: 4,
                 },
+                pt: "85px",
               }}
             >
-              {planData.milestones?.map((milestone, idx) => (
-                <Box key={idx} mb={2}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    color="primary"
-                  >
-                    {milestone.title}
-                  </Typography>
-
-                  <Typography variant="body2" color="text.secondary">
-                    {milestone.description}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    mt={1}
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Flag
-                      fontSize="small"
-                      sx={{ mr: 0.5, color: "warning.main" }}
-                    />
-                    Mục tiêu: {milestone.targetCigarettes} điếu/ngày
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <AccessTime
-                      fontSize="small"
-                      sx={{ mr: 0.5, color: "info.main" }}
-                    />
-                    Thời hạn:{" "}
-                    {new Date(milestone.targetDate).toLocaleDateString("vi-VN")}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    mt={1}
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <DirectionsRun
-                      fontSize="small"
-                      sx={{ mr: 0.5, color: "success.main" }}
-                    />
-                    Hành động:
-                  </Typography>
-
-                  <ul style={{ paddingLeft: 16 }}>
-                    {milestone.actions?.map((action, i) => (
-                      <li key={i}>
-                        <Typography variant="body2">
-                          {i + 1}. {action}
-                        </Typography>
-                      </li>
-                    ))}
-                  </ul>
-                </Box>
-              ))}
+              <TimelineChart plans={[planData]} />
             </CardContent>
           </Card>
         </Grid>

@@ -225,16 +225,6 @@ export default function CoachesPage() {
                         variant="outlined"
                         onClick={() => handleOpenEdit(coach)}
                         startIcon={<CreateOutlinedIcon fontSize="small" />}
-                        sx={{
-                          borderColor: "#43a047",
-                          color: "#43a047",
-                          "&:hover": {
-                            borderColor: "#1b5e20",
-                            backgroundColor: "rgba(67,160,71,0.08)",
-                            color: "#1b5e20",
-                          },
-                          fontWeight: 600,
-                        }}
                       >
                         Chỉnh sửa
                       </Button>
@@ -259,55 +249,63 @@ export default function CoachesPage() {
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 6 }}>
-              <TextField
-                label="Tên tài khoản"
-                fullWidth
-                disabled={editMode}
-                size="small"
-                value={formData.username}
-                onChange={(e) =>
-                  setFormData({ ...formData, username: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <TextField
-                label="Email"
-                type="email"
-                fullWidth
-                size="small"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                disabled={editMode}
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                label="Họ và tên"
-                fullWidth
-                disabled={editMode}
-                size="small"
-                value={formData.fullName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                label="Mật khẩu"
-                type="password"
-                fullWidth
-                size="small"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-              />
-            </Grid>
+            {!editMode ? (
+              <>
+                {" "}
+                <Grid size={{ xs: 6 }}>
+                  <TextField
+                    label="Tên tài khoản"
+                    fullWidth
+                    disabled={editMode}
+                    size="small"
+                    value={formData.username}
+                    onChange={(e) =>
+                      setFormData({ ...formData, username: e.target.value })
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <TextField
+                    label="Email"
+                    type="email"
+                    fullWidth
+                    size="small"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    disabled={editMode}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <TextField
+                    label="Họ và tên"
+                    fullWidth
+                    disabled={editMode}
+                    size="small"
+                    value={formData.fullName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, fullName: e.target.value })
+                    }
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <TextField
+                    label="Mật khẩu"
+                    type="password"
+                    fullWidth
+                    size="small"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                  />
+                </Grid>{" "}
+              </>
+            ) : (
+              <></>
+            )}
+
             <Grid size={{ xs: 12 }}>
               <TextField
                 label="Chuyên môn"
@@ -333,21 +331,7 @@ export default function CoachesPage() {
                 }
               />
             </Grid>
-            <Grid item xs={12}>
-              <Select
-                value={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.value })
-                }
-                fullWidth
-                size="small"
-                displayEmpty
-                defaultValue={"ACTIVE"}
-              >
-                <MenuItem value="ACTIVE">Đang hoạt động</MenuItem>
-                <MenuItem value="INACTIVE">Ngừng hoạt động</MenuItem>
-              </Select>
-            </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
         </DialogContent>
         <DialogActions>

@@ -5,78 +5,60 @@ import {
   InputAdornment,
   LinearProgress,
   Typography,
+  TextField,
+  useMediaQuery,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import { useState } from "react";
 import dayjs from "dayjs";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { USER_API_ROUTES } from "@/api/apiRouter";
 
-function OnboadingPage() {
+function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [quitDate, setQuitDate] = useState(null);
   const [cigaretteCount, setCigaretteCount] = useState("");
   const [cigarettesInAPack, setCigarettesInAPack] = useState("");
   const [priceOfThePack, setPriceOfThePack] = useState("");
   const [yearsOfSmoking, setYearsOfSmoking] = useState("");
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
-  function formatNumber(number) {
+  const formatNumber = (number) => {
     number = Math.round(parseFloat(number));
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
+  };
 
   const submitData = async () => {
     const token = localStorage.getItem("token");
-
     const payload = {
       quitDate: quitDate?.toISOString(),
       cigarettesPerDay: Number(cigaretteCount),
       costPerPack: Number(priceOfThePack),
       cigarettesPerPack: Number(cigarettesInAPack),
-      yearsOfSmoking: Number(yearsOfSmoking), // ✅ thêm mới
+      yearsOfSmoking: Number(yearsOfSmoking),
     };
 
     try {
-      const response = await axios.post(
-        USER_API_ROUTES.POST_SMOKING_STATUS,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      await axios.post(USER_API_ROUTES.POST_SMOKING_STATUS, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       navigate("/userDashBoard");
     } catch (error) {
-      if (error.response) {
-        console.error("Server error:", error.response.data);
-        alert("Có lỗi xảy ra khi gửi dữ liệu");
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        alert("Không thể kết nối đến máy chủ.");
-      } else {
-        console.error("Error setting up request:", error.message);
-        alert("Lỗi không xác định.");
-      }
+      console.error("Submit error:", error);
+      alert("Đã có lỗi xảy ra. Vui lòng thử lại.");
     }
-  };
-
-  const handleNext = () => {
-    if (currentStep < 6) setCurrentStep(currentStep + 1);
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const canProcess = () => {
@@ -84,455 +66,334 @@ function OnboadingPage() {
       case 1:
         return quitDate !== null;
       case 2:
-        return cigaretteCount !== "" && Number(cigaretteCount) > 0;
+        return Number(cigaretteCount) > 0;
       case 3:
-        return cigarettesInAPack !== "" && Number(cigarettesInAPack) > 0;
+        return Number(cigarettesInAPack) > 0;
       case 4:
-        return priceOfThePack !== "" && Number(priceOfThePack) > 0;
+        return Number(priceOfThePack) > 0;
       case 5:
-        return yearsOfSmoking !== "" && Number(yearsOfSmoking) > 0;
-      case 6:
-        return true;
+        return Number(yearsOfSmoking) > 0;
       default:
-        return false;
+        return true;
     }
   };
 
-  function Progress() {
-    const value = currentStep * (100 / 6);
-    return (
-      <LinearProgress
-        variant="determinate"
-        value={value}
-        sx={{
-          height: 20,
-          borderRadius: 5,
-          bgcolor: "rgba(0,0,0,0.1)",
-          "& .MuiLinearProgress-bar": {
-            bgcolor: "#primary.light",
-          },
-          transition: "ease",
-        }}
-      />
-    );
-  }
+  const renderTextField = (label, value, setValue, max = 100) => (
+    <TextField
+      label={label}
+      type="number"
+      value={value}
+      variant="outlined"
+      fullWidth
+      onChange={(e) =>
+        setValue(Math.min(Math.max(Number(e.target.value), 0), max))
+      }
+      sx={{
+        bgcolor: "#f9fafb",
+        borderRadius: 2,
+        mt: 2,
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": { borderColor: "primary.main" },
+          "&:hover fieldset": { borderColor: "primary.dark" },
+          "&.Mui-focused fieldset": { borderColor: "primary.main" },
+        },
+      }}
+    />
+  );
 
   const renderStep = () => {
+    const summaryItem = (label, value) => (
+      <Box
+        sx={{
+          p: 2,
+          bgcolor: "#f9fafb",
+          borderRadius: 2,
+          border: "1px solid #e2e8f0",
+        }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          {label}
+        </Typography>
+        <Typography fontWeight={600}>{value}</Typography>
+      </Box>
+    );
+
     switch (currentStep) {
       case 1:
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
+          <>
+            <Typography variant="h5" fontWeight={700}>
               Bạn bỏ thuốc lá khi nào?
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1" color="text.secondary">
               Chọn ngày bạn dự định bỏ thuốc lá
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <Box mt={2}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DateTimePicker"]}>
-                  <DateTimePicker
-                    value={quitDate}
-                    onChange={(newValue) => setQuitDate(newValue)}
-                    label="Chọn ngày "
-                    sx={{
-                      color: "primary.light",
-                      "& .MuiInputBase-input": { color: "primary.light" },
-                      "& .MuiInputLabel-root": { color: "primary.light" },
-                      "& .MuiOutlinedInput-root fieldset": {
-                        borderColor: "primary.light",
-                      },
-                    }}
-                  />
-                </DemoContainer>
+                <DateTimePicker
+                  label="Ngày bỏ thuốc"
+                  value={quitDate}
+                  onChange={setQuitDate}
+                  sx={{
+                    width: "100%",
+                    bgcolor: "#f9fafb",
+                    borderRadius: 2,
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "primary.main" },
+                      "&:hover fieldset": { borderColor: "primary.dark" },
+                      "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                    },
+                  }}
+                />
               </LocalizationProvider>
             </Box>
-          </Box>
+          </>
         );
-
       case 2:
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
+          <>
+            <Typography variant="h5" fontWeight={700}>
               Bạn hút bao nhiêu điếu thuốc mỗi ngày?
             </Typography>
-            <Typography variant="body2">
-              Nhập số lượng thuốc lá trung bình bạn hút mỗi ngày
+            <Typography variant="body1" color="text.secondary">
+              Nhập số lượng trung bình mỗi ngày
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <TextField
-                label="số điếu thuốc mỗi ngày"
-                type="number"
-                variant="standard"
-                value={cigaretteCount}
-                onChange={(e) =>
-                  setCigaretteCount(
-                    Math.min(Math.max(Number(e.target.value), 0), 100)
-                  )
-                }
-                sx={{
-                  "& .MuiInputBase-input": { color: "primary.light" },
-                  "& .MuiInputLabel-root": { color: "primary.light" },
-                  "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
+            {renderTextField(
+              "Số điếu thuốc mỗi ngày",
+              cigaretteCount,
+              setCigaretteCount
+            )}
+          </>
         );
-
       case 3:
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
+          <>
+            <Typography variant="h5" fontWeight={700}>
               Một gói có bao nhiêu điếu thuốc?
             </Typography>
-            <Typography variant="body2">
-              Nhập số lượng thuốc lá trong một gói bạn thường mua
+            <Typography variant="body1" color="text.secondary">
+              Nhập số lượng trong một gói
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <TextField
-                label="số lượng thuốc lá trong một gói"
-                type="number"
-                variant="standard"
-                value={cigarettesInAPack}
-                onChange={(e) =>
-                  setCigarettesInAPack(
-                    Math.min(Math.max(Number(e.target.value), 0), 100)
-                  )
-                }
-                sx={{
-                  "& .MuiInputBase-input": { color: "primary.light" },
-                  "& .MuiInputLabel-root": { color: "primary.light" },
-                  "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
+            {renderTextField(
+              "Điếu thuốc / gói",
+              cigarettesInAPack,
+              setCigarettesInAPack
+            )}
+          </>
         );
-
       case 4:
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
+          <>
+            <Typography variant="h5" fontWeight={700}>
               Giá một gói thuốc là bao nhiêu?
             </Typography>
-            <Typography variant="body2">
-              Nhập giá một gói thuốc (VNĐ)
+            <Typography variant="body1" color="text.secondary">
+              Nhập giá tiền (VNĐ)
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <TextField
-                label="Giá tiền"
-                type="number"
-                variant="standard"
-                value={priceOfThePack}
-                onChange={(e) =>
-                  setPriceOfThePack(
-                    Math.min(Math.max(Number(e.target.value), 0), 10000000)
-                  )
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{ color: "primary.light" }}
-                    >
-                      VND
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  "& .MuiInputBase-input": { color: "primary.light" },
-                  "& .MuiInputLabel-root": { color: "primary.light" },
-                  "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
+            <TextField
+              label="Giá tiền"
+              type="number"
+              value={priceOfThePack}
+              fullWidth
+              variant="outlined"
+              onChange={(e) =>
+                setPriceOfThePack(
+                  Math.min(Math.max(Number(e.target.value), 0), 10000000)
+                )
+              }
+              InputProps={{
+                endAdornment: <InputAdornment position="end">₫</InputAdornment>,
+              }}
+              sx={{
+                bgcolor: "#f9fafb",
+                borderRadius: 2,
+                mt: 2,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "primary.main" },
+                  "&:hover fieldset": { borderColor: "primary.dark" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            />
+          </>
         );
-
       case 5:
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
+          <>
+            <Typography variant="h5" fontWeight={700}>
               Bạn đã hút thuốc bao nhiêu năm?
             </Typography>
-            <Typography variant="body2">
-              Nhập số năm bạn hút thuốc trước khi quyết định bỏ
+            <Typography variant="body1" color="text.secondary">
+              Nhập số năm trước khi bỏ thuốc
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-              <TextField
-                label="Số năm hút thuốc"
-                type="number"
-                variant="standard"
-                value={yearsOfSmoking}
-                onChange={(e) =>
-                  setYearsOfSmoking(
-                    Math.min(Math.max(Number(e.target.value), 0), 100)
-                  )
-                }
-                sx={{
-                  "& .MuiInputBase-input": { color: "primary.light" },
-                  "& .MuiInputLabel-root": { color: "primary.light" },
-                  "& .MuiInput-underline:before": {
-                    borderBottomColor: "primary.light",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
+            {renderTextField(
+              "Số năm hút thuốc",
+              yearsOfSmoking,
+              setYearsOfSmoking
+            )}
+          </>
         );
-
       case 6:
+        const daily = cigaretteCount * (priceOfThePack / cigarettesInAPack);
         return (
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Box sx={{ textAlign: "center", my: 3 }}>
-              <Typography variant="h4" sx={{ mb: 2 }}>
-                Tóm tắt thông tin của bạn
-              </Typography>
-
-              <Typography variant="body2">
-                Đây là số tiền bạn sẽ tiết kiệm được khi bỏ thuốc lá
-              </Typography>
-            </Box>
-            {/* */}
-
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Box
-                sx={{
-                  width: "50%",
-                  border: "1px solid rgba(128, 128, 128, 0.3)",
-                  borderRadius: 2,
-                  p: 3,
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <Typography
-                    variant="body1"
-                    sx={{ textAlign: "start", fontWeight: 600 }}
-                  >
-                    Ngày bỏ thuốc
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: 800,
-                      textAlign: "start",
-                      letterSpacing: "0.1rem",
-                    }}
-                  >
-                    {quitDate.format("YYYY/MM/DD HH:mm")}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  width: "50%",
-                  border: "1px solid rgba(128, 128, 128, 0.3)",
-                  borderRadius: 2,
-                  p: 3,
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <Typography
-                    variant="body1"
-                    sx={{ textAlign: "start", fontWeight: 600 }}
-                  >
-                    Số điếu thuốc /ngày
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: 800, textAlign: "start" }}
-                  >
-                    {cigaretteCount}
-                  </Typography>
-                </Box>
-              </Box>
+          <>
+            <Typography variant="h5" fontWeight={700}>
+              Tóm tắt thông tin của bạn
+            </Typography>
+            <Box
+              sx={{
+                mt: 2,
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                gap: 2,
+              }}
+            >
+              {summaryItem(
+                "Ngày bỏ thuốc",
+                quitDate?.format("YYYY/MM/DD HH:mm")
+              )}
+              {summaryItem("Số điếu mỗi ngày", cigaretteCount)}
+              {summaryItem("Điếu / gói", cigarettesInAPack)}
+              {summaryItem("Giá / gói", `${formatNumber(priceOfThePack)}₫`)}
             </Box>
 
             <Box
               sx={{
-                width: "100%",
-                border: "1px solid rgba(128, 128, 128, 0.3)",
-                p: 3,
+                mt: 3,
+                p: 2,
+                bgcolor: "primary.light",
                 borderRadius: 2,
-                mt: 2,
               }}
             >
-              <Box sx={{ textAlign: "start" }}>
-                <Typography variant="h4" sx={{ mb: 1 }}>
-                  Số tiền tiết kiệm
-                </Typography>
-
-                <Typography variant="body2">khi bạn bỏ thuốc</Typography>
-              </Box>
-              {/* day week*/}
-
-              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                <Box sx={{ width: "50%" }}>
-                  <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Mỗi ngày
-                  </Typography>
-                  <Typography
-                    variant="body1"
+              <Typography variant="h6" color="primary.main" fontWeight={700}>
+                Số tiền tiết kiệm
+              </Typography>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 2,
+                }}
+              >
+                {[1, 7, 30, 365].map((days, idx) => (
+                  <Box
+                    key={idx}
                     sx={{
-                      textAlign: "start",
-                      fontWeight: 800,
-                      color: "primary.main",
+                      p: 2,
+                      bgcolor: "#fff",
+                      borderRadius: 2,
+                      border: "1px dashed #ccc",
                     }}
                   >
-                    {formatNumber(
-                      Number(cigaretteCount) *
-                        (Number(priceOfThePack) / Number(cigarettesInAPack))
-                    )}
-                    &nbsp;₫
-                  </Typography>
-                </Box>
-                <Box sx={{ width: "50%" }}>
-                  <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Mỗi tuần
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      textAlign: "start",
-                      fontWeight: 800,
-                      color: "primary.main",
-                    }}
-                  >
-                    {formatNumber(
-                      cigaretteCount * (priceOfThePack / cigarettesInAPack) * 7
-                    )}
-                    &nbsp;₫
-                  </Typography>
-                </Box>
-              </Box>
-              {/* month Year*/}
-
-              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                <Box sx={{ width: "50%" }}>
-                  <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Mỗi tháng
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      textAlign: "start",
-                      fontWeight: 800,
-                      color: "primary.main",
-                    }}
-                  >
-                    {formatNumber(
-                      cigaretteCount * (priceOfThePack / cigarettesInAPack) * 30
-                    )}
-                    &nbsp;₫
-                  </Typography>
-                </Box>
-                <Box sx={{ width: "50%" }}>
-                  <Typography sx={{ textAlign: "start" }} variant="body2">
-                    Mỗi năm
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      textAlign: "start",
-                      fontWeight: 800,
-                      color: "primary.main",
-                    }}
-                  >
-                    {formatNumber(
-                      cigaretteCount *
-                        (priceOfThePack / cigarettesInAPack) *
-                        365
-                    )}
-                    &nbsp;₫
-                  </Typography>
-                </Box>
+                    <Typography variant="body2" color="text.secondary">
+                      {days === 1
+                        ? "Mỗi ngày"
+                        : days === 7
+                        ? "Mỗi tuần"
+                        : days === 30
+                        ? "Mỗi tháng"
+                        : "Mỗi năm"}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      fontWeight={700}
+                      color="primary.main"
+                    >
+                      {formatNumber(daily * days)}₫
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
             </Box>
-          </Box>
+          </>
         );
     }
   };
 
   return (
-    <Box sx={{ bgcolor: "primary.light" }}>
-      <Container
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          height: "100vh",
-        }}
-      >
+    <Box
+      sx={{
+        bgcolor: "primary.light",
+        minHeight: "100vh",
+        py: 4,
+        overflowY: "hidden",
+      }}
+    >
+      <Container>
         <Box
           sx={{
-            width: "60%",
-            color: "primary.light",
-            bgcolor: "primary.dark",
-            borderRadius: 2,
-            padding: 4,
-            height: "95vh",
+            width: "100%",
+            maxWidth: 700,
+            mx: "auto",
+            bgcolor: "#ffffff",
+            borderRadius: 3,
+            boxShadow: 3,
+            p: isMobile ? 3 : 4,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            minHeight: "85vh",
           }}
         >
           <Box>
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 2,
-              }}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                Survey about you
+              <Typography variant="h6" fontWeight={700}>
+                Khảo sát của bạn
               </Typography>
-              <Typography variant="body1">{currentStep}/6</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {currentStep}/6
+              </Typography>
             </Box>
-            <Progress />
-            <Box>{renderStep()}</Box>
+
+            <LinearProgress
+              variant="determinate"
+              value={currentStep * (100 / 6)}
+              sx={{
+                height: 10,
+                borderRadius: 5,
+                bgcolor: "#e2e8f0",
+                mb: 2,
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "primary.main",
+                },
+              }}
+            />
+
+            {renderStep()}
           </Box>
 
-          <Box>
-            <hr />
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-            >
+          <Box mt={4}>
+            <Box display="flex" justifyContent="space-between">
               <Button
-                startIcon={<ArrowBackIosNewIcon />}
                 variant="outlined"
-                onClick={handlePrevious}
+                startIcon={<ArrowBackIosNewIcon />}
+                onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
               >
                 Quay lại
               </Button>
-              {currentStep === 6 ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={submitData}
-                  disabled={!canProcess()}
-                >
-                  Gửi
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  disabled={!canProcess()}
-                >
-                  Tiếp theo
-                </Button>
-              )}
+
+              <Button
+                variant="contained"
+                endIcon={currentStep === 6 ? null : <ArrowForwardIosIcon />}
+                onClick={
+                  currentStep === 6
+                    ? submitData
+                    : () => setCurrentStep((prev) => prev + 1)
+                }
+                disabled={!canProcess()}
+                sx={{
+                  bgcolor: "primary.main",
+                  "&:hover": { bgcolor: "primary.dark" },
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                {currentStep === 6 ? "Gửi" : "Tiếp theo"}
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -541,4 +402,4 @@ function OnboadingPage() {
   );
 }
 
-export default OnboadingPage;
+export default OnboardingPage;

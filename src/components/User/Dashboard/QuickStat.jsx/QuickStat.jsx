@@ -91,7 +91,7 @@ function QuickStat({ userData }) {
               {data ? data.progress.statistics.totalMoneySaved : "0"}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              ~ {Math.floor(costPerDay)} ₫ /Ngày
+              {Math.floor(costPerDay)} ₫ /Ngày
             </Typography>
           </Box>
         </Grid>
@@ -119,7 +119,7 @@ function QuickStat({ userData }) {
               {data ? data.progress.statistics.totalCigarettesAvoided : "0"}
             </Typography>
             <Typography variant="body2" sx={{ textAlign: "start" }}>
-              ~ {userData.cigarettesPerDay} điếu thuốc /Ngày
+              {userData.cigarettesPerDay} điếu thuốc /Ngày
             </Typography>
           </Box>
         </Grid>

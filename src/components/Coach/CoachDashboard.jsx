@@ -5,6 +5,9 @@ import "@fontsource/be-vietnam-pro/800.css";
 import ChatIcon from "@mui/icons-material/Chat";
 import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import { RiBook3Line } from "react-icons/ri";
+
 import {
   AppBar,
   Avatar,
@@ -21,12 +24,6 @@ import {
   Menu,
   MenuItem,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Toolbar,
   Tooltip,
   Typography,
@@ -36,14 +33,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../Logo/Logo";
 import SendPlan from "./SendPlan/SendPlan";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+
 function ClientManagement() {
   const [clients, setClients] = useState([]);
   const [chatStatus, setChatStatus] = useState({});
   const [planOpen, setPlanOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
+  const navigate = useNavigate();
 
   const fetchClients = async () => {
     try {
@@ -81,7 +82,6 @@ function ClientManagement() {
   }, []);
 
   const handleOpenPlan = (client) => {
-    console.log(client.coachId);
     setSelectedClient({
       clientId: client.clientId,
       name: "",
@@ -103,13 +103,19 @@ function ClientManagement() {
     { title: "Gói nâng cao", path: "/Package" },
   ];
 
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const username = localStorage.getItem("username");
+  const toggleDrawer = (newOpen) => () => setOpen(newOpen);
+  const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleCloseMenu = () => setAnchorEl(null);
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+  const handleProfile = () => {
+    handleCloseMenu();
+    navigate("/coachDashboard");
+  };
+
+  const handleLogout = () => {
+    handleCloseMenu();
+    localStorage.clear();
+    navigate("/login");
   };
 
   const DrawerList = (
@@ -126,30 +132,9 @@ function ClientManagement() {
     </Box>
   );
 
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleProfile = () => {
-    handleCloseMenu();
-    navigate("/coachDashboard");
-  };
-
-  const handleLogout = () => {
-    handleCloseMenu();
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userID");
-    navigate("/login");
-  };
-
   return (
     <>
+      {/* Navbar */}
       <AppBar
         position="fixed"
         sx={{ backgroundColor: "primary.light", boxShadow: "none" }}
@@ -157,8 +142,6 @@ function ClientManagement() {
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <Logo />
-
-            {/* Menu icon mobile */}
             <Box
               sx={{
                 flexGrow: 1,
@@ -166,21 +149,17 @@ function ClientManagement() {
                 justifyContent: "center",
               }}
             >
-              <Box sx={{ display: { xs: "block", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  color="inherit"
-                  onClick={toggleDrawer(true)}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
-                  {DrawerList}
-                </Drawer>
-              </Box>
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={toggleDrawer(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer anchor="top" open={open} onClose={toggleDrawer(false)}>
+                {DrawerList}
+              </Drawer>
             </Box>
-
-            {/* Navbar desktop */}
             <Box
               sx={{
                 flexGrow: 1,
@@ -191,19 +170,13 @@ function ClientManagement() {
               {pages.map((page) => (
                 <Button
                   key={page.title}
-                  sx={{
-                    color: "primary.main",
-                    display: "block",
-                    fontWeight: 600,
-                  }}
+                  sx={{ color: "primary.main", fontWeight: 600 }}
                   onClick={() => navigate(page.path)}
                 >
                   {page.title}
                 </Button>
               ))}
             </Box>
-
-            {/* Avatar hoặc Đăng nhập */}
             <Box sx={{ flexGrow: 0 }}>
               {token ? (
                 <>
@@ -227,17 +200,7 @@ function ClientManagement() {
                   </Menu>
                 </>
               ) : (
-                <Button
-                  onClick={() => navigate("/login")}
-                  variant="contained"
-                  sx={{
-                    py: { xs: 0.5, sm: 1 },
-                    px: { xs: 1, sm: 2 },
-                    color: "white",
-                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                    minWidth: { xs: "80px", sm: "120px" },
-                  }}
-                >
+                <Button onClick={() => navigate("/login")} variant="contained">
                   Đăng nhập
                 </Button>
               )}
@@ -246,14 +209,13 @@ function ClientManagement() {
         </Container>
       </AppBar>
 
-      <Container sx={{ mt: 10 }}>
+      {/* Content */}
+      <Container sx={{ mt: 12, mb: 4 }}>
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
         >
           <Typography variant="h5" fontWeight="bold">
             Khách hàng của tôi
@@ -266,78 +228,101 @@ function ClientManagement() {
             Xem lịch hẹn
           </Button>
         </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <b>Tên</b>
-                </TableCell>
-                <TableCell>
-                  <b>Email</b>
-                </TableCell>
-                <TableCell>
-                  <b>Trò chuyện</b>
-                </TableCell>
-                <TableCell>
-                  <b>Tạo kế hoạch cai thuốc</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {clients.map((client) => {
-                const chat = chatStatus[client.clientId] || {};
-                return (
-                  <TableRow key={client.clientId}>
-                    <TableCell>{client.clientName}</TableCell>
-                    <TableCell>{client.email}</TableCell>
-                    <TableCell>
-                      <Badge
-                        color="error"
-                        badgeContent={
-                          chat.unreadCount > 0 ? chat.unreadCount : 0
-                        }
-                        invisible={chat.unreadCount === 0}
-                      >
-                        <Button
-                          variant="outlined"
-                          startIcon={<ChatIcon />}
-                          onClick={() =>
-                            navigate(`/chatPageCoach/${client.clientId}`)
-                          }
-                        >
-                          Trò chuyện
-                        </Button>
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outlined"
-                        startIcon={<EditCalendarOutlinedIcon />}
-                        onClick={() => handleOpenPlan(client)}
-                      >
-                        Tạo kế hoạch
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
 
-              {clients.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={4}>
-                    <Typography align="center" color="text.secondary">
-                      Không có khách hàng nào.
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
+            },
+            gap: 2,
+          }}
+        >
+          {clients.map((client) => {
+            const chat = chatStatus[client.clientId] || {};
+            return (
+              <Paper
+                key={client.clientId}
+                elevation={3}
+                sx={{
+                  borderRadius: 3,
+                  padding: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1.5,
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Avatar sx={{ bgcolor: "primary.main" }}>
+                    {client.clientName?.[0]?.toUpperCase() || "U"}
+                  </Avatar>
+                  <Box>
+                    <Typography fontWeight="bold">
+                      {client.clientName}
                     </Typography>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    <Typography variant="body2" color="text.secondary">
+                      {client.email}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box display="flex" flexDirection="column" gap={1.5}>
+                  <Badge
+                    color="error"
+                    badgeContent={
+                      chat.unreadCount > 0 ? chat.unreadCount : null
+                    }
+                    invisible={chat.unreadCount === 0}
+                  >
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<ChatIcon />}
+                      onClick={() =>
+                        navigate(`/chatPageCoach/${client.clientId}`)
+                      }
+                    >
+                      Trò chuyện
+                    </Button>
+                  </Badge>
+
+                  <Button
+                    variant="outlined"
+                    startIcon={<RiBook3Line />}
+                    onClick={() => navigate(`/clientDiary/${client.clientId}`)}
+                  >
+                    Xem nhật ký
+                  </Button>
+
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="success"
+                    startIcon={<EditCalendarOutlinedIcon />}
+                    onClick={() => handleOpenPlan(client)}
+                  >
+                    Tạo kế hoạch cai
+                  </Button>
+                </Box>
+              </Paper>
+            );
+          })}
+
+          {clients.length === 0 && (
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              textAlign="center"
+              gridColumn="1 / -1"
+            >
+              Không có khách hàng nào.
+            </Typography>
+          )}
+        </Box>
       </Container>
 
-      {/* Modal tạo kế hoạch */}
       <SendPlan
         open={planOpen}
         onClose={() => setPlanOpen(false)}
