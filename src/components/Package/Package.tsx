@@ -101,7 +101,27 @@ export default function PricingPage() {
 
   return (
     <>
-      <div className="max-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center px-4 py-12">
+      <Box
+        sx={{
+          position: "fixed",
+          top: 16,
+          left: 16,
+          zIndex: 999,
+        }}
+      >
+        <Button
+          onClick={() => navigate("/")} // hoặc navigate("/") nếu muốn về trang chính
+          startIcon={<ArrowBackIcon />}
+          sx={{}}
+        >
+          Quay lại
+        </Button>
+      </Box>
+
+      <div
+        className="max-h-screen  flex items-center justify-center px-4 py-12"
+        style={{ backgroundColor: "#e8fde8" }}
+      >
         <div className="p-6 max-w-5xl w-full">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">

@@ -73,19 +73,28 @@ export default function PrimarySearchAppBar({ userData }) {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      PaperProps={{
+        sx: {
+          mt: 6.5,
+          minWidth: 160,
+        },
+      }}
     >
-      <MenuItem onClick={handleFormerData}>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <CheckCircleOutlineIcon />
-          <Typography variant="body1">Former smoker data</Typography>
-        </Box>
-      </MenuItem>
-
-      <MenuItem onClick={logout}>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <LogoutIcon />
-          <Typography variant="body1">Logout</Typography>
-        </Box>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          logout();
+        }}
+        sx={{
+          color: "error.main",
+          "&:hover": {
+            bgcolor: "error.light",
+            color: "white",
+          },
+        }}
+      >
+        <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
+        <Typography variant="body1">Đăng xuất</Typography>
       </MenuItem>
     </Menu>
   );
@@ -209,7 +218,7 @@ export default function PrimarySearchAppBar({ userData }) {
                     borderColor: "primary.light",
                   }}
                   startIcon={<SwitchAccessShortcutAddOutlinedIcon />}
-                  onClick={() => navigate("/Package")}
+                  onClick={() => navigate("/userPackage")}
                 >
                   Nâng cấp gói Premium
                 </Button>
