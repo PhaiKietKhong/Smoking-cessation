@@ -9,9 +9,9 @@ export const USER_API_ROUTES = {
   GET_POSTS: `${BASE_URL}/api/CommunityPost`,
   GET_QUITPLAN: `${BASE_URL}/api/QuitPlan/my-plans`,
   GET_BRINKMAN: `${BASE_URL}/api/SmokingStatus/brinkman-index`,
-  GET_USER_PROGESS_BY_DATE_RANGE: `${BASE_URL}/api/Progress/date-range`,
+  GET_USER_PROGESS_BY_DATE_RANGE: `${BASE_URL}/api/Progress/my-progress`,
   GET_SUGGEST_PLAN: `${BASE_URL}/api/Package/suggested-quit-plan`,
-  POST_DAILY_PROGRESS: `${BASE_URL}/api/DailyProgress/daily`,
+  POST_DAILY_PROGRESS: `${BASE_URL}/api/Progress/daily`,
   PUT_DAILY_PROGRESS: `${BASE_URL}/api/Progress`,
   GET_REPORT_DASHBOARD: `${BASE_URL}/api/Report/dashboard`,
   POST_APPOINTMENT: `${BASE_URL}/api/Appointment`,
@@ -25,6 +25,8 @@ export const USER_API_ROUTES = {
   CHECK_PREMIUM_ACCESS: `${BASE_URL}/api/Package/premium-access`,
   UPGRADE_PACKAGE: `${BASE_URL}/api/Package/force-upgrade-premium`,
   GET_UNLOCKED_ACHIEVEMENTS: `${BASE_URL}/api/Achievement/unlocked`,
+  GET_FEEDBACK: `${BASE_URL}/api/Feedback/by-coach`,
+  POST_FEEDBACK: `${BASE_URL}/api/Feedback`,
 };
 
 export const COMMON_API = {
@@ -52,6 +54,8 @@ export const COACH_API_ROUTES = {
   GET_APPOINTMENTS: `${BASE_URL}/api/Appointment/coach`,
   GET_DIARY_USER: `${BASE_URL}/api/Coach/clients`,
   SENDNOTES_DIARY_USER: `${BASE_URL}/api/Coach/clients`,
+  GET_MY_CLIENTS_PLANS: `${BASE_URL}/api/Coach/my-clients`,
+  EDIT_QUIT_PLAN: `${BASE_URL}/api/Coach/clients`,
 };
 export const ADMIN_API_ROUTES = {
   GET_STATISTICS: `${BASE_URL}/api/Admin/statistics`,

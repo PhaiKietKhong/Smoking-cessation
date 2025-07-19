@@ -169,21 +169,51 @@ function CardDiary({ diaryData, onUpdated }) {
           </Grid>
         </Grid>
 
-        <Card
-          sx={{
-            p: 2,
-            border: "none",
-            boxShadow: "none",
-            bgcolor: "rgba(216, 216, 216, 0.2)",
-            color: "#4f4f4f	",
-            my: 2,
-          }}
-        >
-          <Typography sx={{ fontWeight: 600 }} variant="body2">
-            Ghi chú:
-          </Typography>
-          <Typography variant="body2">{diaryData.notes}</Typography>
-        </Card>
+        <Grid spacing={1} container sx={{ my: 2, alignItems: "stretch" }}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card
+              sx={{
+                p: 2,
+                border: "none",
+                boxShadow: "none",
+                bgcolor: "rgba(216, 216, 216, 0.2)",
+                color: "#4f4f4f",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography sx={{ fontWeight: 600 }} variant="body2">
+                Ghi chú:
+              </Typography>
+              <Typography variant="body2">{diaryData.notes}</Typography>
+            </Card>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card
+              sx={{
+                p: 2,
+                border: "none",
+                boxShadow: "none",
+                bgcolor: "rgba(216, 216, 216, 0.2)",
+                color: "#4f4f4f",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography sx={{ fontWeight: 600 }} variant="body2">
+                Ghi chú của huấn luyện viên:
+              </Typography>
+              {diaryData.coachNotes ? (
+                diaryData.coachNotes
+              ) : (
+                <Typography>Chưa có ghi chú</Typography>
+              )}
+            </Card>
+          </Grid>
+        </Grid>
+
         <ModalEditDiary
           open={openModal}
           onClose={(updated) => {

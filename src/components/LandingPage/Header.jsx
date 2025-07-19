@@ -53,7 +53,7 @@ function Header() {
       isTokenValid = decoded.exp && decoded.exp > currentTime;
     } catch (err) {
       console.error("Token không hợp lệ:", err);
-      token = null;
+      isTokenValid = false; // Chỉ cần đặt lại biến này
     }
   }
 

@@ -222,7 +222,7 @@ export default function CoachesPage() {
                     <TableCell>
                       <Button
                         color="success"
-                        variant="outlined"
+                        variant="text"
                         onClick={() => handleOpenEdit(coach)}
                         startIcon={<CreateOutlinedIcon fontSize="small" />}
                       >

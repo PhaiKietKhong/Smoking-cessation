@@ -7,7 +7,7 @@ import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { RiBook3Line } from "react-icons/ri";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   AppBar,
   Avatar,
@@ -295,7 +295,17 @@ function ClientManagement() {
                   >
                     Xem nhật ký
                   </Button>
-
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="success"
+                    startIcon={<VisibilityIcon />}
+                    onClick={() =>
+                      navigate(`/coachDashboard/details/${client.clientId}`)
+                    }
+                  >
+                    xem kế hoạch cai thuốc hiện tại
+                  </Button>
                   <Button
                     fullWidth
                     variant="contained"

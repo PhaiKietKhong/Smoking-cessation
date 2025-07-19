@@ -37,8 +37,11 @@ const fallbackImages = [
 ];
 
 export default function CoachListPage() {
-  const isAuthenticated = useAuthCheck({ requiredRole: "User" });
+  const { isValid: isAuthenticated, isChecking } = useAuthCheck({
+    requiredRole: "User",
+  });
   const { hasPremiumAccess, loading: premiumLoading } = usePremiumAccess();
+
   const [coaches, setCoaches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [snackbar, setSnackbar] = useState({
@@ -47,6 +50,10 @@ export default function CoachListPage() {
     severity: "success",
   });
   const navigate = useNavigate();
+
+  const handleCardClick = (coachId) => {
+    navigate(`/coach/${coachId}`);
+  };
 
   const handleAssignCoach = async (coach) => {
     try {
@@ -87,10 +94,10 @@ export default function CoachListPage() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && hasPremiumAccess) {
+    if (isAuthenticated && hasPremiumAccess && !premiumLoading && !isChecking) {
       fetchCoaches();
     }
-  }, [isAuthenticated, hasPremiumAccess]);
+  }, [isAuthenticated, hasPremiumAccess, premiumLoading, isChecking]);
 
   if (!hasPremiumAccess) {
     return (
@@ -141,6 +148,7 @@ export default function CoachListPage() {
           {coaches.map((coach, index) => (
             <Grid item size={{ xs: 12, md: 4 }} key={coach.coachId}>
               <Card
+                onClick={() => handleCardClick(coach.coachId)}
                 sx={{
                   display: "flex",
                   flexDirection: "column",
@@ -231,8 +239,10 @@ export default function CoachListPage() {
                   <Button
                     fullWidth
                     variant="contained"
-                    size="large"
-                    onClick={() => handleAssignCoach(coach)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAssignCoach(coach);
+                    }}
                     disabled={!coach.isAvailable}
                     sx={{
                       py: 1.2,

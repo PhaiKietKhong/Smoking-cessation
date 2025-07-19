@@ -30,7 +30,9 @@ const ChatPage = ({ chatId }) => {
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
-  const isAuthenticated = useAuthCheck({ requiredRole: "User" });
+  const { isValid: isAuthenticated, isChecking } = useAuthCheck({
+    requiredRole: "User",
+  });
   const { hasPremiumAccess, loading: premiumLoading } = usePremiumAccess();
 
   const fetchChatHistory = async () => {
@@ -53,11 +55,10 @@ const ChatPage = ({ chatId }) => {
   };
 
   useEffect(() => {
-    if (isAuthenticated && hasPremiumAccess) {
+    if (isAuthenticated && hasPremiumAccess && !premiumLoading && !isChecking) {
       fetchChatHistory();
     }
-  }, [isAuthenticated, hasPremiumAccess, chatId]);
-
+  }, [isAuthenticated, hasPremiumAccess, premiumLoading, isChecking, chatId]);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

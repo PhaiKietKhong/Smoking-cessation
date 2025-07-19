@@ -29,6 +29,8 @@ import ChatPageCoach from "./components/Coach/ChatPageCoach/ChatPageCoach";
 import Appointments from "./components/Coach/Appointments/Appointments";
 import ClientDiary from "./components/Coach/ClientDiary/ClientDiary";
 import UserPackagePage from "@/components/User/UserPackage/UserPackage";
+import CoachDetailPage from "./components/User/CoachDetailPage/CoachDetailPage";
+import DetailClientPlan from "./components/Coach/DetailClientPlan/DetailClientPlan";
 function App() {
   return (
     <Router>
@@ -56,6 +58,12 @@ function App() {
           <Route path="/coach/appointments" element={<Appointments />} />
           <Route path="/clientDiary/:clientId" element={<ClientDiary />} />
           <Route path="/userPackage" element={<UserPackagePage />} />
+          <Route path="/coach/:id" element={<CoachDetailPage />} />
+          <Route
+            path="/coachDashboard/details/:clientId"
+            element={<DetailClientPlan />}
+          />
+
           <Route
             path="/accounts"
             element={

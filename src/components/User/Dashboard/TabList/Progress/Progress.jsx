@@ -4,6 +4,7 @@ import {
   CardContent,
   CardHeader,
   Chip,
+  CircularProgress,
   Grid,
   LinearProgress,
   Tooltip,
@@ -19,6 +20,11 @@ import EditPlanModal from "./EditPlanModal/EditPlanModal";
 import React from "react";
 import { Flag, AccessTime, DirectionsRun } from "@mui/icons-material";
 import TimelineChart from "./TimelineChart";
+import {
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 function Progress() {
   const [planData, setPlanData] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -86,6 +92,7 @@ function Progress() {
 
   const progressText = `${planData.daysCompleted}/${planData.daysInPlan} ngày (${planData.completionPercentage}%)`;
   const daysLeft = planData.daysInPlan - planData.daysCompleted;
+  const percent = planData.completionPercentage ?? 0;
 
   return (
     <Box
@@ -138,7 +145,7 @@ function Progress() {
               </Typography>
 
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" color="text.secondary">
                     Ngày bắt đầu:
                   </Typography>
@@ -146,7 +153,7 @@ function Progress() {
                     {new Date(planData.startDate).toLocaleDateString("vi-VN")}
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" color="text.secondary">
                     Ngày kết thúc:
                   </Typography>
@@ -172,6 +179,52 @@ function Progress() {
                     </li>
                   ))}
                 </ul>
+              </Box>
+
+              {/* Biểu đồ hoàn thành */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  py: 2,
+                }}
+              >
+                <Box sx={{ width: 160, mb: 1 }}>
+                  <CircularProgressbarWithChildren
+                    value={planData.completionPercentage ?? 0}
+                    styles={buildStyles({
+                      pathColor:
+                        (planData.completionPercentage ?? 0) >= 80
+                          ? "#22c55e"
+                          : (planData.completionPercentage ?? 0) <= 60 &&
+                            (planData.completionPercentage ?? 0) < 30
+                          ? "tomato"
+                          : "#FFCB61",
+                      trailColor: "#eee",
+                    })}
+                  >
+                    <Box
+                      sx={{
+                        fontSize: 28,
+                        fontWeight: "bold",
+                        color: "primary.main",
+                      }}
+                    >
+                      {(planData.completionPercentage ?? 0).toFixed(1)}%
+                    </Box>
+                    <div style={{ fontSize: 10, color: "#888", marginTop: 4 }}>
+                      Hoàn thành kế hoạch
+                    </div>
+                  </CircularProgressbarWithChildren>
+                </Box>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#666", mt: 1, textAlign: "center" }}
+                >
+                  Biểu đồ này thể hiện phần trăm tiến độ hoàn thành kế hoạch cai
+                  thuốc lá của bạn.
+                </Typography>
               </Box>
             </CardContent>
           </Card>
